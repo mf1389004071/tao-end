@@ -1,0 +1,851 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  Home, BookOpen, MessageSquare, User, Search, Bell, ChevronRight, 
+  Calendar, MapPin, Zap, Star, Share2, TrendingUp, Hash, Award,
+  Clock, CheckCircle2, Book, Trophy, Users, Heart, Camera, X,
+  ArrowRight, Filter, Bookmark, Quote, Info, ChevronLeft, Send,
+  Layout, Lightbulb, Target, MessageCircle, MoreHorizontal, Download, Eye,
+  CreditCard, ExternalLink
+} from 'lucide-react';
+
+const App = () => {
+  // --- 全局状态管理 ---
+  const [activeTab, setActiveTab] = useState('home');
+  // 视图堆栈: list, topicDetail, courseDetail, msgAnnouncement, inviteDetail, levelGuide, toolDetail, pointLog, search
+  const [view, setView] = useState({ type: 'list', data: null });
+  const [showCheckIn, setShowCheckIn] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [toast, setToast] = useState(null);
+  const [msgSubTab, setMsgSubTab] = useState('system'); // system, interaction, subscription
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const showMessage = (msg) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  };
+
+  // --- 模拟数据库 ---
+  const offlineCourses = [
+    { 
+      id: 'c1', title: "把自己产品化 · 深圳站", speaker: "王建硕", date: "2024.05.20", city: "深圳 · 南山", 
+      status: "报名中", image: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=800", 
+      daysLeft: 5, price: "￥2999", 
+      curriculum: ["产品化思维底层逻辑", "个人商业画布拆解", "流量与信任的转换", "实战方案演练"],
+      features: ["线下闭门分享", "终身校友会", "1对1方案诊断"]
+    }
+  ];
+
+  const topics = [
+    { id: 't1', title: "蛋壳理论", icon: "🥚", tags: ["自我认知", "方法论"], count: { notes: 12, tools: 3 }, desc: "从内打破是生命，从外打破是食物。探讨个体成长的内生动力。", tools: [{id: 'tl1', name: '七圣境扫描', desc: '用于自检当前能量场状态'}] },
+    { id: 't2', title: "七圣境", icon: "💎", tags: ["工具", "底层逻辑"], count: { notes: 45, tools: 1 }, desc: "顶级高手的人生推演沙盘，通过七个维度重构你的认知系统。", tools: [{id: 'tl1', name: '七圣境扫描', desc: '核心诊断工具'}] }
+  ];
+
+  const toolsData = {
+    'tl1': { id: 'tl1', name: '七圣境扫描', version: 'V2.0', desc: '通过身体、情绪、认知、关系、事业、财富、精神七个维度进行生命力自查。', guide: ['静心5分钟', '按1-10分对各维度评分', '连接各点形成雷达图', '分析短板原因'], case: '学员小王通过该工具发现事业瓶颈源于关系维度的缺失，调整后产出提升30%。' }
+  };
+
+  const pointHistory = [
+    { id: 1, title: "发布优质实修心得", change: "+10", time: "今天 10:20", type: "earn" },
+    { id: 2, title: "受邀好友完成注册", change: "+50", time: "昨天", type: "earn" },
+    { id: 3, title: "兑换线下课优惠券", change: "-200", time: "3天前", type: "spend" }
+  ];
+
+  const interactions = [
+    { id: 1, user: "张帆", action: "赞了你的心得", target: "《关于蛋壳理论的3点思考》", time: "2分钟前", avatar: "https://i.pravatar.cc/100?u=1" },
+    { id: 2, user: "陈默", action: "回复了你的评论", target: "非常赞同，内生力量才是持久的...", time: "1小时前", avatar: "https://i.pravatar.cc/100?u=2" }
+  ];
+
+  const topicFeed = [
+    { id: 1, topic: "蛋壳理论", content: "王建硕发布了新的官方指南：如何识别外力的干扰？", time: "10分钟前" },
+    { id: 2, topic: "极致利他", content: "社群内新增 5 份关于《极致利他》的高分实修报告", time: "3小时前" }
+  ];
+
+  const systemMsgs = [
+    { id: 1, title: '积分商城正式上线', content: '现在可以使用贡献值兑换权益啦！', time: '10:24', read: false },
+    { id: 2, title: '实修打卡挑战赛开启', content: '累计打卡21天，赢取王老师亲笔签名书。', time: '昨天', read: true }
+  ];
+
+  // --- 导航函数 ---
+  const goBack = () => setView({ type: 'list', data: null });
+  const navigateTo = (type, data = null) => {
+    setView({ type, data });
+    window.scrollTo(0, 0);
+  };
+
+  // --- 通用 UI 组件 ---
+  const Toast = () => toast && (
+    <div className="fixed top-12 left-1/2 -translate-x-1/2 z-[300] bg-slate-900/95 backdrop-blur-md text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300">
+      <div className="bg-green-500 rounded-full p-1"><CheckCircle2 size={14} /></div>
+      <span className="text-sm font-bold tracking-tight">{toast}</span>
+    </div>
+  );
+
+  const SectionHeader = ({ title, sub, action, onAction }) => (
+    <div className="flex justify-between items-end mb-5 px-6">
+      <div>
+        <h2 className="text-2xl font-black text-slate-900 leading-none tracking-tight">{title}</h2>
+        <p className="text-[10px] text-slate-400 mt-2 font-black uppercase tracking-widest opacity-80">{sub}</p>
+      </div>
+      {action && (
+        <button onClick={onAction} className="text-xs font-bold text-indigo-600 bg-indigo-50 px-4 py-2 rounded-full active:scale-95 transition-transform flex items-center gap-1">
+          {action} <ChevronRight size={14} />
+        </button>
+      )}
+    </div>
+  );
+
+  // --- 视图渲染器 ---
+
+  // 1. 首页列表
+  const HomeList = () => (
+    <div className="animate-in fade-in pb-32">
+      <div className="bg-orange-50 mx-6 mt-4 py-3.5 px-5 rounded-[24px] flex items-center gap-3 border border-orange-100 mb-8 cursor-pointer" onClick={() => navigateTo('msgAnnouncement', { title: '紧急通告', content: '五一席位调整详情...', time: '刚刚' })}>
+        <Zap size={16} className="text-orange-500 fill-orange-500" />
+        <div className="flex-1 text-[11px] text-orange-900 font-bold truncate">紧急通知：五一期间“把自己产品化”线下站席位变动</div>
+        <ChevronRight size={14} className="text-orange-300" />
+      </div>
+
+      <SectionHeader title="线下重磅" sub="Offline Prime" action="所有课程" onAction={() => showMessage("列表拉取中...")} />
+      <div className="flex gap-5 overflow-x-auto px-6 pb-6 scrollbar-hide">
+        {offlineCourses.map(c => (
+          <div key={c.id} onClick={() => navigateTo('courseDetail', c)} className="relative min-w-[310px] rounded-[48px] overflow-hidden shadow-2xl shadow-indigo-100 active:scale-95 transition-transform group cursor-pointer">
+            <img src={c.image} className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-700" alt="" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/10 to-transparent"></div>
+            <div className="absolute top-8 left-8 flex gap-2">
+              <span className="bg-indigo-600 text-white text-[10px] font-black px-4 py-1.5 rounded-full shadow-lg">报名中</span>
+              <span className="bg-white/20 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1.5 rounded-full border border-white/20">{c.city}</span>
+            </div>
+            <div className="absolute bottom-10 left-8 right-8 text-white">
+              <h3 className="text-2xl font-black mb-2 tracking-tight">{c.title}</h3>
+              <p className="text-xs font-medium text-white/70 mb-4 flex items-center gap-2">
+                <Calendar size={12} /> {c.date} 
+              </p>
+              <div className="flex justify-between items-center">
+                <span className="text-xl font-black">{c.price}</span>
+                <div className="w-10 h-10 bg-white rounded-2xl flex items-center justify-center text-slate-900 shadow-xl"><ArrowRight size={20} /></div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-10">
+        <SectionHeader title="进行中的活动" sub="Happening Now" />
+        <div className="px-6 space-y-4">
+          <div className="bg-white p-6 rounded-[36px] border border-slate-50 shadow-sm flex items-center justify-between group">
+            <div className="flex gap-4 items-center">
+              <div className="relative">
+                <div className="w-14 h-14 bg-indigo-50 rounded-2xl flex flex-col items-center justify-center text-indigo-600">
+                  <span className="text-xs font-black">19:30</span>
+                  <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-ping mt-1"></div>
+                </div>
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-slate-800 tracking-tight">《重塑》共读会 - 第三章</h4>
+                <p className="text-[10px] text-slate-400 mt-1.5 font-bold flex items-center gap-1"><Users size={10} /> 128 人在线</p>
+              </div>
+            </div>
+            <button onClick={() => showMessage("正在进入直播间...")} className="bg-indigo-600 text-white text-[10px] font-black px-5 py-2.5 rounded-2xl shadow-lg shadow-indigo-100">立即进入</button>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-12 px-6">
+        <div className="bg-slate-900 rounded-[48px] p-10 text-white relative overflow-hidden shadow-2xl">
+          <div className="relative z-10">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center"><BookOpen size={20}/></div>
+              <h3 className="text-xl font-black">知识库全景</h3>
+            </div>
+            <p className="text-slate-400 text-sm mb-8 leading-relaxed font-medium">深度链接人与知识，让每一次成长都有迹可循。</p>
+            <div className="grid grid-cols-2 gap-3 mb-8">
+              {['蛋壳理论', '利他系统', '七圣境', '认知跃迁'].map(t => (
+                <div key={t} className="bg-white/5 backdrop-blur-sm px-4 py-3 rounded-2xl border border-white/10 text-xs font-bold text-white/80">#{t}</div>
+              ))}
+            </div>
+            <button onClick={() => setActiveTab('growth')} className="w-full py-4 bg-indigo-600 rounded-3xl text-sm font-black tracking-tight active:scale-95 transition-transform">开启探索</button>
+          </div>
+          <div className="absolute -right-16 -bottom-16 w-64 h-64 bg-indigo-500/20 rounded-full blur-[80px]"></div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // 2. 消息中心
+  const MessageCenter = () => (
+    <div className="animate-in fade-in pb-32">
+      <div className="px-8 pt-8 pb-4">
+        <h2 className="text-3xl font-black text-slate-900 mb-8 tracking-tight">消息中心</h2>
+        <div className="flex gap-8 mb-8 border-b border-slate-50">
+          {[
+            { id: 'system', label: '系统通知' },
+            { id: 'interaction', label: '互动回复' },
+            { id: 'subscription', label: '话题更新' }
+          ].map(tab => (
+            <button 
+              key={tab.id}
+              onClick={() => setMsgSubTab(tab.id)}
+              className={`pb-4 text-sm font-bold transition-all relative ${msgSubTab === tab.id ? 'text-indigo-600' : 'text-slate-400'}`}
+            >
+              {tab.label}
+              {msgSubTab === tab.id && <div className="absolute bottom-0 left-0 right-0 h-1 bg-indigo-600 rounded-full"></div>}
+            </button>
+          ))}
+        </div>
+
+        <div className="space-y-2">
+          {msgSubTab === 'system' && (
+            systemMsgs.map(m => (
+              <div key={m.id} onClick={() => navigateTo('msgAnnouncement', m)} className="p-6 rounded-[32px] border border-slate-50 flex items-start gap-4 active:bg-slate-50 cursor-pointer">
+                <div className={`mt-2 w-2 h-2 rounded-full flex-shrink-0 ${m.read ? 'bg-slate-200' : 'bg-red-500'}`}></div>
+                <div className="flex-1">
+                  <div className="flex justify-between items-center mb-1">
+                    <h4 className="text-sm font-black text-slate-800">{m.title}</h4>
+                    <span className="text-[10px] text-slate-300 font-bold">{m.time}</span>
+                  </div>
+                  <p className="text-xs text-slate-400 font-medium line-clamp-1">{m.content}</p>
+                </div>
+                <ChevronRight size={16} className="text-slate-200 mt-1" />
+              </div>
+            ))
+          )}
+
+          {msgSubTab === 'interaction' && (
+            interactions.map(i => (
+              <div key={i.id} className="p-6 rounded-[32px] border border-slate-50 flex items-center gap-4 active:bg-slate-50">
+                <img src={i.avatar} className="w-12 h-12 rounded-full border-2 border-slate-50" alt="" />
+                <div className="flex-1">
+                  <div className="flex justify-between">
+                    <h4 className="text-sm font-bold text-slate-800">{i.user}</h4>
+                    <span className="text-[10px] text-slate-300 font-bold">{i.time}</span>
+                  </div>
+                  <p className="text-xs text-slate-500 mt-1 font-medium">{i.action} <span className="text-slate-300">"{i.target}"</span></p>
+                </div>
+                <MessageCircle size={16} className="text-indigo-200" />
+              </div>
+            ))
+          )}
+
+          {msgSubTab === 'subscription' && (
+            topicFeed.map(f => (
+              <div key={f.id} onClick={() => navigateTo('topicDetail', topics[0])} className="p-6 rounded-[32px] border border-slate-50 flex items-center gap-4 active:bg-slate-50 cursor-pointer">
+                <div className="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 font-black text-xl">#</div>
+                <div className="flex-1">
+                  <div className="flex justify-between">
+                    <h4 className="text-sm font-black text-slate-800">{f.topic}</h4>
+                    <span className="text-[10px] text-slate-300 font-bold">{f.time}</span>
+                  </div>
+                  <p className="text-xs text-slate-400 mt-1 font-medium">{f.content}</p>
+                </div>
+                <ChevronRight size={16} className="text-slate-200" />
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    </div>
+  );
+
+  // 3. 详情页渲染
+
+  const ToolDetailView = ({ data }) => (
+    <div className="animate-in slide-in-from-right bg-white min-h-screen pb-32">
+      <div className="pt-16 px-8 flex justify-between items-center mb-8">
+        <button onClick={goBack} className="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center"><ChevronLeft size={24} /></button>
+        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest tracking-[0.3em]">Master Tool</span>
+      </div>
+      <div className="px-8">
+        <div className="flex items-center gap-4 mb-8">
+          <div className="w-20 h-20 bg-orange-100 rounded-3xl flex items-center justify-center text-orange-600 shadow-xl shadow-orange-50">
+            <Lightbulb size={40} />
+          </div>
+          <div>
+            <h2 className="text-3xl font-black text-slate-900 tracking-tight">{data.name}</h2>
+            <p className="text-xs font-bold text-orange-600 mt-1.5 uppercase tracking-widest">Version {data.version}</p>
+          </div>
+        </div>
+
+        <div className="bg-slate-50 rounded-[40px] p-8 mb-10 border border-slate-100">
+          <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-4">工具简介</h4>
+          <p className="text-sm text-slate-600 leading-relaxed font-medium">{data.desc}</p>
+        </div>
+
+        <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-6 px-2">使用指南</h4>
+        <div className="space-y-4 mb-10">
+          {data.guide.map((g, i) => (
+            <div key={i} className="flex gap-5 items-start px-4">
+              <span className="text-xl font-black text-indigo-100 mt-1">0{i+1}</span>
+              <p className="text-sm font-bold text-slate-800 pt-1.5 leading-snug">{g}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="bg-indigo-600 rounded-[40px] p-8 text-white relative overflow-hidden">
+          <h4 className="text-sm font-black text-indigo-200 uppercase tracking-widest mb-4">实操案例</h4>
+          <p className="text-sm leading-relaxed font-medium mb-6 italic">"{data.case}"</p>
+          <button className="flex items-center gap-2 text-xs font-bold bg-white/20 px-4 py-2 rounded-xl border border-white/20"><Download size={14}/> 下载高清PDF工作坊</button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const PointsLogView = () => (
+    <div className="animate-in slide-in-from-right bg-slate-50 min-h-screen">
+      <div className="bg-slate-900 pt-16 pb-20 px-10 rounded-b-[60px] text-white">
+        <button onClick={goBack} className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center border border-white/10 mb-8"><ChevronLeft size={20}/></button>
+        <p className="text-xs font-black text-indigo-400 uppercase tracking-widest mb-2">My Contribution</p>
+        <h2 className="text-4xl font-black tracking-tight">1,280 <span className="text-sm font-bold opacity-40 ml-2 uppercase">Points</span></h2>
+      </div>
+      <div className="px-8 -mt-10">
+        <div className="bg-white rounded-[40px] shadow-xl border border-slate-50 overflow-hidden">
+          <div className="p-6 border-b border-slate-50 flex justify-between items-center">
+            <h4 className="text-sm font-black text-slate-800">积分明细</h4>
+            <Filter size={16} className="text-slate-300" />
+          </div>
+          {pointHistory.map(h => (
+            <div key={h.id} className="p-6 border-b border-slate-50 last:border-none flex items-center justify-between">
+              <div>
+                <p className="text-sm font-bold text-slate-800">{h.title}</p>
+                <p className="text-[10px] text-slate-400 mt-1 font-bold">{h.time}</p>
+              </div>
+              <span className={`text-lg font-black ${h.type === 'earn' ? 'text-green-500' : 'text-slate-900'}`}>{h.change}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const SearchOverlay = () => (
+    <div className="fixed inset-0 z-[200] bg-white animate-in slide-in-from-bottom">
+      <div className="pt-16 px-8 flex gap-4 items-center mb-10">
+        <div className="flex-1 bg-slate-100 rounded-3xl flex items-center px-6 py-4">
+          <Search size={20} className="text-slate-400" />
+          <input autoFocus type="text" placeholder="搜索话题、金句、伙伴..." className="bg-transparent border-none focus:ring-0 text-sm ml-3 w-full font-bold" />
+        </div>
+        <button onClick={goBack} className="text-sm font-black text-indigo-600 px-2">取消</button>
+      </div>
+      <div className="px-8">
+        <h4 className="text-xs font-black text-slate-300 uppercase tracking-widest mb-6">热门搜索</h4>
+        <div className="flex flex-wrap gap-3 mb-12">
+          {['蛋壳理论', '七圣境实操', '王建硕专栏', '把自己产品化', '裂变机制'].map(tag => (
+            <span key={tag} className="bg-slate-50 px-5 py-2.5 rounded-2xl text-xs font-bold text-slate-600 border border-slate-100 active:bg-indigo-50 active:text-indigo-600 cursor-pointer" onClick={() => showMessage(`搜索：${tag}`)}>{tag}</span>
+          ))}
+        </div>
+        <h4 className="text-xs font-black text-slate-300 uppercase tracking-widest mb-6">历史搜索</h4>
+        <div className="space-y-6">
+          {['如何产品化', '贡献值兑换规则'].map(h => (
+            <div key={h} className="flex items-center justify-between text-sm font-bold text-slate-400">
+              <div className="flex items-center gap-3"><Clock size={16}/> {h}</div>
+              <X size={14} className="cursor-pointer" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const TopicDetailView = ({ data }) => (
+    <div className="animate-in slide-in-from-right bg-slate-50 min-h-screen pb-32">
+      <div className="bg-indigo-600 pt-16 pb-24 px-10 rounded-b-[60px] text-white relative overflow-hidden">
+        <button onClick={goBack} className="absolute top-12 left-6 w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center border border-white/20"><ChevronLeft size={20} /></button>
+        <div className="relative z-10 flex flex-col items-center text-center">
+          <div className="text-6xl mb-6 scale-110 transition-transform">{data.icon}</div>
+          <h2 className="text-3xl font-black mb-3 tracking-tighter">{data.title}</h2>
+          <div className="flex gap-2">
+            {data.tags.map(t => <span key={t} className="text-[10px] bg-white/20 backdrop-blur-md px-4 py-1 rounded-full font-black border border-white/10 tracking-widest uppercase">#{t}</span>)}
+          </div>
+        </div>
+        <div className="absolute -right-10 top-0 w-64 h-64 bg-white/5 rounded-full blur-[100px]"></div>
+      </div>
+
+      <div className="px-6 -mt-12 relative z-10">
+        <div className="bg-white rounded-[48px] p-10 shadow-2xl border border-slate-50 mb-10">
+          <h3 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em] mb-6">Official Wiki</h3>
+          <p className="text-base text-slate-600 leading-relaxed font-medium mb-8">{data.desc}</p>
+          <div className="p-5 bg-indigo-50 rounded-3xl flex items-center justify-between group active:scale-95 transition-transform cursor-pointer" onClick={() => showMessage("正在拉取 PDF 文档...")}>
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-indigo-600 shadow-sm"><Layout size={20} /></div>
+              <span className="text-sm font-black text-indigo-900">实操手册 V3.2</span>
+            </div>
+            <Download size={18} className="text-indigo-300" />
+          </div>
+        </div>
+
+        {data.tools && (
+          <div className="mb-12">
+            <SectionHeader title="关联工具库" sub="Mastery Tools" />
+            <div className="grid grid-cols-1 gap-4">
+              {data.tools.map(tool => (
+                <div key={tool.id} onClick={() => navigateTo('toolDetail', toolsData[tool.id])} className="bg-white p-6 rounded-[36px] border border-slate-50 shadow-sm flex gap-5 items-center active:bg-slate-50 transition-colors cursor-pointer">
+                  <div className="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center text-orange-500"><Lightbulb size={28} /></div>
+                  <div className="flex-1">
+                    <h5 className="text-base font-black text-slate-800">{tool.name}</h5>
+                    <p className="text-xs text-slate-400 mt-1.5 font-bold">{tool.desc}</p>
+                  </div>
+                  <ChevronRight size={18} className="text-slate-200" />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <SectionHeader title="共创实修案例" sub="Shared Wisdom" action="我要投稿" onAction={() => setShowCheckIn(true)} />
+        <div className="space-y-4">
+          {[1, 2].map(i => (
+            <div key={i} className="bg-white p-8 rounded-[40px] border border-slate-50 shadow-sm">
+              <div className="flex items-center gap-4 mb-6">
+                <img src={`https://i.pravatar.cc/100?u=${i+10}`} className="w-10 h-10 rounded-full border-2 border-slate-50" alt="" />
+                <div>
+                  <p className="text-sm font-black text-slate-800">学员_02{i} <span className="text-[10px] text-indigo-500 ml-2 font-black uppercase bg-indigo-50 px-2 py-0.5 rounded">Verified</span></p>
+                  <p className="text-[10px] text-slate-400 mt-1 font-bold">2小时前 · 广东深圳</p>
+                </div>
+              </div>
+              <p className="text-sm text-slate-600 leading-relaxed font-medium mb-6">“应用了{data.title}后，我学会了诚实地面对内心的恐惧。内生动力的释放需要先打破陈旧的认知壁垒...”</p>
+              <div className="flex items-center gap-6 text-slate-200">
+                <div className="flex items-center gap-2 active:text-red-500 transition-colors cursor-pointer"><Heart size={16} /> <span className="text-xs font-black text-slate-400">24</span></div>
+                <div className="flex items-center gap-2 cursor-pointer"><MessageCircle size={16} /> <span className="text-xs font-black text-slate-400">8</span></div>
+                <div className="flex items-center gap-2 ml-auto"><Eye size={16} /> <span className="text-xs font-black text-slate-400">1.2k</span></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const CheckInModal = () => (
+    <div className="fixed inset-0 z-[250] flex flex-end flex-col">
+      <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-md" onClick={() => setShowCheckIn(false)}></div>
+      <div className="relative bg-white rounded-t-[60px] p-10 animate-in slide-in-from-bottom duration-500 shadow-[0_-20px_40px_rgba(0,0,0,0.2)]">
+        <div className="w-14 h-1.5 bg-slate-100 rounded-full mx-auto mb-10"></div>
+        <div className="flex justify-between items-center mb-10">
+          <h2 className="text-3xl font-black text-slate-900 tracking-tight">发布实修心得</h2>
+          <button onClick={() => setShowCheckIn(false)} className="bg-slate-50 p-3 rounded-full"><X size={20}/></button>
+        </div>
+        
+        <div className="space-y-8">
+          <div>
+            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 block opacity-80">关联当前研究话题</label>
+            <div className="flex flex-wrap gap-2">
+              <span className="px-5 py-2.5 bg-indigo-600 text-white rounded-2xl text-xs font-black shadow-xl shadow-indigo-100 flex items-center gap-2"># 蛋壳理论 <CheckCircle2 size={12}/></span>
+              <span className="px-5 py-2.5 bg-slate-50 text-slate-400 rounded-2xl text-xs font-black border border-slate-100 active:bg-indigo-50 active:text-indigo-600 cursor-pointer">+ 添加关联话题</span>
+            </div>
+          </div>
+
+          <div className="bg-slate-50 rounded-[32px] p-6 border border-slate-100">
+            <label className="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-3 block">我的观察与顿悟</label>
+            <textarea 
+              placeholder="分享此时此刻的真实思考，利他是最高级的学习..."
+              className="w-full bg-transparent border-none rounded-none p-0 text-base h-40 focus:ring-0 font-medium placeholder:text-slate-300 outline-none resize-none"
+            ></textarea>
+          </div>
+
+          <div className="flex gap-4">
+            <div className="w-28 h-28 bg-slate-50 rounded-[36px] border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-300 active:scale-95 transition-transform cursor-pointer">
+              <Camera size={24} />
+              <span className="text-[10px] mt-2 font-black">上传现场快照</span>
+            </div>
+            <div className="flex-1 flex flex-col justify-center">
+              <p className="text-xs font-bold text-slate-400 mb-1">公开程度</p>
+              <div className="flex gap-2">
+                <span className="text-[10px] font-black px-3 py-1 bg-green-50 text-green-600 rounded-lg">所有人可见</span>
+                <span className="text-[10px] font-black px-3 py-1 bg-slate-100 text-slate-400 rounded-lg">匿名发布</span>
+              </div>
+            </div>
+          </div>
+
+          <button 
+            onClick={() => { setShowCheckIn(false); showMessage("发布成功！贡献值 +10"); }}
+            className="w-full py-5 bg-indigo-600 text-white rounded-[32px] font-black text-lg shadow-2xl shadow-indigo-200 active:scale-95 transition-transform flex items-center justify-center gap-3"
+          >
+            <Send size={22} /> 存入 Wiki 知识库并赚分
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-white font-sans text-slate-900 select-none overflow-x-hidden">
+      <Toast />
+      
+      {/* 动态顶部导航 (仅列表页) */}
+      {view.type === 'list' && (
+        <nav className={`fixed top-0 inset-x-0 z-[100] transition-all duration-500 ${scrolled ? 'bg-white/90 backdrop-blur-2xl shadow-sm py-4' : 'bg-transparent py-6'}`}>
+          <div className="px-8 flex justify-between items-center">
+            <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
+              <div className="w-10 h-10 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-indigo-100">
+                <span className="text-white font-black text-xs">10X</span>
+              </div>
+              <h1 className="text-xl font-black tracking-tighter">智慧成长</h1>
+            </div>
+            <div className="flex items-center gap-4">
+              <button onClick={() => navigateTo('search')} className="p-3 bg-white/80 rounded-2xl shadow-sm border border-slate-50 active:bg-slate-50 transition-colors"><Search size={22} className="text-slate-700" /></button>
+              <button onClick={() => setActiveTab('msg')} className="relative p-3 bg-white/80 rounded-2xl shadow-sm border border-slate-50 active:bg-slate-50 transition-colors">
+                <Bell size={22} className="text-slate-700" />
+                <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
+              </button>
+            </div>
+          </div>
+        </nav>
+      )}
+
+      {/* 视图层级 */}
+      <main className={view.type === 'list' ? 'pt-28' : ''}>
+        {view.type === 'list' && (
+          <>
+            {activeTab === 'home' && <HomeList />}
+            {activeTab === 'growth' && (
+              <div className="animate-in fade-in pb-32">
+                <div className="px-8 pt-8 pb-4">
+                  <h2 className="text-3xl font-black text-slate-900 mb-10 tracking-tight">学习中心</h2>
+                  <SectionHeader title="实修看板" sub="Ongoing Progress" />
+                  <div className="bg-white rounded-[48px] p-8 shadow-2xl shadow-indigo-50 border border-slate-50 mb-12 relative overflow-hidden">
+                    <div className="flex justify-between items-end mb-6">
+                      <div>
+                        <p className="text-[10px] text-slate-400 font-black uppercase mb-1">Current Focus</p>
+                        <h4 className="text-xl font-black text-slate-800 tracking-tight">把自己产品化</h4>
+                      </div>
+                      <span className="text-2xl font-black text-indigo-600">75%</span>
+                    </div>
+                    <div className="h-3 w-full bg-slate-50 rounded-full mb-8 px-1 flex items-center shadow-inner">
+                      <div className="h-1.5 w-3/4 bg-indigo-600 rounded-full shadow-lg shadow-indigo-200"></div>
+                    </div>
+                    <button onClick={() => setShowCheckIn(true)} className="w-full py-4.5 bg-indigo-600 text-white rounded-[28px] font-black text-sm flex items-center justify-center gap-3 shadow-xl active:scale-95 transition-transform">
+                      <Camera size={20} /> 打卡心得发布
+                    </button>
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full -mr-16 -mt-16"></div>
+                  </div>
+
+                  <SectionHeader title="话题 Wiki" sub="Knowledge Graph" />
+                  <div className="space-y-4">
+                    {topics.map(t => (
+                      <div key={t.id} onClick={() => navigateTo('topicDetail', t)} className="bg-white p-6 rounded-[40px] border border-slate-50 shadow-sm flex justify-between items-center group active:bg-indigo-50 transition-all cursor-pointer">
+                        <div className="flex gap-5 items-center">
+                          <div className="w-16 h-16 bg-slate-50 rounded-3xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">{t.icon}</div>
+                          <div>
+                            <h4 className="text-lg font-black text-slate-900 tracking-tight">{t.title}</h4>
+                            <div className="flex gap-2 mt-1.5">
+                              {t.tags.map(tag => <span key={tag} className="text-[9px] font-black text-slate-400 uppercase">#{tag}</span>)}
+                            </div>
+                          </div>
+                        </div>
+                        <ChevronRight size={22} className="text-slate-200 group-hover:text-indigo-600" />
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-16">
+                    <SectionHeader title="共鸣金句库" sub="Daily Wisdom" action="全屏查看" />
+                    <div className="bg-gradient-to-br from-slate-900 to-indigo-900 rounded-[48px] p-10 text-white relative shadow-2xl">
+                      <Quote className="absolute top-8 right-10 opacity-20 rotate-180" size={48} />
+                      <p className="text-xl font-serif italic mb-8 leading-relaxed font-bold">“真正的成长，是你在面对世界的复杂时，依然能找到自己内心的那个‘十倍好’的内核。”</p>
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-white/20"></div>
+                          <span className="text-[10px] font-black text-white/60">选自 · 王建硕线下私享会</span>
+                        </div>
+                        <div className="flex gap-2">
+                          <button className="p-3 bg-white/10 rounded-2xl border border-white/10" onClick={() => showMessage("金句已收藏")}><Bookmark size={16}/></button>
+                          <button className="p-3 bg-white/10 rounded-2xl border border-white/10" onClick={() => showMessage("海报已生成")}><Share2 size={16}/></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            {activeTab === 'msg' && <MessageCenter />}
+            {activeTab === 'me' && (
+              <div className="animate-in slide-in-from-bottom-8 pb-32">
+                <div className="px-8 pt-12 pb-24 bg-indigo-600 rounded-b-[70px] text-white relative overflow-hidden">
+                  <div className="relative z-10">
+                    <div className="flex items-center gap-6 mb-12">
+                      <div className="w-24 h-24 rounded-[36px] border-4 border-white/20 overflow-hidden shadow-2xl rotate-3">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200" alt="" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-3xl font-black mb-2 tracking-tight">李慕白</h3>
+                        <div className="flex gap-2">
+                          <span className="text-[10px] bg-white/20 backdrop-blur-md px-3.5 py-1.5 rounded-full font-black border border-white/10 shadow-lg">创始联创人</span>
+                          <span className="text-[10px] bg-orange-500 px-3.5 py-1.5 rounded-full font-black flex items-center gap-1 shadow-xl shadow-orange-900/40 tracking-widest"><Award size={10} className="fill-white" /> V3 高手</span>
+                        </div>
+                      </div>
+                      <button className="bg-white/10 p-4 rounded-3xl border border-white/10 shadow-lg" onClick={() => showMessage("设置中心模块维护中")}><MoreHorizontal size={24}/></button>
+                    </div>
+                    <div className="grid grid-cols-3 gap-8 bg-white/10 backdrop-blur-3xl p-8 rounded-[40px] border border-white/10 shadow-2xl cursor-pointer" onClick={() => navigateTo('pointLog')}>
+                      <div className="text-center">
+                        <p className="text-2xl font-black tracking-tight">1.2k</p>
+                        <p className="text-[10px] opacity-60 font-black uppercase mt-1.5 tracking-widest">贡献值</p>
+                      </div>
+                      <div className="text-center border-x border-white/10">
+                        <p className="text-2xl font-black tracking-tight">12</p>
+                        <p className="text-[10px] opacity-60 font-black uppercase mt-1.5 tracking-widest">进行中</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-2xl font-black tracking-tight">84</p>
+                        <p className="text-[10px] opacity-60 font-black uppercase mt-1.5 tracking-widest">实修日</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="absolute -top-16 -right-16 w-80 h-80 bg-white/5 rounded-full blur-[100px]"></div>
+                </div>
+
+                <div className="px-8 -mt-12 relative z-10 mb-10">
+                  <div className="bg-white rounded-[48px] p-10 shadow-2xl shadow-slate-200/50 border border-slate-50 active:scale-95 transition-transform cursor-pointer" onClick={() => navigateTo('levelGuide')}>
+                    <div className="flex justify-between items-center mb-10">
+                      <div>
+                        <h4 className="font-black text-slate-800 text-lg tracking-tight leading-none">成长进化地图</h4>
+                        <p className="text-[10px] text-slate-400 mt-2 font-black uppercase tracking-widest leading-none">Growth Blueprint</p>
+                      </div>
+                      <div className="text-[10px] text-indigo-600 font-black bg-indigo-50 px-4 py-2 rounded-2xl shadow-sm">Lv.3 高手</div>
+                    </div>
+                    <div className="relative h-2 w-full bg-slate-50 rounded-full mb-3 px-1 flex items-center shadow-inner">
+                      <div className="h-1.5 w-2/3 bg-indigo-600 rounded-full shadow-lg shadow-indigo-200"></div>
+                      <div className="absolute top-1/2 left-2/3 -translate-y-1/2 -translate-x-1/2 w-5 h-5 bg-white border-4 border-indigo-600 rounded-full shadow-xl"></div>
+                    </div>
+                    <div className="flex justify-between text-[10px] font-black text-slate-300 uppercase tracking-widest">
+                      <span className="text-indigo-600">Level 3</span>
+                      <span>Level 4</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="px-8 space-y-3">
+                  {[
+                    { label: '关系网络 (邀请有礼)', extra: '3位新伙伴', view: 'inviteDetail', icon: <Users size={18}/> },
+                    { label: '我的收藏与实修足迹', extra: '128条', view: null, icon: <Bookmark size={18}/> },
+                    { label: '贡献值商城', extra: '有券可兑', view: null, icon: <CreditCard size={18}/> },
+                    { label: '共创与产品反馈', extra: '', view: null, icon: <Heart size={18}/> },
+                  ].map((item, i) => (
+                    <div key={i} onClick={() => item.view && navigateTo(item.view)} className="bg-white p-6 rounded-[32px] border border-slate-50 shadow-sm flex items-center justify-between active:bg-slate-50 transition-all cursor-pointer">
+                      <div className="flex items-center gap-4">
+                        <div className="text-indigo-400">{item.icon}</div>
+                        <span className="text-sm font-black text-slate-700 tracking-tight">{item.label}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] text-slate-300 font-black tracking-widest uppercase">{item.extra}</span>
+                        <ChevronRight size={18} className="text-slate-200" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* 子页面分发 */}
+        {view.type === 'courseDetail' && <CourseDetailView data={view.data} goBack={goBack} showMessage={showMessage} />}
+        {view.type === 'topicDetail' && <TopicDetailView data={view.data} />}
+        {view.type === 'msgAnnouncement' && <AnnouncementDetailView data={view.data} goBack={goBack} />}
+        {view.type === 'inviteDetail' && <InviteView goBack={goBack} showMessage={showMessage} />}
+        {view.type === 'levelGuide' && <LevelGuideView goBack={goBack} />}
+        {view.type === 'toolDetail' && <ToolDetailView data={view.data} />}
+        {view.type === 'pointLog' && <PointsLogView />}
+        {view.type === 'search' && <SearchOverlay />}
+      </main>
+
+      {/* 底部导航栏 */}
+      {view.type === 'list' && (
+        <div className="fixed bottom-0 inset-x-0 bg-white/90 backdrop-blur-3xl border-t border-slate-50 flex justify-around items-center py-5 pb-10 px-8 z-[150] shadow-[0_-10px_30px_rgba(0,0,0,0.02)]">
+          {[
+            { id: 'home', label: '发现', Icon: Home },
+            { id: 'growth', label: '成长', Icon: BookOpen },
+            { id: 'center', label: '连接', Icon: Share2, center: true },
+            { id: 'msg', label: '消息', Icon: MessageSquare, badge: true },
+            { id: 'me', label: '我的', Icon: User }
+          ].map(tab => (
+            tab.center ? (
+              <button key={tab.id} onClick={() => setShowCheckIn(true)} className="flex flex-col items-center active:scale-90 transition-transform -mt-16 group">
+                <div className="w-16 h-16 bg-indigo-600 rounded-[28px] flex items-center justify-center shadow-2xl shadow-indigo-400 text-white border-8 border-white group-hover:rotate-12 transition-transform">
+                  <tab.Icon size={28} />
+                </div>
+                <span className="text-[10px] font-black text-indigo-600 mt-3 tracking-widest uppercase">{tab.label}</span>
+              </button>
+            ) : (
+              <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex flex-col items-center gap-2 transition-all ${activeTab === tab.id ? 'text-indigo-600 scale-110' : 'text-slate-300'}`}>
+                <div className="relative">
+                  <tab.Icon size={22} className={activeTab === tab.id ? 'fill-indigo-50/50' : ''} />
+                  {tab.badge && <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>}
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-widest">{tab.label}</span>
+              </button>
+            )
+          ))}
+        </div>
+      )}
+
+      {showCheckIn && <CheckInModal />}
+
+      <style>{`
+        @keyframes fade-in { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        @keyframes slide-in-from-bottom { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        @keyframes slide-in-from-right { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        .animate-in { animation: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1.1) forwards; }
+        .fade-in { animation-name: fade-in; }
+        .slide-in-from-bottom { animation-name: slide-in-from-bottom; }
+        .slide-in-from-right { animation-name: slide-in-from-right; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
+    </div>
+  );
+};
+
+// 辅助组件定义
+const CourseDetailView = ({ data, goBack, showMessage }) => (
+  <div className="animate-in slide-in-from-right bg-white min-h-screen pb-40">
+    <div className="relative h-[450px] overflow-hidden">
+      <img src={data.image} className="w-full h-full object-cover shadow-2xl" alt="" />
+      <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent"></div>
+      <button onClick={goBack} className="absolute top-16 left-8 w-14 h-14 bg-white/20 backdrop-blur-md rounded-[20px] flex items-center justify-center text-white border border-white/20"><ChevronLeft size={28} /></button>
+    </div>
+    <div className="px-10 -mt-24 relative z-10">
+      <div className="flex justify-between items-end mb-10">
+        <h2 className="text-4xl font-black text-slate-900 leading-tight tracking-tighter">{data.title}</h2>
+        <div className="text-right">
+          <p className="text-[10px] text-indigo-600 font-black uppercase tracking-widest mb-1">Reservation</p>
+          <p className="text-3xl font-black text-slate-900 tracking-tighter">{data.price}</p>
+        </div>
+      </div>
+      
+      <div className="grid grid-cols-2 gap-3 mb-12">
+        {data.features.map(f => (
+          <div key={f} className="bg-slate-50 px-5 py-4 rounded-[24px] border border-slate-100 flex items-center gap-3 text-xs font-black text-slate-700">
+            <CheckCircle2 size={16} className="text-green-500" /> {f}
+          </div>
+        ))}
+      </div>
+
+      <h4 className="text-sm font-black text-slate-300 uppercase tracking-[0.4em] mb-6 px-2">课程大纲 / Curriculum</h4>
+      <div className="space-y-4 mb-12">
+        {data.curriculum.map((item, i) => (
+          <div key={i} className="flex gap-6 p-6 bg-slate-50 rounded-[32px] items-center border border-slate-50 shadow-sm active:bg-indigo-50 transition-all">
+            <span className="text-3xl font-black text-indigo-100">0{i+1}</span>
+            <span className="text-sm font-black text-slate-800 tracking-tight leading-snug">{item}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+    <div className="fixed bottom-0 inset-x-0 bg-white/80 backdrop-blur-2xl p-8 border-t border-slate-50 flex gap-4 z-[200]">
+      <button className="flex-1 py-5 bg-slate-100 text-slate-800 rounded-[32px] font-black tracking-tight" onClick={() => showMessage("咨询已接通")}>线上咨询</button>
+      <button className="flex-[2.5] py-5 bg-indigo-600 text-white rounded-[32px] font-black tracking-tight shadow-2xl shadow-indigo-200 active:scale-95 transition-transform" onClick={() => showMessage("报名申请已提交")}>立即报名锁定席位</button>
+    </div>
+  </div>
+);
+
+const AnnouncementDetailView = ({ data, goBack }) => (
+  <div className="animate-in slide-in-from-right bg-white min-h-screen">
+    <div className="pt-20 px-10 flex justify-between items-center mb-12">
+      <button onClick={goBack} className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center"><ChevronLeft size={24} /></button>
+      <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em]">Official Announcement</span>
+    </div>
+    <div className="px-10">
+      <h2 className="text-4xl font-black text-slate-900 mb-4 leading-tight tracking-tighter">{data.title}</h2>
+      <p className="text-xs text-slate-400 font-bold mb-12 flex items-center gap-2"><Clock size={12}/> 发布于 {data.time} · 十倍好成长运营中心</p>
+      <div className="prose prose-slate text-slate-600 leading-relaxed space-y-6 text-base font-medium">
+        <p>{data.content}</p>
+        <p>我们始终致力于为每一位伙伴提供最高质量的实修场域。本次席位调整旨在优化线下互动体验，确保每位参与者都能获得深度的 1 对 1 导师连接。</p>
+        <div className="p-8 bg-slate-50 rounded-[40px] border border-slate-100 mt-12">
+          <p className="text-slate-900 font-black mb-4">关键节点调整：</p>
+          <ul className="space-y-3 text-slate-500 font-bold text-sm">
+            <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-indigo-600 rounded-full"></div> 深圳站：增加 5 个特邀共创席位</li>
+            <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-indigo-600 rounded-full"></div> 线上直播：全程同步开启 AI 实验室</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const InviteView = ({ goBack, showMessage }) => (
+  <div className="animate-in slide-in-from-right bg-slate-50 min-h-screen pb-40">
+    <div className="pt-20 px-10 flex justify-between items-center mb-10">
+      <button onClick={goBack} className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm"><ChevronLeft size={24} /></button>
+      <h4 className="font-black text-slate-900 tracking-tight">关系网络 / Network</h4>
+    </div>
+    <div className="px-8">
+      <div className="bg-indigo-600 rounded-[60px] p-12 text-white relative overflow-hidden mb-12 shadow-2xl">
+        <h3 className="text-4xl font-black mb-4 leading-tight tracking-tight">邀请好友<br/>共建智慧场</h3>
+        <p className="text-indigo-200 text-sm font-bold mb-10 opacity-80">每成功邀请一位联创伙伴，双方均可获得 100 贡献值及优先实修权。</p>
+        <div className="flex gap-4 relative z-10">
+          <button className="bg-white text-indigo-600 px-8 py-4 rounded-[24px] font-black text-sm shadow-xl active:scale-95 transition-transform" onClick={() => showMessage("海报已生成")}>专属海报</button>
+          <button className="bg-indigo-500 text-white px-8 py-4 rounded-[24px] font-black text-sm border border-indigo-400 shadow-xl active:scale-95 transition-transform" onClick={() => showMessage("链接已复制")}>分享链接</button>
+        </div>
+        <Share2 className="absolute -right-10 -bottom-10 opacity-10 rotate-12 scale-150" size={150} />
+      </div>
+
+      <div className="flex justify-between items-end mb-5 px-6">
+        <div>
+          <h2 className="text-2xl font-black text-slate-900 leading-none tracking-tight">已建立连接</h2>
+          <p className="text-[10px] text-slate-400 mt-2 font-black uppercase tracking-widest opacity-80">My Network (3)</p>
+        </div>
+      </div>
+      <div className="bg-white rounded-[40px] overflow-hidden border border-slate-50 shadow-sm">
+        {[1, 2, 3].map(i => (
+          <div key={i} className="flex items-center gap-5 p-6 border-b border-slate-50 last:border-none group">
+            <div className="w-12 h-12 rounded-full bg-slate-100 overflow-hidden border-2 border-slate-50 group-hover:scale-110 transition-transform"><img src={`https://i.pravatar.cc/100?u=net${i}`} alt="" /></div>
+            <div className="flex-1">
+              <p className="text-sm font-black text-slate-800">联创伙伴_{i}号</p>
+              <p className="text-[10px] text-slate-400 mt-1 font-bold tracking-tight">于 2024-04 加入 · 已贡献 3 份 Wiki</p>
+            </div>
+            <div className="text-right">
+              <p className="text-base font-black text-green-500">+100</p>
+              <p className="text-[8px] text-slate-300 uppercase font-black tracking-widest">Points</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
+const LevelGuideView = ({ goBack }) => (
+  <div className="animate-in slide-in-from-bottom bg-slate-950 min-h-screen text-white px-10 pt-20 pb-40">
+    <div className="flex justify-between items-center mb-16">
+      <button onClick={goBack} className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center border border-white/20"><X size={24} /></button>
+      <h4 className="font-black tracking-[0.5em] text-slate-600 uppercase text-xs">Growth Blueprint</h4>
+    </div>
+    <h2 className="text-5xl font-black mb-12 leading-tight tracking-tighter">李慕白的<br/><span className="text-indigo-500">智慧进化</span>路线</h2>
+    
+    <div className="space-y-16 relative">
+      <div className="absolute left-7 top-0 bottom-0 w-1 bg-white/5"></div>
+      {[
+        { level: '新人 / Newbie', icon: <Hash size={24}/>, status: 'Completed', req: '完成个人模型构建', active: true },
+        { level: '学员 / Student', icon: <Target size={24}/>, status: 'Completed', req: '累计贡献 5 份实修 Wiki', active: true },
+        { level: '高手 / Master', icon: <Trophy size={24}/>, status: 'Active', req: '贡献值达到 1000 点', active: true },
+        { level: '导师 / Mentor', icon: <Star size={24}/>, status: 'Locked', req: '发起 1 场城市线下实修站', active: false },
+      ].map((step, i) => (
+        <div key={step.level} className={`flex items-start gap-10 relative z-10 transition-all ${step.active ? 'opacity-100' : 'opacity-20'}`}>
+          <div className={`w-14 h-14 rounded-[22px] flex items-center justify-center border-4 ${step.status === 'Active' ? 'bg-indigo-600 border-indigo-400 shadow-[0_0_30px_rgba(99,102,241,0.5)]' : step.status === 'Completed' ? 'bg-green-600 border-green-400' : 'bg-slate-900 border-slate-800'}`}>
+            {step.status === 'Completed' ? <CheckCircle2 size={28} /> : step.icon}
+          </div>
+          <div className="flex-1">
+            <div className="flex items-center gap-3 mb-2">
+              <h5 className="text-xl font-black tracking-tight">{step.level}</h5>
+              {step.status === 'Active' && <span className="bg-indigo-500 text-[9px] px-2.5 py-1 rounded-lg font-black uppercase animate-pulse">Current Stage</span>}
+            </div>
+            <p className="text-xs text-slate-500 font-black uppercase tracking-widest">{step.req}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div className="fixed bottom-12 inset-x-10">
+      <div className="bg-gradient-to-r from-indigo-600 to-indigo-800 p-10 rounded-[50px] shadow-2xl text-center relative overflow-hidden">
+        <p className="text-[10px] font-black text-indigo-200 mb-2 uppercase tracking-[0.3em]">Next Privilege Unlock</p>
+        <h3 className="text-2xl font-black mb-6 tracking-tight">距离导师权益还需 450 分</h3>
+        <button onClick={goBack} className="w-full py-5 bg-white text-indigo-900 rounded-[28px] font-black tracking-tighter shadow-xl active:scale-95 transition-transform">去打卡获取贡献值</button>
+      </div>
+    </div>
+  </div>
+);
+
+export default App;
