@@ -15,6 +15,19 @@
 
 # 当前版本是3.8.9-G
 
+## 本地开发环境（JDK 与 Maven）
+
+- **要求**：JDK 21（本项目使用 Java 21 编译与运行）。
+- **本仓库约定**：Maven 编译与运行时统一使用指定 JDK，路径为：
+  - `JAVA_HOME=/Users/msc/Library/Java/JavaVirtualMachines/ms-21.0.10/Contents/Home`
+- **命令行**：在 `tao-end` 目录下使用脚本，可自动带上上述 JDK：
+  ```bash
+  chmod +x run-with-jdk.sh
+  ./run-with-jdk.sh mvn clean compile
+  ./run-with-jdk.sh mvn -pl geek-admin spring-boot:run
+  ```
+- **IDE**：在 Cursor/VSCode 下已通过 `tao-end/.vscode/settings.json` 配置 `java.jdt.ls.java.home` 与 `java.configuration.runtimes`，使用同一 JDK 进行编辑、编译与运行。若使用 IntelliJ，请在项目结构中将项目 SDK 设为该 JDK（或已配置的 ms-21）。
+
 本人的其他两个推荐搭配的项目
 
 1. [RuoYi-App-Geek: 这是若依极客生态的小程序版本 (gitee.com)](https://gitee.com/geek-xd/geek-uniapp-vue3-uview-plus-uchart)
