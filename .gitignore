@@ -63,3 +63,4 @@ effective-pom.xml
 !dependency-list.txt
 !dependency-tree.txt
 /docker/data/db/
+.DS_Store
