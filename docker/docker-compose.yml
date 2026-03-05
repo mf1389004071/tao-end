@@ -1,0 +1,14 @@
+services:
+  # 数据库服务 (PostgreSQL 16 + pgvector)
+  bt10-db:
+    image: pgvector/pgvector:pg16
+    container_name: bt10-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: bt10
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Bt10@1234
+    volumes:
+      # 数据持久化映射到本地
+      - ./data/db:/var/lib/postgresql/data

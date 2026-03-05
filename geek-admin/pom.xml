@@ -35,10 +35,10 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Mysql驱动包 -->
+        <!-- PostgreSQL 驱动包（与 docker 中 bt10-db 一致） -->
         <dependency>
-            <groupId>com.mysql</groupId>
-            <artifactId>mysql-connector-j</artifactId>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
         </dependency>
 
 
