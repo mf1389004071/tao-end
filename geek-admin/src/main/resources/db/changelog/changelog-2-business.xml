@@ -39,7 +39,7 @@
         </createTable>
         <addForeignKeyConstraint baseTableName="user_point_logs" baseColumnNames="user_id" constraintName="fk_user_point_logs_user" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
         <createIndex indexName="idx_user_point_logs_user_id" tableName="user_point_logs"><column name="user_id"/></createIndex>
-        <createIndex indexName="idx_user_point_logs_created_time" tableName="user_point_logs"><column name="created_time"/></createIndex>
+        <createIndex indexName="idx_user_point_logs_create_time" tableName="user_point_logs"><column name="create_time"/></createIndex>
     </changeSet>
 
     <!-- 5. 用户贡献点流水表 -->
@@ -54,14 +54,14 @@
             <column name="remark" type="TEXT" remarks="说明"/>
             <column name="related_type" type="VARCHAR(50)" remarks="关联业务类型"/>
             <column name="related_id" type="BIGINT" remarks="关联业务ID"/>
-            <column name="payment_id" type="VARCHAR(255)" remarks="支付单号"/>
+            <column name="payment_no" type="VARCHAR(255)" remarks="支付单号"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="发生时间"/>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="user_contrib_logs" baseColumnNames="user_id" constraintName="fk_user_contrib_logs_user" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
         <createIndex indexName="idx_user_contrib_logs_user_id" tableName="user_contrib_logs"><column name="user_id"/></createIndex>
-        <createIndex indexName="idx_user_contrib_logs_created_time" tableName="user_contrib_logs"><column name="created_time"/></createIndex>
+        <createIndex indexName="idx_user_contrib_logs_create_time" tableName="user_contrib_logs"><column name="create_time"/></createIndex>
     </changeSet>
 
     <!-- 6. 用户邀请关系表 -->
@@ -102,7 +102,7 @@
         </createTable>
         <addForeignKeyConstraint baseTableName="user_growth" baseColumnNames="user_id" constraintName="fk_user_growth_user" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
         <createIndex indexName="idx_user_growth_user_id" tableName="user_growth"><column name="user_id"/></createIndex>
-        <createIndex indexName="idx_user_growth_created_time" tableName="user_growth"><column name="created_time"/></createIndex>
+        <createIndex indexName="idx_user_growth_create_time" tableName="user_growth"><column name="create_time"/></createIndex>
     </changeSet>
 
     <!-- 8. 知识分类表 -->
@@ -415,7 +415,7 @@
             <column name="check_in_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="签到时间"/>
             <column name="check_in_method" type="VARCHAR(50)" remarks="签到方式：二维码/定位/手动"/>
             <column name="check_in_location" type="jsonb" remarks="签到位置"/>
-            <column name="operator_id" type="VARCHAR(64)" remarks="操作人ID(手动签到时)"/>
+            <column name="operator_id" type="BIGINT" remarks="操作人ID(手动签到时)"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column name="remark" type="TEXT" remarks="备注"/>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
@@ -489,7 +489,7 @@
     <changeSet author="tao-business" id="business-021-xiaoe_orders">
         <createTable remarks="小鹅通订单同步表，存储第三方订单与支付信息便于对账与用户关联" tableName="xiaoe_orders">
             <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
-            <column name="xiaoe_order_id" type="VARCHAR(255)" remarks="小鹅通订单ID"><constraints nullable="false" unique="true"/></column>
+            <column name="xiaoe_order_no" type="VARCHAR(255)" remarks="小鹅通订单号"><constraints nullable="false" unique="true"/></column>
             <column name="user_id" type="BIGINT" remarks="关联本平台用户ID"/>
             <column name="order_state" type="VARCHAR(50)" remarks="小鹅通订单状态"/>
             <column name="actual_fee" type="DECIMAL(24,4)" remarks="实际支付金额"/>
@@ -501,7 +501,7 @@
             <column name="trade_no" type="VARCHAR(255)" remarks="第三方交易号">
                 <constraints unique="true"/>
             </column>
-            <column name="create_time" type="TIMESTAMP" remarks="小鹅通侧创建时间"/>
+            <column name="xiaoe_create_time" type="TIMESTAMP" remarks="小鹅通侧创建时间"/>
             <column name="student_info" type="jsonb" remarks="学员信息快照"/>
             <column name="invoice_info" type="jsonb" remarks="发票信息"/>
             <column name="sync_status" type="VARCHAR(20)" defaultValue="PENDING" remarks="同步状态：待同步/已同步/失败"/>
@@ -562,7 +562,7 @@
             <column name="status" type="CHAR(1)" defaultValue="0" remarks="状态（0正常 1停用）"/>
         </addColumn>
         <createIndex indexName="idx_sys_file_info_folder_id" tableName="sys_file_info"><column name="folder_id"/></createIndex>
-        <createIndex indexName="idx_sys_file_info_user_id" tableName="sys_file_info"><column name="user_id"/></createIndex>
+        <createIndex indexName="idx_sys_file_info_create_id" tableName="sys_file_info"><column name="create_id"/></createIndex>
     </changeSet>
 
     <!-- 24. 积分商品表 -->
@@ -644,7 +644,7 @@
             <column name="cash_amount" type="DECIMAL(24,4)" defaultValueNumeric="0" remarks="现金支付额"/>
             <column name="payment_status" type="VARCHAR(20)" defaultValue="PENDING" remarks="支付状态：待付/已付/已退/失败/已取消"/>
             <column name="payment_method" type="VARCHAR(50)" remarks="支付方式：微信/支付宝/贡献点/积分等"/>
-            <column name="payment_id" type="VARCHAR(255)" remarks="第三方支付单号"/>
+            <column name="payment_no" type="VARCHAR(255)" remarks="第三方支付单号"/>
             <column name="paid_time" type="TIMESTAMP" remarks="支付成功时间"/>
             <column name="refund_amount" type="DECIMAL(24,4)" defaultValueNumeric="0" remarks="退款金额"/>
             <column name="refund_reason" type="TEXT" remarks="退款原因"/>
@@ -731,7 +731,7 @@
             <column name="old_value" type="TEXT" remarks="旧值"/>
             <column name="new_value" type="TEXT" remarks="新值"/>
             <column name="change_reason" type="TEXT" remarks="变更原因"/>
-            <column name="operator_id" type="VARCHAR(64)" remarks="操作人用户ID"/>
+            <column name="operator_id" type="BIGINT" remarks="操作人用户ID"/>
             <column name="operator_type" type="VARCHAR(50)" remarks="操作人类型：用户/系统/管理员"/>
             <column name="ip_address" type="VARCHAR(50)" remarks="操作IP"/>
             <column name="user_agent" type="TEXT" remarks="UA"/>
@@ -754,7 +754,7 @@
             <column name="old_value" type="TEXT" remarks="旧值"/>
             <column name="new_value" type="TEXT" remarks="新值"/>
             <column name="change_reason" type="TEXT" remarks="变更原因"/>
-            <column name="operator_id" type="VARCHAR(64)" remarks="操作人ID"/>
+            <column name="operator_id" type="BIGINT" remarks="操作人ID"/>
             <column name="operator_type" type="VARCHAR(50)" remarks="操作人类型"/>
             <column name="changed_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="变更时间"/>
             <column name="metadata" type="jsonb" remarks="扩展信息"/>
@@ -776,7 +776,7 @@
             <column name="old_value" type="TEXT" remarks="旧值"/>
             <column name="new_value" type="TEXT" remarks="新值"/>
             <column name="change_reason" type="TEXT" remarks="变更原因"/>
-            <column name="operator_id" type="VARCHAR(64)" remarks="操作人ID"/>
+            <column name="operator_id" type="BIGINT" remarks="操作人ID"/>
             <column name="operator_type" type="VARCHAR(50)" remarks="操作人类型"/>
             <column name="changed_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="变更时间"/>
             <column name="metadata" type="jsonb" remarks="扩展信息"/>
@@ -801,7 +801,7 @@
             <column name="change_reason" type="TEXT" remarks="原因说明"/>
             <column name="related_type" type="VARCHAR(50)" remarks="关联业务类型"/>
             <column name="related_id" type="BIGINT" remarks="关联业务ID"/>
-            <column name="operator_id" type="VARCHAR(64)" remarks="操作人ID"/>
+            <column name="operator_id" type="BIGINT" remarks="操作人ID"/>
             <column name="operator_type" type="VARCHAR(50)" remarks="操作人类型"/>
             <column name="changed_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="变更时间"/>
             <column name="metadata" type="jsonb" remarks="扩展信息"/>
@@ -845,7 +845,7 @@
         <addForeignKeyConstraint baseTableName="notifications" baseColumnNames="user_id" constraintName="fk_notifications_user" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
         <createIndex indexName="idx_notifications_user_id" tableName="notifications"><column name="user_id"/></createIndex>
         <createIndex indexName="idx_notifications_is_read" tableName="notifications"><column name="is_read"/></createIndex>
-        <createIndex indexName="idx_notifications_created_time" tableName="notifications"><column name="created_time"/></createIndex>
+        <createIndex indexName="idx_notifications_create_time" tableName="notifications"><column name="create_time"/></createIndex>
     </changeSet>
 
     <!-- 35. 系统通知/公告表(小程序通知列表与详情) -->
