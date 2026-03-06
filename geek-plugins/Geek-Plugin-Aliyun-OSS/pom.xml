@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>geek</artifactId>
+        <groupId>com.geekxd</groupId>
+        <version>3.9.1-G</version>
+		<relativePath>../../pom.xml</relativePath>
+    </parent>
+	<groupId>com.geekxd</groupId>
+	<artifactId>geek-plugin-aliyun-oss</artifactId>
+	<description>
+		阿里云OSS对象存储
+	</description>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>com.geekxd</groupId>
+			<artifactId>geek-common</artifactId>
+		</dependency>
+
+
+		<!--阿里云oss-->
+		<dependency>
+			<groupId>com.aliyun.oss</groupId>
+			<artifactId>aliyun-sdk-oss</artifactId>
+			<version>3.18.4</version>
+		</dependency>
+	</dependencies>
+</project>

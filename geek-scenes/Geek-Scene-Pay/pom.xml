@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>geek</artifactId>
+        <groupId>com.geekxd</groupId>
+        <version>3.9.1-G</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>geek-scene-pay</artifactId>
+
+    <properties>
+        <wechatpay.version>0.2.17</wechatpay.version>
+        <alipay.version>2.2.3</alipay.version>
+    </properties>
+
+    <description>
+        支付模块
+    </description>
+    <dependencyManagement>
+        <dependencies>
+            <!-- 微信支付的api -->
+            <dependency>
+                <groupId>com.github.wechatpay-apiv3</groupId>
+                <artifactId>wechatpay-java</artifactId>
+                <version>${wechatpay.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alipay.sdk</groupId>
+                <artifactId>alipay-easysdk</artifactId>
+                <version>${alipay.version}</version>
+            </dependency>
+
+            <!-- 支付基础模块 -->
+            <dependency>
+                <groupId>com.geekxd</groupId>
+                <artifactId>geek-pay-common</artifactId>
+                <version>${geek.version}</version>
+            </dependency>
+
+            <!-- 收钱吧支付 -->
+            <dependency>
+                <groupId>com.geekxd</groupId>
+                <artifactId>geek-pay-sqb</artifactId>
+                <version>${geek.version}</version>
+            </dependency>
+
+            <!-- 支付宝支付 -->
+            <dependency>
+                <groupId>com.geekxd</groupId>
+                <artifactId>geek-pay-alipay</artifactId>
+                <version>${geek.version}</version>
+            </dependency>
+
+            <!-- 微信支付 -->
+            <dependency>
+                <groupId>com.geekxd</groupId>
+                <artifactId>geek-pay-wx</artifactId>
+                <version>${geek.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+
+    <modules>
+        <module>geek-pay-sqb</module>
+        <module>geek-pay-alipay</module>
+        <module>geek-pay-wx</module>
+        <module>geek-pay-common</module>
+        <module>geek-pay-starter</module>
+    </modules>
+    <packaging>pom</packaging>
+</project>
