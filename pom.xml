@@ -233,6 +233,13 @@
                 <artifactId>geek-system</artifactId>
                 <version>${geek.version}</version>
             </dependency>
+
+            <!-- 代码生成器模块（可选） -->
+            <dependency>
+                <groupId>com.geekxd</groupId>
+                <artifactId>geek-module-generator</artifactId>
+                <version>${geek.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -241,6 +248,7 @@
         <module>geek-framework</module>
         <module>geek-system</module>
         <module>geek-common</module>
+        <module>geek-modules/Geek-Module-Generator</module>
     </modules>
     <packaging>pom</packaging>
 

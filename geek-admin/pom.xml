@@ -54,6 +54,12 @@
             <artifactId>geek-framework</artifactId>
         </dependency>
 
+        <!-- 代码生成器模块（可选，通过 geek.sh add Geek-Module-Generator 安装） -->
+        <dependency>
+            <groupId>com.geekxd</groupId>
+            <artifactId>geek-module-generator</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
