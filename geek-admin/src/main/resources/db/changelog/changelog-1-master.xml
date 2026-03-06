@@ -295,7 +295,7 @@
 
     </changeSet>
     <changeSet author="Administrator (generated)" id="1764223194862-42">
-        <createTable remarks="用户信息表" tableName="sys_user">
+        <createTable remarks="用户信息表(账号与基础信息)；业务用户完整信息=sys_user+user_profiles，同用途字段仅保留本表：登录名/昵称/手机/邮箱/头像/密码/状态/部门" tableName="sys_user">
             <column autoIncrement="true" name="user_id" remarks="用户ID" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
