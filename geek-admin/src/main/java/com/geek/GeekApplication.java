@@ -27,7 +27,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 public class GeekApplication {
     public static void main(String[] args) throws UnknownHostException {
         ensureLogDir();
-        // System.setProperty("spring.devtools.restart.enabled", "false");
+        System.setProperty("spring.devtools.restart.enabled", "false");
         ConfigurableApplicationContext application = SpringApplication.run(GeekApplication.class, args);
         System.out.println("(♥◠‿◠)ﾉﾞ  极客启动成功   ლ(´ڡ`ლ)ﾞ  \n" +
                 " .-------.       ____     __        \n" +

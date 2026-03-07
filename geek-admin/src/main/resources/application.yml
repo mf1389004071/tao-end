@@ -83,11 +83,10 @@ spring:
       max-file-size: 10MB
       # 设置总上传的文件大小
       max-request-size: 20MB
-  # 服务模块
+  # 服务模块（禁止热部署，避免小改动触发重新编译与重启）
   devtools:
     restart:
-      # 热部署开关
-      enabled: true
+      enabled: false
 
 # token配置
 token:

@@ -11,7 +11,7 @@
     "java.compile.nullAnalysis.mode": "disabled",
     "maven.executable.options": "-T 4",
     "maven.pomfile.autoUpdateEffectivePOM": true,
-    "java.debug.settings.hotCodeReplace": "auto",
+    "java.debug.settings.hotCodeReplace": "never",
     "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=9 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx4G -Xms4G -Xlog:disable",
     "maven.excludedFolders": [
         "**/.vscode",
