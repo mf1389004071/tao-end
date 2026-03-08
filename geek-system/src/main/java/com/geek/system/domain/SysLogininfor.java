@@ -1,10 +1,9 @@
 package com.geek.system.domain;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.geek.common.annotation.Excel;
 import com.geek.common.annotation.Excel.ColumnType;
@@ -66,11 +65,10 @@ public class SysLogininfor {
     @Excel(name = "提示消息")
     private String msg;
 
-    /** 访问时间 */
+    /** 访问时间（UTC） */
     @Schema(title = "访问时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Excel(name = "访问时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
-    private Date loginTime;
+    private Instant loginTime;
 
     /** 请求参数 */
     @Schema(title = "请求参数", example = "{'pageNum': 1, 'pageSize': 10, 'startXXX':'', 'endXXX':''}")

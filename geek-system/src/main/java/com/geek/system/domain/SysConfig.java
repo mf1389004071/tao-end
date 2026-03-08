@@ -49,10 +49,29 @@ public class SysConfig extends BaseEntity {
     private String configValue;
 
     /** 系统内置（Y是 N否） */
-    @Schema(title = "系统内置")
+    @Schema(title = "系统内置（Y是 N否）")
     @Excel(name = "系统内置", readConverterExp = "Y=是,N=否")
     @NotBlank(message = "参数键值不能为空")
     @Size(min = 0, max = 500, message = "参数键值长度不能超过500个字符")
     private String configType;
 
+    /** 配置分类 */
+    @Schema(title = "配置分类")
+    @Excel(name = "配置分类")
+    private String category;
+
+    /** 是否对前端开放 */
+    @Schema(title = "是否对前端开放")
+    @Excel(name = "是否对前端开放")
+    private String isPublic;
+
+    /** 值类型：字符串/数字/布尔/JSON.config_type */
+    @Schema(title = "值类型：字符串/数字/布尔/JSON.config_type")
+    @Excel(name = "值类型：字符串/数字/布尔/JSON.config_type")
+    private String valueType;
+
+    /** 状态（0正常 1停用） */
+    @Schema(title = "状态（0正常 1停用）")
+    @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
+    private String status;
 }

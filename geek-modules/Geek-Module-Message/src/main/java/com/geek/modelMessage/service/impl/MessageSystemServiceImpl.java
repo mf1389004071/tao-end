@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.geek.common.core.domain.entity.SysUser;
 import com.geek.common.exception.ServiceException;
-import com.geek.common.utils.DateUtils;
 import com.geek.common.utils.JSON;
 import com.geek.common.utils.SecurityUtils;
 import com.geek.common.utils.StringUtils;
@@ -100,7 +99,6 @@ public class MessageSystemServiceImpl implements IMessageSystemService {
      */
     @Override
     public int updateMessageSystem(MessageSystem messageSystem) {
-        messageSystem.setUpdateTime(DateUtils.getNowDate());
         return messageSystemMapper.updateMessageSystem(messageSystem);
     }
 
@@ -140,10 +138,6 @@ public class MessageSystemServiceImpl implements IMessageSystemService {
     public int batchInsertMessageSystem(List<MessageSystem> messageSystemList) {
         for (MessageSystem messageSystem : messageSystemList) {
             messageSystem.setMessageStatus("0"); // 默认发送信息为未读状态
-            messageSystem.setCreateBy(SecurityUtils.getUsername());
-            messageSystem.setUpdateBy(SecurityUtils.getUsername());
-            messageSystem.setCreateTime(DateUtils.getNowDate());
-            messageSystem.setUpdateTime(DateUtils.getNowDate());
         }
         int result = messageSystemMapper.batchInsertMessageSystem(messageSystemList);
         if (result <= 0) {

@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.geek.common.utils.DateUtils;
 import com.geek.flowable.domain.SysExpression;
 import com.geek.flowable.mapper.SysExpressionMapper;
 import com.geek.flowable.service.ISysExpressionService;
@@ -55,7 +54,6 @@ public class SysExpressionServiceImpl implements ISysExpressionService
     @Override
     public int insertSysExpression(SysExpression sysExpression)
     {
-        sysExpression.setCreateTime(DateUtils.getNowDate());
         return sysExpressionMapper.insertSysExpression(sysExpression);
     }
 
@@ -68,7 +66,6 @@ public class SysExpressionServiceImpl implements ISysExpressionService
     @Override
     public int updateSysExpression(SysExpression sysExpression)
     {
-        sysExpression.setUpdateTime(DateUtils.getNowDate());
         return sysExpressionMapper.updateSysExpression(sysExpression);
     }
 

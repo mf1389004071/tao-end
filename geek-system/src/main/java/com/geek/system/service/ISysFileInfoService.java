@@ -1,7 +1,8 @@
 package com.geek.system.service;
 
-import java.util.Date;
+import java.time.Instant;
 
+import com.geek.common.utils.DateUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.geek.common.utils.sign.Md5Utils;
@@ -22,10 +23,10 @@ public interface ISysFileInfoService extends IService<SysFileInfo> {
     /**
      * 新增文件
      * 
-     * @param file
+     * @param file Web传输文件
      * @return 结果
      */
-    default public SysFileInfo buildSysFileInfo(MultipartFile file) {
+    default SysFileInfo buildSysFileInfo(MultipartFile file) {
         String fileType = null;
         if (file.getOriginalFilename() != null && file.getOriginalFilename().contains(".")) {
             fileType = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf('.') + 1);
@@ -36,8 +37,8 @@ public interface ISysFileInfoService extends IService<SysFileInfo> {
         fileInfo.setFileType(fileType);
         fileInfo.setFileSize(file.getSize());
         fileInfo.setMd5(md5);
-        fileInfo.setCreateTime(new Date());
-        fileInfo.setUpdateTime(new Date());
+        fileInfo.setCreateTime(DateUtils.getNowInstant());
+        fileInfo.setUpdateTime(DateUtils.getNowInstant());
         fileInfo.setDelFlag(0);
         return fileInfo;
     }

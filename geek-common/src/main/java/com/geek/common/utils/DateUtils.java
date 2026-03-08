@@ -3,11 +3,13 @@ package com.geek.common.utils;
 import java.lang.management.ManagementFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -35,12 +37,58 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
             "yyyy.MM.dd", "yyyy.MM.dd HH:mm:ss", "yyyy.MM.dd HH:mm", "yyyy.MM" };
 
     /**
-     * 获取当前Date型日期
-     * 
-     * @return Date() 当前日期
+     * 获取当前 UTC 时刻（推荐：与数据库 timestamptz 一致）
      */
+    public static Instant getNowInstant() {
+        return Instant.now();
+    }
+
+    /**
+     * 获取当前Date型日期（兼容旧代码，新代码请用 getNowInstant）
+     */
+    @Deprecated
     public static Date getNowDate() {
         return new Date();
+    }
+
+    /** Instant 转 Date（系统默认时区解释） */
+    public static Date toDate(Instant instant) {
+        return instant == null ? null : Date.from(instant);
+    }
+
+    /** Date 转 Instant */
+    public static Instant toInstant(Date date) {
+        return date == null ? null : date.toInstant();
+    }
+
+    /**
+     * 将「日期范围」参数转为 Instant（用于查询条件）。支持 yyyy-MM-dd 或 yyyy-MM-dd HH:mm:ss，按 UTC 解析。
+     *
+     * @param obj params 中的 beginXxx/endXxx（String 或 Date 或 Instant）
+     * @return 若为 null 或空字符串返回 null；否则解析为 Instant
+     */
+    public static Instant parseToInstant(Object obj) {
+        if (obj == null) {
+            return null;
+        }
+        if (obj instanceof Instant) {
+            return (Instant) obj;
+        }
+        if (obj instanceof Date) {
+            return ((Date) obj).toInstant();
+        }
+        String str = obj.toString().trim();
+        if (str.isEmpty()) {
+            return null;
+        }
+        try {
+            if (str.length() <= 10) {
+                return LocalDate.parse(str).atStartOfDay(ZoneId.of("UTC")).toInstant();
+            }
+            return LocalDateTime.parse(str.replace(" ", "T")).atZone(ZoneId.of("UTC")).toInstant();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**
@@ -52,27 +100,27 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         return dateTimeNow(YYYY_MM_DD);
     }
 
-    public static final String getTime() {
+    public static String getTime() {
         return dateTimeNow(YYYY_MM_DD_HH_MM_SS);
     }
 
-    public static final String dateTimeNow() {
+    public static String dateTimeNow() {
         return dateTimeNow(YYYYMMDDHHMMSS);
     }
 
-    public static final String dateTimeNow(final String format) {
+    public static String dateTimeNow(final String format) {
         return parseDateToStr(format, new Date());
     }
 
-    public static final String dateTime(final Date date) {
+    public static String dateTime(final Date date) {
         return parseDateToStr(YYYY_MM_DD, date);
     }
 
-    public static final String parseDateToStr(final String format, final Date date) {
+    public static String parseDateToStr(final String format, final Date date) {
         return new SimpleDateFormat(format).format(date);
     }
 
-    public static final Date dateTime(final String format, final String ts) {
+    public static Date dateTime(final String format, final String ts) {
         try {
             return new SimpleDateFormat(format).parse(ts);
         } catch (ParseException e) {
@@ -126,19 +174,46 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     }
 
     /**
+     * 计算相差天数
+     */
+    public static int differentDaysByMillisecond(Instant date1, Instant date2) {
+        return Math.toIntExact(Math.abs(ChronoUnit.DAYS.between(date1, date2)));
+    }
+
+    /**
+     * 如果涉及“自然日”差异（很多系统需要）
+     * 例如：
+     *      2026-03-07 23:00
+     *      2026-03-08 01:00
+     * 实际只差：
+     *      2小时
+     * 但很多业务希望：
+     *      相差1天
+     * @param d1
+     * @param d2
+     * @param zone
+     * @return
+     */
+    public static long differentDays(Instant d1, Instant d2, ZoneId zone) {
+        LocalDate date1 = d1.atZone(zone).toLocalDate();
+        LocalDate date2 = d2.atZone(zone).toLocalDate();
+        return Math.abs(ChronoUnit.DAYS.between(date1, date2));
+    }
+    
+    /**
      * 计算时间差
      *
      * @param endTime   最后时间
      * @param startTime 开始时间
      * @return 时间差（天/小时/分钟）
      */
-    public static String timeDistance(Date endDate, Date startTime) {
+    public static String timeDistance(Date endTime, Date startTime) {
         long nd = 1000L * 24 * 60 * 60;
         long nh = 1000L * 60 * 60;
         long nm = 1000L * 60;
         // long ns = 1000;
         // 获得两个时间的毫秒时间差异
-        long diff = endDate.getTime() - startTime.getTime();
+        long diff = endTime.getTime() - startTime.getTime();
         // 计算差多少天
         long day = diff / nd;
         // 计算差多少小时

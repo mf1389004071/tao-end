@@ -9,6 +9,9 @@ services:
       POSTGRES_DB: bt10
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: Bt10@1234
+      TZ: UTC
+      PGTZ: UTC
     volumes:
       # 数据持久化映射到本地
       - ./data/db:/var/lib/postgresql/data
+    restart: unless-stopped

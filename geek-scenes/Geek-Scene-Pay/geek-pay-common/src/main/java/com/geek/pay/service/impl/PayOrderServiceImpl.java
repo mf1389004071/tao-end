@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.geek.common.exception.ServiceException;
-import com.geek.common.utils.DateUtils;
 import com.geek.pay.domain.PayOrder;
 import com.geek.pay.mapper.PayOrderMapper;
 import com.geek.pay.service.IPayOrderService;
@@ -79,7 +78,6 @@ public class PayOrderServiceImpl implements IPayOrderService {
      */
     @Override
     public int updatePayOrder(PayOrder payOrder) {
-        payOrder.setUpdateTime(DateUtils.getNowDate());
         return payOrderMapper.updatePayOrder(payOrder);
     }
 

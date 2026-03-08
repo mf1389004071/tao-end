@@ -12,10 +12,14 @@
             <column defaultValue="" name="config_key" remarks="参数键名" type="VARCHAR(100)"/>
             <column defaultValue="" name="config_value" remarks="参数键值" type="VARCHAR(500)"/>
             <column defaultValue="N" name="config_type" remarks="系统内置（Y是 N否）" type="CHAR(1)"/>
+            <column defaultValue="0" name="status" remarks="配置状态（0正常 1停用）" type="CHAR(1)"/>
+            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
             <column defaultValue="" name="create_by" remarks="创建者" type="VARCHAR(64)"/>
-            <column name="create_time" remarks="创建时间" type="TIMESTAMP"/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
             <column defaultValue="" name="update_by" remarks="更新者" type="VARCHAR(64)"/>
-            <column name="update_time" remarks="更新时间" type="TIMESTAMP"/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
             <column name="remark" remarks="备注" type="VARCHAR(500)"/>
         </createTable>
 
@@ -35,10 +39,12 @@
             <column name="email" remarks="邮箱" type="VARCHAR(50)"/>
             <column defaultValue="0" name="status" remarks="部门状态（0正常 1停用）" type="CHAR(1)"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
             <column defaultValue="" name="create_by" remarks="创建者" type="VARCHAR(64)"/>
-            <column name="create_time" remarks="创建时间" type="TIMESTAMP"/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
             <column defaultValue="" name="update_by" remarks="更新者" type="VARCHAR(64)"/>
-            <column name="update_time" remarks="更新时间" type="TIMESTAMP"/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
             <column name="remark" remarks="备注" type="VARCHAR(500)"/>
         </createTable>
 
@@ -57,10 +63,13 @@
             <column name="list_class" remarks="表格回显样式" type="VARCHAR(100)"/>
             <column defaultValue="N" name="is_default" remarks="是否默认（Y是 N否）" type="CHAR(1)"/>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
             <column defaultValue="" name="create_by" remarks="创建者" type="VARCHAR(64)"/>
-            <column name="create_time" remarks="创建时间" type="TIMESTAMP"/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
             <column defaultValue="" name="update_by" remarks="更新者" type="VARCHAR(64)"/>
-            <column name="update_time" remarks="更新时间" type="TIMESTAMP"/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
             <column name="remark" remarks="备注" type="VARCHAR(500)"/>
         </createTable>
 
@@ -76,10 +85,13 @@
                 <constraints unique="true"/>
             </column>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column defaultValue="" name="create_by" remarks="创建者" type="VARCHAR(64)"/>
-            <column name="create_time" remarks="创建时间" type="TIMESTAMP"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
             <column defaultValue="" name="update_by" remarks="更新者" type="VARCHAR(64)"/>
-            <column name="update_time" remarks="更新时间" type="TIMESTAMP"/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
             <column name="remark" remarks="备注" type="VARCHAR(500)"/>
         </createTable>
 
@@ -104,10 +116,14 @@
             <column name="md5" remarks="文件MD5" type="VARCHAR(64)">
                 <constraints unique="true"/>
             </column>
+            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
             <column defaultValue="" name="create_by" remarks="创建者" type="VARCHAR(64)"/>
             <column name="create_time" remarks="创建时间" type="TIMESTAMP"/>
             <column defaultValue="" name="update_by" remarks="更新者" type="VARCHAR(64)"/>
-            <column name="update_time" remarks="更新时间" type="TIMESTAMP"/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
             <column name="remark" remarks="备注" type="VARCHAR(255)"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
         </createTable>
@@ -124,7 +140,7 @@
             <column defaultValue="" name="os" remarks="操作系统" type="VARCHAR(50)"/>
             <column defaultValue="0" name="status" remarks="登录状态（0成功 1失败）" type="CHAR(1)"/>
             <column defaultValue="" name="msg" remarks="提示消息" type="VARCHAR(255)"/>
-            <column name="login_time" remarks="访问时间" type="TIMESTAMP"/>
+            <column name="login_time" remarks="访问时间" type="TIMESTAMPTZ"/>
         </createTable>
         <createIndex associatedWith="" indexName="idx_sys_logininfor_lt" tableName="sys_logininfor">
             <column name="login_time"/>
@@ -154,10 +170,12 @@
             <column defaultValue="0" name="status" remarks="菜单状态（0正常 1停用）" type="CHAR(1)"/>
             <column name="perms" remarks="权限标识" type="VARCHAR(100)"/>
             <column defaultValue="#" name="icon" remarks="菜单图标" type="VARCHAR(100)"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
             <column defaultValue="" name="create_by" remarks="创建者" type="VARCHAR(64)"/>
             <column name="create_time" remarks="创建时间" type="TIMESTAMP"/>
             <column defaultValue="" name="update_by" remarks="更新者" type="VARCHAR(64)"/>
-            <column name="update_time" remarks="更新时间" type="TIMESTAMP"/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
             <column defaultValue="" name="remark" remarks="备注" type="VARCHAR(500)"/>
         </createTable>
         <loadData tableName="sys_menu" file="../../db/data/sys_menu.csv" separator="," encoding="UTF-8" relativeToChangelogFile="true"/>
@@ -175,10 +193,14 @@
             </column>
             <column name="notice_content" remarks="公告内容" type="TEXT"/>
             <column defaultValue="0" name="status" remarks="公告状态（0正常 1关闭）" type="CHAR(1)"/>
+            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
             <column defaultValue="" name="create_by" remarks="创建者" type="VARCHAR(64)"/>
-            <column name="create_time" remarks="创建时间" type="TIMESTAMP"/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
             <column defaultValue="" name="update_by" remarks="更新者" type="VARCHAR(64)"/>
-            <column name="update_time" remarks="更新时间" type="TIMESTAMP"/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
             <column name="remark" remarks="备注" type="VARCHAR(255)"/>
         </createTable>
         <loadData tableName="sys_notice" file="../../db/data/sys_notice.csv" separator="," encoding="UTF-8" relativeToChangelogFile="true"/>
@@ -202,7 +224,7 @@
             <column defaultValue="" name="json_result" remarks="返回参数" type="VARCHAR(2000)"/>
             <column defaultValueNumeric="0" name="status" remarks="操作状态（0正常 1异常）" type="INT"/>
             <column defaultValue="" name="error_msg" remarks="错误消息" type="VARCHAR(2000)"/>
-            <column name="oper_time" remarks="操作时间" type="TIMESTAMP"/>
+            <column name="oper_time" remarks="操作时间" type="TIMESTAMPTZ"/>
             <column defaultValueNumeric="0" name="cost_time" remarks="消耗时间" type="BIGINT"/>
         </createTable>
         <createIndex associatedWith="" indexName="idx_sys_oper_log_bt" tableName="sys_oper_log">
@@ -232,10 +254,14 @@
             <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)">
                 <constraints nullable="false"/>
             </column>
+            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
             <column defaultValue="" name="create_by" remarks="创建者" type="VARCHAR(64)"/>
-            <column name="create_time" remarks="创建时间" type="TIMESTAMP"/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
             <column defaultValue="" name="update_by" remarks="更新者" type="VARCHAR(64)"/>
-            <column name="update_time" remarks="更新时间" type="TIMESTAMP"/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
             <column name="remark" remarks="备注" type="VARCHAR(500)"/>
         </createTable>
         <loadData tableName="sys_post" file="../../db/data/sys_post.csv" separator="," encoding="UTF-8" relativeToChangelogFile="true"/>
@@ -257,14 +283,14 @@
             <column defaultValue="1" name="data_scope" remarks="数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限）" type="CHAR(1)"/>
             <column defaultValueNumeric="1" name="menu_check_strictly" remarks="菜单树选择项是否关联显示" type="BOOLEAN"/>
             <column defaultValueNumeric="1" name="dept_check_strictly" remarks="部门树选择项是否关联显示" type="BOOLEAN"/>
-            <column name="status" remarks="角色状态（0正常 1停用）" type="CHAR(1)">
-                <constraints nullable="false"/>
-            </column>
+            <column defaultValue="0" name="status" remarks="角色状态（0正常 1停用）" type="CHAR(1)"><constraints nullable="false"/></column>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
             <column defaultValue="" name="create_by" remarks="创建者" type="VARCHAR(64)"/>
-            <column name="create_time" remarks="创建时间" type="TIMESTAMP"/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
             <column defaultValue="" name="update_by" remarks="更新者" type="VARCHAR(64)"/>
-            <column name="update_time" remarks="更新时间" type="TIMESTAMP"/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
             <column name="remark" remarks="备注" type="VARCHAR(500)"/>
         </createTable>
         <loadData tableName="sys_role" file="../../db/data/sys_role.csv" separator="," encoding="UTF-8" relativeToChangelogFile="true"/>
@@ -278,6 +304,7 @@
             <column name="dept_id" remarks="部门ID" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ" defaultValueComputed="CURRENT_TIMESTAMP"/>
         </createTable>
         <loadData tableName="sys_role_dept" file="../../db/data/sys_role_dept.csv" separator="," encoding="UTF-8" relativeToChangelogFile="true"/>
 
@@ -290,6 +317,7 @@
             <column name="menu_id" remarks="菜单ID" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ" defaultValueComputed="CURRENT_TIMESTAMP"/>
         </createTable>
         <loadData tableName="sys_role_menu" file="../../db/data/sys_role_menu.csv" separator="," encoding="UTF-8" relativeToChangelogFile="true"/>
 
@@ -315,12 +343,14 @@
             <column defaultValue="0" name="status" remarks="账号状态（0正常 1停用）" type="CHAR(1)"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column defaultValue="" name="login_ip" remarks="最后登录IP" type="VARCHAR(128)"/>
-            <column name="login_date" remarks="最后登录时间" type="TIMESTAMP"/>
-            <column name="pwd_update_date" remarks="密码最后更新时间" type="TIMESTAMP"/>
+            <column name="login_date" remarks="最后登录时间" type="TIMESTAMPTZ"/>
+            <column name="pwd_update_date" remarks="密码最后更新时间" type="TIMESTAMPTZ"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
             <column defaultValue="" name="create_by" remarks="创建者" type="VARCHAR(64)"/>
-            <column name="create_time" remarks="创建时间" type="TIMESTAMP"/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
             <column defaultValue="" name="update_by" remarks="更新者" type="VARCHAR(64)"/>
-            <column name="update_time" remarks="更新时间" type="TIMESTAMP"/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
             <column name="remark" remarks="备注" type="VARCHAR(500)"/>
         </createTable>
         <loadData tableName="sys_user" file="../../db/data/sys_user.csv" separator="," encoding="UTF-8" relativeToChangelogFile="true"/>
@@ -333,6 +363,7 @@
             <column name="post_id" remarks="岗位ID" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ" defaultValueComputed="CURRENT_TIMESTAMP"/>
         </createTable>
         <loadData tableName="sys_user_post" file="../../db/data/sys_user_post.csv" separator="," encoding="UTF-8" relativeToChangelogFile="true"/>
     </changeSet>
@@ -344,6 +375,7 @@
             <column name="role_id" remarks="角色ID" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ" defaultValueComputed="CURRENT_TIMESTAMP"/>
         </createTable>
         <loadData tableName="sys_user_role" file="../../db/data/sys_user_role.csv" separator="," encoding="UTF-8" relativeToChangelogFile="true"/>
 

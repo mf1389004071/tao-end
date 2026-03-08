@@ -8,9 +8,9 @@
     <changeSet author="tao-business" id="business-002-sys_dept_merge_user_dept">
         <addColumn tableName="sys_dept">
             <column name="dept_code" type="VARCHAR(255)" remarks="部门编码，唯一"/>
-            <column name="delete_time" type="TIMESTAMP" remarks="删除时间(软删除)"/>
-            <column name="create_id" type="BIGINT" remarks="创建人ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新人ID"/>
+            <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间(软删除)"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
             <column name="delete_id" type="BIGINT" remarks="删除人ID(软删除)"/>
             <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
             <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
@@ -31,11 +31,11 @@
             <column name="balance_after" type="BIGINT" remarks="变动后积分余额"><constraints nullable="false"/></column>
             <column name="related_type" type="VARCHAR(50)" remarks="关联业务类型如EVENT/CONTENT"/>
             <column name="related_id" type="BIGINT" remarks="关联业务主键"/>
-            <column name="expired_time" type="TIMESTAMP" remarks="该笔积分过期时间"/>
+            <column name="expired_time" type="TIMESTAMPTZ" remarks="该笔积分过期时间"/>
             <column name="remark" type="TEXT" remarks="备注"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="发生时间"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="发生时间"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="user_point_logs" baseColumnNames="user_id" constraintName="fk_user_point_logs_user" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
         <createIndex indexName="idx_user_point_logs_user_id" tableName="user_point_logs"><column name="user_id"/></createIndex>
@@ -56,7 +56,7 @@
             <column name="related_id" type="BIGINT" remarks="关联业务ID"/>
             <column name="payment_no" type="VARCHAR(255)" remarks="支付单号"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="发生时间"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="发生时间"/>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="user_contrib_logs" baseColumnNames="user_id" constraintName="fk_user_contrib_logs_user" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
@@ -71,7 +71,7 @@
             <column name="user_id" type="BIGINT" remarks="被邀请人用户ID(sys_user.user_id)"><constraints nullable="false"/></column>
             <column name="inviter_id" type="BIGINT" remarks="邀请人用户ID"/>
             <column name="invite_code" type="VARCHAR(20)" remarks="使用的邀请码"><constraints nullable="false"/></column>
-            <column name="invite_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="被邀请时间"/>
+            <column name="invite_time" type="TIMESTAMPTZ" remarks="被邀请时间"/>
             <column name="reward_status" type="VARCHAR(20)" defaultValue="PENDING" remarks="状态：待处理/已接受/已发奖"/>
             <column name="reward_claimed" type="BOOLEAN" defaultValueBoolean="false" remarks="邀请人是否已领取奖励"/>
             <column name="reward_points" type="INT" defaultValueNumeric="0" remarks="邀请奖励积分"/>
@@ -96,7 +96,7 @@
             <column name="trigger_type" type="VARCHAR(50)" remarks="触发方式：自动/手动/任务完成等"/>
             <column name="trigger_data" type="jsonb" remarks="触发上下文数据"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="变更时间"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="变更时间"/>
             <column name="remark" type="TEXT" remarks="备注"/>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
         </createTable>
@@ -118,12 +118,12 @@
             <column name="icon" type="VARCHAR(255)" remarks="图标"/>
             <column name="color" type="VARCHAR(50)" remarks="主题色"/>
             <column name="permission_level" type="INT" defaultValueNumeric="1" remarks="可见权限等级1-5"/>
-            <column name="create_id" type="BIGINT" remarks="创建人ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新人ID"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
             <column name="delete_id" type="BIGINT" remarks="删除人ID"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
-            <column name="delete_time" type="TIMESTAMP" remarks="删除时间"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
+            <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
             <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
@@ -152,7 +152,7 @@
             <column name="core_values" type="TEXT" remarks="核心价值观描述"/>
             <column name="tags" type="TEXT" remarks="标签(逗号分隔)"/>
             <column name="biz_status" type="VARCHAR(50)" defaultValue="DRAFT" remarks="状态：草稿/审核中/已发布/归档/已删"/>
-            <column name="publish_time" type="TIMESTAMP" remarks="发布时间"/>
+            <column name="publish_time" type="TIMESTAMPTZ" remarks="发布时间"/>
             <column name="view_count" type="BIGINT" defaultValueNumeric="0" remarks="浏览次数"/>
             <column name="like_count" type="BIGINT" defaultValueNumeric="0" remarks="点赞数"/>
             <column name="comment_count" type="BIGINT" defaultValueNumeric="0" remarks="评论数"/>
@@ -164,12 +164,12 @@
             <column name="source_from" type="VARCHAR(255)" remarks="来源"/>
             <column name="difficulty_level" type="VARCHAR(10)" remarks="难度等级"/>
             <column name="ai_summary" type="TEXT" remarks="AI生成摘要"/>
-            <column name="create_id" type="BIGINT" remarks="创建人ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新人ID"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
             <column name="delete_id" type="BIGINT" remarks="删除人ID"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
-            <column name="delete_time" type="TIMESTAMP" remarks="删除时间"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
+            <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
             <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
@@ -199,12 +199,12 @@
             <column name="like_count" type="INT" defaultValueNumeric="0" remarks="点赞数"/>
             <column name="is_pinned" type="BOOLEAN" defaultValueBoolean="false" remarks="是否置顶"/>
             <column name="biz_status" type="VARCHAR(20)" defaultValue="PUBLISHED" remarks="状态：已发布/隐藏"/>
-            <column name="create_id" type="BIGINT" remarks="创建人ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新人ID"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
             <column name="delete_id" type="BIGINT" remarks="删除人ID"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
-            <column name="delete_time" type="TIMESTAMP" remarks="删除时间"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
+            <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column name="remark" type="TEXT" remarks="备注"/>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
@@ -223,7 +223,7 @@
             <column name="content_id" type="BIGINT" remarks="知识内容ID"><constraints nullable="false"/></column>
             <column name="action_type" type="VARCHAR(10)" remarks="类型：点赞/反对/收藏/分享等"><constraints nullable="false"/></column>
             <column name="user_id" type="BIGINT" remarks="用户ID"><constraints nullable="false"/></column>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="点赞时间"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="点赞时间"/>
             <column name="remark" type="TEXT" remarks="备注"/>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
         </createTable>
@@ -240,9 +240,9 @@
             <column name="remark" type="TEXT" remarks="备注"/>
             <column name="join_type" type="VARCHAR(50)" defaultValue="ONLINE" remarks="参与方式：线上/线下/混合"/>
             <column name="category" type="VARCHAR(50)" remarks="活动分类"/>
-            <column name="start_time" type="TIMESTAMP" remarks="开始时间"><constraints nullable="false"/></column>
-            <column name="end_time" type="TIMESTAMP" remarks="结束时间"><constraints nullable="false"/></column>
-            <column name="join_deadline" type="TIMESTAMP" remarks="报名截止时间"/>
+            <column name="start_time" type="TIMESTAMPTZ" remarks="开始时间"><constraints nullable="false"/></column>
+            <column name="end_time" type="TIMESTAMPTZ" remarks="结束时间"><constraints nullable="false"/></column>
+            <column name="join_deadline" type="TIMESTAMPTZ" remarks="报名截止时间"/>
             <column name="max_participants" type="INT" remarks="最大参与人数"/>
             <column name="registered_count" type="INT" defaultValueNumeric="0" remarks="已报名人数"/>
             <column name="checked_in_count" type="INT" defaultValueNumeric="0" remarks="已签到人数"/>
@@ -274,12 +274,12 @@
             <column name="organizer" type="VARCHAR(200)" remarks="主办方"/>
             <column name="contact" type="VARCHAR(255)" remarks="联系方式"/>
             <column name="pm_user_id" type="BIGINT" remarks="负责人ID"/>
-            <column name="create_id" type="BIGINT" remarks="创建人ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新人ID"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
             <column name="delete_id" type="BIGINT" remarks="删除人ID"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
-            <column name="delete_time" type="TIMESTAMP" remarks="删除时间"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
+            <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
             <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
@@ -312,10 +312,10 @@
             <column name="requirements" type="TEXT" remarks="任职要求"/>
             <column name="order_num" type="INT" defaultValueNumeric="0" remarks="排序"/>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
-            <column name="create_id" type="BIGINT" remarks="创建人ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新人ID"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column name="remark" type="TEXT" remarks="备注"/>
         </createTable>
@@ -336,19 +336,19 @@
             <column name="payment_amount" type="DECIMAL(24,4)" defaultValueNumeric="0" remarks="支付金额"/>
             <column name="payment_method" type="VARCHAR(50)" remarks="支付方式：贡献点/积分/混合/现金等"/>
             <column name="payment_no" type="VARCHAR(255)" remarks="支付单号"/>
-            <column name="checked_in_time" type="TIMESTAMP" remarks="签到时间"/>
+            <column name="checked_in_time" type="TIMESTAMPTZ" remarks="签到时间"/>
             <column name="check_in_method" type="VARCHAR(50)" remarks="签到方式：二维码/定位/手动"/>
             <column name="check_in_location" type="jsonb" remarks="签到位置信息"/>
             <column name="conversion_status" type="VARCHAR(20)" remarks="转化状态：无/有意向/已转化"/>
             <column name="conversion_product_id" type="BIGINT" remarks="转化产品ID"/>
             <column name="conversion_amount" type="DECIMAL(24,4)" remarks="转化金额"/>
             <column name="conversion_notes" type="TEXT" remarks="转化备注"/>
-            <column name="create_id" type="BIGINT" remarks="创建人ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新人ID"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
             <column name="delete_id" type="BIGINT" remarks="删除人ID"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="报名时间"/>
-            <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
-            <column name="delete_time" type="TIMESTAMP" remarks="删除时间"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="报名时间"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
+            <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
             <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
@@ -371,8 +371,8 @@
             <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
             <column name="join_id" type="BIGINT" remarks="报名记录ID"><constraints nullable="false"/></column>
             <column name="role_id" type="BIGINT" remarks="活动角色ID"><constraints nullable="false"/></column>
-            <column name="assigned_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="分配时间"/>
-            <column name="confirmed_time" type="TIMESTAMP" remarks="确认时间"/>
+            <column name="assigned_time" type="TIMESTAMPTZ" remarks="分配时间"/>
+            <column name="confirmed_time" type="TIMESTAMPTZ" remarks="确认时间"/>
             <column name="biz_status" type="VARCHAR(20)" defaultValue="ASSIGNED" remarks="状态：已分配/已确认/已拒绝"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column name="remark" type="TEXT" remarks="备注"/>
@@ -388,16 +388,16 @@
             <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
             <column name="event_id" type="BIGINT" remarks="所属活动ID"><constraints nullable="false"/></column>
             <column name="session_date" type="DATE" remarks="场次日期"><constraints nullable="false"/></column>
-            <column name="start_time" type="TIMESTAMP" remarks="场次开始时间"><constraints nullable="false"/></column>
-            <column name="end_time" type="TIMESTAMP" remarks="场次结束时间"><constraints nullable="false"/></column>
+            <column name="start_time" type="TIMESTAMPTZ" remarks="场次开始时间"><constraints nullable="false"/></column>
+            <column name="end_time" type="TIMESTAMPTZ" remarks="场次结束时间"><constraints nullable="false"/></column>
             <column name="biz_status" type="VARCHAR(20)" defaultValue="SCHEDULED" remarks="状态：已排期/进行中/已结束/已取消"/>
             <column name="check_in_count" type="INT" defaultValueNumeric="0" remarks="本场签到人数"/>
             <column name="summary_text" type="TEXT" remarks="AI生成场次总结"/>
             <column name="meeting_url" type="TEXT" remarks="本场会议链接"/>
-            <column name="create_id" type="BIGINT" remarks="创建人ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新人ID"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
         </createTable>
@@ -412,7 +412,7 @@
             <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
             <column name="join_id" type="BIGINT" remarks="报名记录ID"><constraints nullable="false"/></column>
             <column name="session_id" type="BIGINT" remarks="场次ID(周期活动时用)"/>
-            <column name="check_in_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="签到时间"/>
+            <column name="check_in_time" type="TIMESTAMPTZ" remarks="签到时间"/>
             <column name="check_in_method" type="VARCHAR(50)" remarks="签到方式：二维码/定位/手动"/>
             <column name="check_in_location" type="jsonb" remarks="签到位置"/>
             <column name="operator_id" type="BIGINT" remarks="操作人ID(手动签到时)"/>
@@ -443,14 +443,14 @@
             <column name="cost_amount" type="DECIMAL(24,4)" defaultValueNumeric="0" remarks="费用"/>
             <column name="tokens_used" type="INT" defaultValueNumeric="0" remarks="消耗token数"/>
             <column name="model_used" type="VARCHAR(100)" remarks="使用模型"/>
-            <column name="start_time" type="TIMESTAMP" remarks="开始时间"/>
-            <column name="complete_time" type="TIMESTAMP" remarks="完成时间"/>
-            <column name="create_id" type="BIGINT" remarks="创建人ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新人ID"/>
+            <column name="start_time" type="TIMESTAMPTZ" remarks="开始时间"/>
+            <column name="complete_time" type="TIMESTAMPTZ" remarks="完成时间"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
             <column name="delete_id" type="BIGINT" remarks="删除人ID"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
-            <column name="delete_time" type="TIMESTAMP" remarks="删除时间"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
+            <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column name="remark" type="TEXT" remarks="备注"/>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
@@ -472,10 +472,10 @@
             <column name="summary" type="TEXT" remarks="AI摘要"/>
             <column name="key_points" type="jsonb" remarks="关键点"/>
             <column name="action_items" type="jsonb" remarks="行动清单"/>
-            <column name="create_id" type="BIGINT" remarks="创建人ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新人ID"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
             <column name="remark" type="TEXT" remarks="备注"/>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
         </createTable>
@@ -501,13 +501,13 @@
             <column name="trade_no" type="VARCHAR(255)" remarks="第三方交易号">
                 <constraints unique="true"/>
             </column>
-            <column name="xiaoe_create_time" type="TIMESTAMP" remarks="小鹅通侧创建时间"/>
+            <column name="xiaoe_create_time" type="TIMESTAMPTZ" remarks="小鹅通侧创建时间"/>
             <column name="student_info" type="jsonb" remarks="学员信息快照"/>
             <column name="invoice_info" type="jsonb" remarks="发票信息"/>
             <column name="sync_status" type="VARCHAR(20)" defaultValue="PENDING" remarks="同步状态：待同步/已同步/失败"/>
-            <column name="last_sync_time" type="TIMESTAMP" remarks="最近同步时间"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="本地创建时间"/>
-            <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
+            <column name="last_sync_time" type="TIMESTAMPTZ" remarks="最近同步时间"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="本地创建时间"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
             <column name="order_no" type="VARCHAR(255)" remarks="本地订单号"/>
             <column name="remark" type="VARCHAR(255)" remarks="备注"/>
             <column name="process_status" type="VARCHAR(255)" remarks="处理状态"/>
@@ -532,10 +532,10 @@
             <column name="xiaoe_user_id" type="VARCHAR(255)" remarks="小鹅通用户ID"><constraints nullable="false" unique="true"/></column>
             <column name="mapping_type" type="VARCHAR(20)" defaultValue="AUTO" remarks="映射方式：自动/手动"/>
             <column name="confidence_score" type="DECIMAL(3,4)" remarks="匹配置信度0-1"/>
-            <column name="mapped_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="建立映射时间"/>
-            <column name="last_update_time" type="TIMESTAMP" remarks="最后更新时间"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
+            <column name="mapped_time" type="TIMESTAMPTZ" remarks="建立映射时间"/>
+            <column name="last_update_time" type="TIMESTAMPTZ" remarks="最后更新时间"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
             <column name="remark" type="TEXT" remarks="备注"/>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
         </createTable>
@@ -551,10 +551,10 @@
             <column name="width" type="INT" remarks="图片宽度"/>
             <column name="height" type="INT" remarks="图片高度"/>
             <column name="duration" type="INT" remarks="音视频时长(秒)"/>
-            <column name="create_id" type="BIGINT" remarks="创建人ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新人ID"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
             <column name="delete_id" type="BIGINT" remarks="删除人ID"/>
-            <column name="delete_time" type="TIMESTAMP" remarks="删除时间(软删除)"/>
+            <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间(软删除)"/>
             <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
             <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
             <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
@@ -580,12 +580,12 @@
             <column name="valid_days" type="INT" remarks="有效天数"/>
             <column name="biz_status" type="VARCHAR(20)" defaultValue="ACTIVE" remarks="状态：上架/下架/售罄"/>
             <column name="order_num" type="INT" defaultValueNumeric="0" remarks="排序"/>
-            <column name="create_id" type="BIGINT" remarks="创建人ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新人ID"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
             <column name="delete_id" type="BIGINT" remarks="删除人ID"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
-            <column name="delete_time" type="TIMESTAMP" remarks="删除时间"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
+            <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
             <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
@@ -608,12 +608,12 @@
             <column name="redemption_code" type="VARCHAR(100)" remarks="兑换码">
                 <constraints unique="true"/>
             </column>
-            <column name="used_time" type="TIMESTAMP" remarks="使用/核销时间"/>
-            <column name="expired_time" type="TIMESTAMP" remarks="过期时间"/>
-            <column name="create_id" type="BIGINT" remarks="创建人ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新人ID"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="兑换时间"/>
-            <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
+            <column name="used_time" type="TIMESTAMPTZ" remarks="使用/核销时间"/>
+            <column name="expired_time" type="TIMESTAMPTZ" remarks="过期时间"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="兑换时间"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
             <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
@@ -645,14 +645,14 @@
             <column name="payment_status" type="VARCHAR(20)" defaultValue="PENDING" remarks="支付状态：待付/已付/已退/失败/已取消"/>
             <column name="payment_method" type="VARCHAR(50)" remarks="支付方式：微信/支付宝/贡献点/积分等"/>
             <column name="payment_no" type="VARCHAR(255)" remarks="第三方支付单号"/>
-            <column name="paid_time" type="TIMESTAMP" remarks="支付成功时间"/>
+            <column name="paid_time" type="TIMESTAMPTZ" remarks="支付成功时间"/>
             <column name="refund_amount" type="DECIMAL(24,4)" defaultValueNumeric="0" remarks="退款金额"/>
             <column name="refund_reason" type="TEXT" remarks="退款原因"/>
-            <column name="refunded_time" type="TIMESTAMP" remarks="退款时间"/>
-            <column name="create_id" type="BIGINT" remarks="创建人ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新人ID"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
+            <column name="refunded_time" type="TIMESTAMPTZ" remarks="退款时间"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
             <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
@@ -674,19 +674,19 @@
             <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
             <column name="name" type="VARCHAR(255)" remarks="社群名称"><constraints nullable="false"/></column>
             <column name="remark" type="TEXT" remarks="备注"/>
-            <column name="owner_id" type="BIGINT" remarks="创建人(合伙人)用户ID"><constraints nullable="false"/></column>
+            <column name="owner_id" type="BIGINT" remarks="创建者(合伙人)用户ID"><constraints nullable="false"/></column>
             <column name="is_public" type="BOOLEAN" defaultValueBoolean="true" remarks="是否公开可见"/>
             <column name="max_members" type="INT" remarks="最大成员数"/>
             <column name="member_count" type="INT" defaultValueNumeric="0" remarks="当前成员数"/>
             <column name="cover_image_url" type="TEXT" remarks="封面图"/>
             <column name="city" type="VARCHAR(100)" remarks="所在城市"/>
             <column name="biz_status" type="VARCHAR(20)" defaultValue="ACTIVE" remarks="状态：正常/已归档/已解散"/>
-            <column name="create_id" type="BIGINT" remarks="创建人ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新人ID"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
             <column name="delete_id" type="BIGINT" remarks="删除人ID"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
-            <column name="delete_time" type="TIMESTAMP" remarks="删除时间"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
+            <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
             <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
@@ -708,8 +708,8 @@
             <column name="user_id" type="BIGINT" remarks="用户ID"><constraints nullable="false"/></column>
             <column name="role" type="VARCHAR(50)" defaultValue="MEMBER" remarks="角色：群主/管理员/成员"/>
             <column name="biz_status" type="VARCHAR(20)" defaultValue="ACTIVE" remarks="状态：在群/已退出/被移出"/>
-            <column name="joined_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="加入时间"/>
-            <column name="left_time" type="TIMESTAMP" remarks="离开时间"/>
+            <column name="joined_time" type="TIMESTAMPTZ" remarks="加入时间"/>
+            <column name="left_time" type="TIMESTAMPTZ" remarks="离开时间"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column name="remark" type="TEXT" remarks="备注"/>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
@@ -735,7 +735,7 @@
             <column name="operator_type" type="VARCHAR(50)" remarks="操作人类型：用户/系统/管理员"/>
             <column name="ip_address" type="VARCHAR(50)" remarks="操作IP"/>
             <column name="user_agent" type="TEXT" remarks="UA"/>
-            <column name="changed_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="变更时间"/>
+            <column name="changed_time" type="TIMESTAMPTZ" remarks="变更时间"/>
             <column name="metadata" type="jsonb" remarks="扩展元数据"/>
             <column name="remark" type="TEXT" remarks="备注"/>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
@@ -756,7 +756,7 @@
             <column name="change_reason" type="TEXT" remarks="变更原因"/>
             <column name="operator_id" type="BIGINT" remarks="操作人ID"/>
             <column name="operator_type" type="VARCHAR(50)" remarks="操作人类型"/>
-            <column name="changed_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="变更时间"/>
+            <column name="changed_time" type="TIMESTAMPTZ" remarks="变更时间"/>
             <column name="metadata" type="jsonb" remarks="扩展信息"/>
             <column name="remark" type="TEXT" remarks="备注"/>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
@@ -778,7 +778,7 @@
             <column name="change_reason" type="TEXT" remarks="变更原因"/>
             <column name="operator_id" type="BIGINT" remarks="操作人ID"/>
             <column name="operator_type" type="VARCHAR(50)" remarks="操作人类型"/>
-            <column name="changed_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="变更时间"/>
+            <column name="changed_time" type="TIMESTAMPTZ" remarks="变更时间"/>
             <column name="metadata" type="jsonb" remarks="扩展信息"/>
             <column name="remark" type="TEXT" remarks="备注"/>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
@@ -803,7 +803,7 @@
             <column name="related_id" type="BIGINT" remarks="关联业务ID"/>
             <column name="operator_id" type="BIGINT" remarks="操作人ID"/>
             <column name="operator_type" type="VARCHAR(50)" remarks="操作人类型"/>
-            <column name="changed_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="变更时间"/>
+            <column name="changed_time" type="TIMESTAMPTZ" remarks="变更时间"/>
             <column name="metadata" type="jsonb" remarks="扩展信息"/>
             <column name="remark" type="TEXT" remarks="备注"/>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
@@ -819,8 +819,8 @@
             <column name="category" type="VARCHAR(100)" remarks="配置分类"/>
             <column name="is_public" type="BOOLEAN" defaultValueBoolean="false" remarks="是否对前端开放"/>
             <column name="value_type" type="VARCHAR(50)" defaultValue="STRING" remarks="值类型：字符串/数字/布尔/JSON.config_type"/>
-            <column name="create_id" type="BIGINT" remarks="创建人ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新人ID"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
             <column name="status" type="CHAR(1)" defaultValue="0" remarks="状态（0正常 1停用）"/>
         </addColumn>
         <createIndex indexName="idx_sys_config_category" tableName="sys_config"><column name="category"/></createIndex>
@@ -837,8 +837,8 @@
             <column name="related_type" type="VARCHAR(50)" remarks="关联业务类型"/>
             <column name="related_id" type="BIGINT" remarks="关联业务ID"/>
             <column name="is_read" type="BOOLEAN" defaultValueBoolean="false" remarks="是否已读"/>
-            <column name="read_time" type="TIMESTAMP" remarks="阅读时间"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="创建时间"/>
+            <column name="read_time" type="TIMESTAMPTZ" remarks="阅读时间"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
             <column name="remark" type="TEXT" remarks="备注"/>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
         </createTable>
@@ -856,11 +856,11 @@
             <column name="content" type="TEXT" remarks="正文"/>
             <column name="type" type="VARCHAR(50)" defaultValue="system" remarks="类型：system等"/>
             <column name="is_urgent" type="BOOLEAN" defaultValueBoolean="false" remarks="是否紧急"/>
-            <column name="publish_time" type="TIMESTAMP" remarks="发布时间"/>
-            <column name="create_id" type="BIGINT" remarks="创建人ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新人ID"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
+            <column name="publish_time" type="TIMESTAMPTZ" remarks="发布时间"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
             <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
             <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
             <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
@@ -915,7 +915,7 @@
             <column name="total_contribution_points" type="DECIMAL(10,2)" defaultValueNumeric="0" remarks="历史累计贡献点"/>
             <column name="growth_stage" type="VARCHAR(50)" defaultValue="BEGINNER" remarks="成长阶段：入门/学员/高手/导师"/>
             <column name="join_date" type="DATE" remarks="加入/注册日期"/>
-            <column name="last_active_at" type="TIMESTAMP" remarks="最后活跃时间"/>
+            <column name="last_active_at" type="TIMESTAMPTZ" remarks="最后活跃时间"/>
             <column name="wechat_unionid" type="VARCHAR(255)" remarks="微信开放平台 unionid"/>
             <column name="wechat_openid" type="VARCHAR(255)" remarks="微信开放平台 openid"/>
             <column name="miniapp_openid" type="VARCHAR(255)" remarks="小程序 openid"/>
@@ -937,10 +937,10 @@
             <column name="appointment_status" type="VARCHAR(20)" remarks="可约状态：可约/已约/不约"/>
             <column name="extra_profile" type="jsonb" remarks="额外画像信息(JSON)，如家庭成员/挑战列表等"/>
             <column name="remark" type="TEXT" remarks="备注"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
-            <column name="create_id" type="BIGINT" remarks="创建人ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新人ID"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
             <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
             <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
             <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
@@ -976,10 +976,10 @@
             <column name="remark" type="TEXT" remarks="标签说明"/>
             <column name="parent_id" type="BIGINT" remarks="父标签ID(可选)"/>
             <column name="order_num" type="INT" defaultValueNumeric="0" remarks="排序"/>
-            <column name="create_id" type="BIGINT" remarks="创建人ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新人ID"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
         </createTable>
         <createIndex indexName="idx_tags_type" tableName="tags">
@@ -1014,7 +1014,7 @@
             <column name="weight" type="DECIMAL(5,4)" remarks="权重(0-1或0-100，越大代表相关性越高)"/>
             <column name="source" type="VARCHAR(50)" remarks="来源：SYSTEM/SELF/COACH等"/>
             <column name="remark" type="TEXT" remarks="备注/说明"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="创建时间"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
         </createTable>
@@ -1041,7 +1041,7 @@
             <column name="user_id" type="BIGINT" remarks="用户ID">
                 <constraints nullable="false"/>
             </column>
-            <column name="occurred_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="发生时间"/>
+            <column name="occurred_time" type="TIMESTAMPTZ" remarks="发生时间"/>
             <column name="ip_address" type="VARCHAR(50)" remarks="IP 地址"/>
             <column name="device" type="VARCHAR(100)" remarks="终端设备信息"/>
             <column name="event_type" type="VARCHAR(50)" remarks="事件类型：LOGIN/LOGOUT/SIGNIN/LIKE/COMMENT/SHARE/REGISTER_EVENT等"/>
@@ -1092,8 +1092,8 @@
             <column name="benefits_text" type="TEXT" remarks="利益说明"/>
             <column name="upgrade_rules_text" type="TEXT" remarks="晋升说明"/>
             <column name="price_amount" type="DECIMAL(24,4)" remarks="身份付费金额(人民币)"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
             <column name="remark" type="TEXT" remarks="备注"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
@@ -1114,12 +1114,12 @@
             </column>
             <column name="is_primary" type="BOOLEAN" defaultValueBoolean="false" remarks="是否当前主身份"/>
             <column name="biz_status" type="VARCHAR(20)" defaultValue="ACTIVE" remarks="状态：ACTIVE/EXPIRED/REVOKED"/>
-            <column name="acquired_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="获得时间"/>
-            <column name="expired_time" type="TIMESTAMP" remarks="到期时间(可为空)"/>
+            <column name="acquired_time" type="TIMESTAMPTZ" remarks="获得时间"/>
+            <column name="expired_time" type="TIMESTAMPTZ" remarks="到期时间(可为空)"/>
             <column name="source_type" type="VARCHAR(50)" remarks="来源类型：PAYMENT/EVENT/MANUAL等"/>
             <column name="source_id" type="BIGINT" remarks="来源业务ID(如支付订单ID)"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
             <column name="remark" type="TEXT" remarks="备注"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
@@ -1166,7 +1166,7 @@
             <column name="related_type" type="VARCHAR(50)" remarks="关联业务类型：EVENT/COURSE/IDENTITY/POINT_PRODUCT等"/>
             <column name="related_id" type="BIGINT" remarks="关联业务ID"/>
             <column name="json_data" type="jsonb" remarks="扩展JSON，如可转让规则等"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="创建时间"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
             <column name="remark" type="TEXT" remarks="备注"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
@@ -1193,7 +1193,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="order_num" type="INT" defaultValueNumeric="0" remarks="排序"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="创建时间"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="knowledge_content_tags" baseColumnNames="content_id"
                                  constraintName="fk_knowledge_content_tags_content"
@@ -1225,7 +1225,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="order_num" type="INT" defaultValueNumeric="0" remarks="排序"/>
-            <column name="create_time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" remarks="创建时间"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="event_info_tags" baseColumnNames="event_id"
                                  constraintName="fk_event_info_tags_event"

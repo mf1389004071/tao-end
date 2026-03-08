@@ -86,9 +86,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 .eq(SysUser::getUserId, user.getUserId())
                 .like(SysUser::getUserName, user.getUserName())
                 .eq(SysUser::getStatus, user.getStatus())
-                .like(SysUser::getPhonenumber, user.getPhonenumber())
-                .ge(SysUser::getCreateTime, user.getParams().get("beginTime"))
-                .le(SysUser::getCreateTime, user.getParams().get("endTime"));
+                .like(SysUser::getPhonenumber, user.getPhonenumber());
+        if (user.getParams() != null) {
+            java.time.Instant begin = DateUtils.parseToInstant(user.getParams().get("beginTime"));
+            java.time.Instant end = DateUtils.parseToInstant(user.getParams().get("endTime"));
+            if (begin != null) {
+                queryChain = queryChain.ge(SysUser::getCreateTime, begin);
+            }
+            if (end != null) {
+                queryChain = queryChain.le(SysUser::getCreateTime, end);
+            }
+        }
         if (user.getDeptId() != null) {
             queryChain.and(SYS_DEPT.DEPT_ID.eq(user.getDeptId())
                     .or(SYS_USER.DEPT_ID.in(QueryWrapper.create().from(SYS_DEPT)
@@ -258,7 +266,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * 校验手机号码是否唯一
      *
      * @param user 用户信息
-     * @return
      */
     @Override
     public boolean checkPhoneUnique(SysUser user) {
@@ -272,7 +279,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * 校验email是否唯一
      *
      * @param user 用户信息
-     * @return
      */
     @Override
     public boolean checkEmailUnique(SysUser user) {
@@ -434,7 +440,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public boolean resetUserPwd(String userName, String password) {
         return this.updateChain()
                 .eq(SysUser::getUserName, userName)
-                .set(SysUser::getPwdUpdateDate, DateUtils.getNowDate())
+                .set(SysUser::getPwdUpdateDate, DateUtils.getNowInstant())
                 .set(SysUser::getPassword, password)
                 .update();
     }
@@ -538,7 +544,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public String importUser(List<SysUser> userList, Boolean isUpdateSupport, String operName) {
-        if (StringUtils.isNull(userList) || userList.size() == 0) {
+        if (StringUtils.isNull(userList) || userList.isEmpty()) {
             throw new ServiceException("导入用户数据不能为空！");
         }
         int successNum = 0;
@@ -556,7 +562,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                     user.setCreateBy(operName);
                     userMapper.insert(user);
                     successNum++;
-                    successMsg.append("<br/>" + successNum + "、账号 " + user.getUserName() + " 导入成功");
+                    successMsg.append("<br/>").append(successNum).append("、账号 ").append(user.getUserName()).append(" 导入成功");
                 } else if (isUpdateSupport) {
                     BeanValidators.validateWithException(validator, user);
                     checkUserAllowed(u);
@@ -565,15 +571,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                     user.setUpdateBy(operName);
                     userMapper.update(user);
                     successNum++;
-                    successMsg.append("<br/>" + successNum + "、账号 " + user.getUserName() + " 更新成功");
+                    successMsg.append("<br/>").append(successNum).append("、账号 ").append(user.getUserName()).append(" 更新成功");
                 } else {
                     failureNum++;
-                    failureMsg.append("<br/>" + failureNum + "、账号 " + user.getUserName() + " 已存在");
+                    failureMsg.append("<br/>").append(failureNum).append("、账号 ").append(user.getUserName()).append(" 已存在");
                 }
             } catch (Exception e) {
                 failureNum++;
                 String msg = "<br/>" + failureNum + "、账号 " + user.getUserName() + " 导入失败：";
-                failureMsg.append(msg + e.getMessage());
+                failureMsg.append(msg).append(e.getMessage());
                 log.error(msg, e);
             }
         }

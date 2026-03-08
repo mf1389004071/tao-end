@@ -41,12 +41,19 @@ public class SysOperLogServiceImpl extends ServiceImpl<SysOperLogMapper, SysOper
         if (ArrayUtils.isNotEmpty(operLog.getBusinessTypes())) {
             queryChain.in(SysOperLog::getBusinessType, (Object[]) operLog.getBusinessTypes());
         }
-        queryChain.eq(SysOperLog::getStatus, operLog.getStatus())
-                .like(SysOperLog::getOperName, operLog.getOperName())
-                .ge(SysOperLog::getOperTime, operLog.getParams().get("beginTime"))
-                .le(SysOperLog::getOperTime, operLog.getParams().get("endTime"))
-                .orderBy(SysOperLog::getOperId, false);
-        return queryChain;
+        QueryChain<SysOperLog> chain = queryChain.eq(SysOperLog::getStatus, operLog.getStatus())
+                .like(SysOperLog::getOperName, operLog.getOperName());
+        if (operLog.getParams() != null) {
+            java.time.Instant begin = com.geek.common.utils.DateUtils.parseToInstant(operLog.getParams().get("beginTime"));
+            java.time.Instant end = com.geek.common.utils.DateUtils.parseToInstant(operLog.getParams().get("endTime"));
+            if (begin != null) {
+                chain = chain.ge(SysOperLog::getOperTime, begin);
+            }
+            if (end != null) {
+                chain = chain.le(SysOperLog::getOperTime, end);
+            }
+        }
+        return chain.orderBy(SysOperLog::getOperId, false);
     }
 
     @Override

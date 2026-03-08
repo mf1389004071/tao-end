@@ -1,6 +1,6 @@
 package com.geek.common.core.domain.entity;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -34,7 +34,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class SysUser extends BaseEntity {
-    private static final long serialVersionUID = 1L;
 
     /** 用户ID */
     @Id
@@ -103,15 +102,15 @@ public class SysUser extends BaseEntity {
     @Excel(name = "最后登录IP", type = Type.EXPORT)
     private String loginIp;
 
-    /** 最后登录时间 */
+    /** 最后登录时间（UTC） */
     @Schema(title = "最后登录时间")
     @Excel(name = "最后登录时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Type.EXPORT)
-    private Date loginDate;
+    private Instant loginDate;
 
-    /** 密码最后更新时间 */
+    /** 密码最后更新时间（UTC） */
     @Schema(title = "密码最后更新时间")
     @Excel(name = "密码最后更新时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Type.EXPORT)
-    private Date pwdUpdateDate;
+    private Instant pwdUpdateDate;
 
     /** 部门对象 */
     @Schema(title = "部门对象")

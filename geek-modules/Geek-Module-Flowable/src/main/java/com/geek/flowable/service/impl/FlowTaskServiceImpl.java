@@ -489,8 +489,8 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
         List<FlowTaskDto> flowList = new ArrayList<>();
         for (HistoricProcessInstance hisIns : historicProcessInstances) {
             FlowTaskDto flowTask = new FlowTaskDto();
-            flowTask.setCreateTime(hisIns.getStartTime());
-            flowTask.setFinishTime(hisIns.getEndTime());
+            flowTask.setCreateTime(hisIns.getStartTime() != null ? hisIns.getStartTime().toInstant() : null);
+            flowTask.setFinishTime(hisIns.getEndTime() != null ? hisIns.getEndTime().toInstant() : null);
             flowTask.setProcInsId(hisIns.getId());
 
             // 计算耗时
@@ -687,7 +687,7 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
             // 当前流程信息
             flowTask.setTaskId(task.getId());
             flowTask.setTaskDefKey(task.getTaskDefinitionKey());
-            flowTask.setCreateTime(task.getCreateTime());
+            flowTask.setCreateTime(task.getCreateTime() != null ? task.getCreateTime().toInstant() : null);
             flowTask.setProcDefId(task.getProcessDefinitionId());
             flowTask.setExecutionId(task.getExecutionId());
             flowTask.setTaskName(task.getName());
@@ -737,8 +737,8 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
             // 当前流程信息
             flowTask.setTaskId(histTask.getId());
             // 审批人员信息
-            flowTask.setCreateTime(histTask.getCreateTime());
-            flowTask.setFinishTime(histTask.getEndTime());
+            flowTask.setCreateTime(histTask.getCreateTime() != null ? histTask.getCreateTime().toInstant() : null);
+            flowTask.setFinishTime(histTask.getEndTime() != null ? histTask.getEndTime().toInstant() : null);
             flowTask.setDuration(getDate(histTask.getDurationInMillis()));
             flowTask.setProcDefId(histTask.getProcessDefinitionId());
             flowTask.setTaskDefKey(histTask.getTaskDefinitionKey());
@@ -815,8 +815,8 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
                     FlowTaskDto flowTask = new FlowTaskDto();
                     flowTask.setTaskId(histIns.getTaskId());
                     flowTask.setTaskName(histIns.getActivityName());
-                    flowTask.setCreateTime(histIns.getStartTime());
-                    flowTask.setFinishTime(histIns.getEndTime());
+                    flowTask.setCreateTime(histIns.getStartTime() != null ? histIns.getStartTime().toInstant() : null);
+                    flowTask.setFinishTime(histIns.getEndTime() != null ? histIns.getEndTime().toInstant() : null);
                     if (StringUtils.isNotBlank(histIns.getAssignee())) {
                         SysUser sysUser = sysUserService.selectUserById(Long.parseLong(histIns.getAssignee()));
                         flowTask.setAssigneeId(sysUser.getUserId());
@@ -1228,8 +1228,8 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
         FlowTaskDto flowTask = new FlowTaskDto();
         flowTask.setTaskId(histIns.getTaskId());
         flowTask.setTaskName(histIns.getActivityName());
-        flowTask.setCreateTime(histIns.getStartTime());
-        flowTask.setFinishTime(histIns.getEndTime());
+        flowTask.setCreateTime(histIns.getStartTime() != null ? histIns.getStartTime().toInstant() : null);
+        flowTask.setFinishTime(histIns.getEndTime() != null ? histIns.getEndTime().toInstant() : null);
         if (StringUtils.isNotBlank(histIns.getAssignee())) {
             SysUser sysUser = sysUserService.selectUserById(Long.parseLong(histIns.getAssignee()));
             flowTask.setAssigneeId(sysUser.getUserId());

@@ -72,13 +72,22 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     }
 
     private QueryChain<SysConfig> selectConfigList(SysConfig config) {
-        return this.queryChain()
+        QueryChain<SysConfig> chain = this.queryChain()
                 .like(SysConfig::getConfigKey, config.getConfigKey())
                 .eq(SysConfig::getConfigType, config.getConfigType())
-                .like(SysConfig::getConfigName, config.getConfigName())
-                .between(SysConfig::getCreateTime,
-                        config.getParams().get("beginTime"),
-                        config.getParams().get("endTime"));
+                .like(SysConfig::getConfigName, config.getConfigName());
+        if (config.getParams() != null) {
+            java.time.Instant begin = com.geek.common.utils.DateUtils.parseToInstant(config.getParams().get("beginTime"));
+            java.time.Instant end = com.geek.common.utils.DateUtils.parseToInstant(config.getParams().get("endTime"));
+            if (begin != null && end != null) {
+                chain = chain.between(SysConfig::getCreateTime, begin, end);
+            } else if (begin != null) {
+                chain = chain.ge(SysConfig::getCreateTime, begin);
+            } else if (end != null) {
+                chain = chain.le(SysConfig::getCreateTime, end);
+            }
+        }
+        return chain;
     }
 
     @Override
@@ -190,7 +199,6 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     /**
      * 获取config缓存
      *
-     * @return
      */
     private Cache getCache() {
         return CacheUtils.getCache(CacheConstants.SYS_CONFIG_KEY);

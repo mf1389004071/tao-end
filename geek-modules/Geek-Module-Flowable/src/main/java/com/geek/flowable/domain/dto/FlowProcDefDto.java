@@ -1,8 +1,6 @@
 package com.geek.flowable.domain.dto;
 import java.io.Serializable;
-import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.Instant;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -48,9 +46,8 @@ public class FlowProcDefDto implements Serializable {
     @Schema(title = "流程定义状态: 1:激活 , 2:中止")
     private int suspensionState;
 
-    @Schema(title = "部署时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date deploymentTime;
+    @Schema(title = "部署时间（UTC）")
+    private Instant deploymentTime;
 
 
 }

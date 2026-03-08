@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.geek.common.utils.DateUtils;
 import com.geek.common.utils.SecurityUtils;
 import com.geek.modelMessage.domain.MessageTemplate;
 import com.geek.modelMessage.mapper.MessageTemplateMapper;
@@ -57,10 +56,6 @@ public class MessageTemplateServiceImpl implements IMessageTemplateService
     @Override
     public int insertMessageTemplate(MessageTemplate messageTemplate)
     {
-        messageTemplate.setCreateBy(SecurityUtils.getUsername());
-        messageTemplate.setCreateTime(DateUtils.getNowDate());
-        messageTemplate.setUpdateBy(SecurityUtils.getUsername());
-        messageTemplate.setUpdateTime(DateUtils.getNowDate());
         return messageTemplateMapper.insertMessageTemplate(messageTemplate);
     }
 
@@ -73,8 +68,6 @@ public class MessageTemplateServiceImpl implements IMessageTemplateService
     @Override
     public int updateMessageTemplate(MessageTemplate messageTemplate)
     {
-        messageTemplate.setUpdateBy(SecurityUtils.getUsername());
-        messageTemplate.setUpdateTime(DateUtils.getNowDate());
         return messageTemplateMapper.updateMessageTemplate(messageTemplate);
     }
 

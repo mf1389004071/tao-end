@@ -34,7 +34,6 @@ import com.geek.common.core.storage.service.StorageService;
 import com.geek.common.core.text.CharsetKit;
 import com.geek.common.exception.ServiceException;
 import com.geek.common.utils.Sb;
-import com.geek.common.utils.SecurityUtils;
 import com.geek.common.utils.StringUtils;
 import com.geek.common.utils.file.FileUtils;
 import com.geek.system.domain.SysFileInfo;
@@ -124,7 +123,6 @@ public class FileController extends BaseController {
     @Anonymous
     @GetMapping({ "/preview", "/{bucketName}/preview" })
     public void preview(
-            @PathVariable(name = "storageType", required = false) String storageType,
             @PathVariable(name = "bucketName", required = false) String bucketName,
             @RequestParam("filePath") String filePath,
             HttpServletResponse response) throws Exception {
@@ -133,7 +131,7 @@ public class FileController extends BaseController {
                 StorageBucketKey.use(bucketName);
             }
             StorageService storageService = new StorageService(GeekConfig.getGeekStorageBucket());
-            filePath = URLDecoder.decode(filePath, CharsetKit.UTF_8);
+            filePath = URLDecoder.decode(filePath, CharsetKit.CHARSET_UTF_8);
             InputStream inputStream = storageService.downLoad(filePath);
             String contentType = URLConnection.guessContentTypeFromName(FileUtils.getName(filePath));
             if (contentType == null) {
@@ -243,17 +241,12 @@ public class FileController extends BaseController {
             }
             // 创建文件记录
             int dotIndex = fileName.lastIndexOf('.');
-            String userName = SecurityUtils.getUsername();
             SysFileInfo fileInfo = new SysFileInfo();
             fileInfo.setFileName(fileName);
             fileInfo.setFilePath(finalPath);
             fileInfo.setFileSize(fileSize);
             fileInfo.setFileType(dotIndex >= 0 ? fileName.substring(dotIndex + 1) : "");
             fileInfo.setStorageType(GeekConfig.getGeekStorageBucket().getDefaultSbType());
-            fileInfo.setCreateBy(userName);
-            fileInfo.setCreateTime(new Date());
-            fileInfo.setUpdateBy(userName);
-            fileInfo.setUpdateTime(new Date());
             fileInfo.setDelFlag(0);
             sysFileInfoService.save(fileInfo);
             return AjaxResult.success(fileInfo);

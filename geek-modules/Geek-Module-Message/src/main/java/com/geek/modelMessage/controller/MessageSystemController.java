@@ -21,7 +21,6 @@ import com.geek.common.core.domain.AjaxResult;
 import com.geek.common.core.page.TableDataInfo;
 import com.geek.common.enums.BusinessType;
 import com.geek.common.exception.ServiceException;
-import com.geek.common.utils.DateUtils;
 import com.geek.common.utils.poi.ExcelUtil;
 import com.geek.modelMessage.domain.MessageSystem;
 import com.geek.modelMessage.service.IMessageSystemService;
@@ -93,8 +92,6 @@ public class MessageSystemController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody MessageSystem messageSystem)
     {
-        messageSystem.setUpdateBy(getUsername());
-        messageSystem.setUpdateTime(DateUtils.getNowDate());
         return toAjax(messageSystemService.updateMessageSystem(messageSystem));
     }
 

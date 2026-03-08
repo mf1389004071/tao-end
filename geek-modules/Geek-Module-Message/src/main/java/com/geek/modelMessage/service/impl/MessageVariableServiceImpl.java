@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.geek.common.exception.ServiceException;
-import com.geek.common.utils.DateUtils;
 import com.geek.common.utils.SecurityUtils;
 import com.geek.modelMessage.domain.MessageVariable;
 import com.geek.modelMessage.mapper.MessageVariableMapper;
@@ -58,10 +57,6 @@ public class MessageVariableServiceImpl implements IMessageVariableService
     @Override
     public int insertMessageVariable(MessageVariable messageVariable)
     {
-        messageVariable.setCreateBy(SecurityUtils.getUsername());
-        messageVariable.setCreateTime(DateUtils.getNowDate());
-        messageVariable.setUpdateBy(SecurityUtils.getUsername());
-        messageVariable.setUpdateTime(DateUtils.getNowDate());
         return messageVariableMapper.insertMessageVariable(messageVariable);
     }
 
@@ -74,8 +69,6 @@ public class MessageVariableServiceImpl implements IMessageVariableService
     @Override
     public int updateMessageVariable(MessageVariable messageVariable)
     {
-        messageVariable.setUpdateBy(SecurityUtils.getUsername());
-        messageVariable.setUpdateTime(DateUtils.getNowDate());
         return messageVariableMapper.updateMessageVariable(messageVariable);
     }
 

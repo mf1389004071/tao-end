@@ -30,7 +30,6 @@ public class SysLogininforServiceImpl extends ServiceImpl<SysLogininforMapper, S
      */
     @Override
     public boolean save(SysLogininfor logininfor) {
-        logininfor.setLoginTime(DateUtils.getNowDate());
         return super.save(logininfor);
     }
 

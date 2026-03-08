@@ -1,7 +1,5 @@
 package com.geek.system.mapper;
 
-import static com.geek.common.core.domain.entity.table.SysRoleTableDef.*;
-
 import com.geek.common.core.domain.entity.SysDept;
 import com.geek.common.core.domain.entity.SysRole;
 import com.geek.common.core.domain.entity.SysUser;

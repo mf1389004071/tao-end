@@ -4,7 +4,7 @@
 
 - **现状**：框架中 `create_by`、`update_by` 实际存储的是 **user_name**（登录名），由 `BaseEntityListener` 通过 `SecurityUtils.getUsername()` 写入。
 - **目标**：将所有此类字段统一改为存储 **sys_user.user_id**，展示处通过关联 `sys_user` 查询昵称/真实姓名等再展示。
-- **收益**：用户改名不影响历史；可建外键；按人统计、权限、JOIN 稳定；与业务表设计（changelog-2 中已标注「创建人ID」）一致。
+- **收益**：用户改名不影响历史；可建外键；按人统计、权限、JOIN 稳定；与业务表设计（changelog-2 中已标注「创建者ID」）一致。
 
 ---
 
@@ -13,7 +13,7 @@
 | 层级 | 内容 | 数量/说明 |
 |------|------|-----------|
 | **数据库** | changelog-1-master 系统表 | 11 张表：create_by/update_by 从 VARCHAR(64) 改为 BIGINT，并做历史数据迁移 |
-| **数据库** | changelog-2-business 业务表 | 约 22 张表：列类型由 VARCHAR(64) 改为 BIGINT（备注已是「创建人ID」） |
+| **数据库** | changelog-2-business 业务表 | 约 22 张表：列类型由 VARCHAR(64) 改为 BIGINT（备注已是「创建者ID」） |
 | **Java 基类与监听器** | BaseEntity + BaseEntityListener | 1 处：类型 String→Long，写入 getUserId() |
 | **Java Controller** | 显式 setCreateBy/setUpdateBy | 约 7 个 Controller、十余处调用 |
 | **Java Service** | 导入等场景 | SysUserServiceImpl、FileController 等 |
@@ -48,7 +48,7 @@
 
 ### 3.2 changelog-2-business.xml（业务表）
 
-业务表已标注「创建人ID」「更新人ID」，但列类型仍为 `VARCHAR(64)`。涉及 create_by/update_by（及部分表含 delete_by）的表包括但不限于：
+业务表已标注「创建者ID」「更新者ID」，但列类型仍为 `VARCHAR(64)`。涉及 create_by/update_by（及部分表含 delete_by）的表包括但不限于：
 
 - user_dept  
 - knowledge_category  
@@ -118,7 +118,7 @@
 - 列名仍为 `create_by`、`update_by`，仅 Java 类型由 String 改为 Long，**resultMap 中 property 类型随实体变化即可**，一般无需改 column 名。  
 - 若个别 XML 中有对 create_by/update_by 的字符串拼接或条件判断，需确认是否仍合法（如 `create_by != ''` 改为 `create_by != null`）。
 
-### 4.4 展示层（列表/详情需要显示「创建人/更新人」名称时）
+### 4.4 展示层（列表/详情需要显示「创建者/更新者」名称时）
 
 - **推荐**：在返回给前端的 DTO/VO 中增加 `createByName`、`updateByName`（或统一命名如 `createByNickName`），在 Service 或 Mapper 层通过 **JOIN sys_user** 或 **批量查 sys_user** 按 user_id 解析出昵称/真实姓名再填入。  
 - 这样前端只消费「名称」字段，不关心底层存的是 user_id；后续若统一为 user_id，只需保证这些 VO 字段由关联查询填充即可。

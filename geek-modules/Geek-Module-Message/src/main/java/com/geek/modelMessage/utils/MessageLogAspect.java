@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import com.geek.common.utils.DateUtils;
 import com.geek.common.utils.SecurityUtils;
 import com.geek.modelMessage.annotation.MessageLog;
 import com.geek.modelMessage.domain.MessageSystem;
@@ -54,13 +53,9 @@ public class MessageLogAspect {
     private void logMessage(String title, String description, MessageType messageType) {
         MessageSystem messageSystem = new MessageSystem();
         messageSystem.setMessageTitle(title); // 标题
-        messageSystem.setCreateBy(SecurityUtils.getUsername()); // 发送人
-        messageSystem.setCreateTime(DateUtils.getNowDate()); // 发送时间
         messageSystem.setMessageContent(description); // 信息内容
         messageSystem.setMessageStatus("0"); // 默认为未读 0未读 1 已读
         messageSystem.setMessageType(messageType.getCode()); 
-        messageSystem.setUpdateBy(SecurityUtils.getUsername()); // 修改人
-        messageSystem.setUpdateTime(DateUtils.getNowDate()); // 修改时间
         messageSystem.setSendMode("0"); // 默认发送方式为平台
         messageSystemService.insertMessageSystem(messageSystem);
         logger.info("消息记录成功，标题: {}, 描述: {}, 类型: {}", title, description, messageType);

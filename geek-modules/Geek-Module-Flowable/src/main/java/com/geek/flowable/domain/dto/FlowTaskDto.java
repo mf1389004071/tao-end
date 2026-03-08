@@ -1,9 +1,7 @@
 package com.geek.flowable.domain.dto;
 
 import java.io.Serializable;
-import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.Instant;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -93,12 +91,10 @@ public class FlowTaskDto implements Serializable {
     @Schema(title = "候选执行人")
     private String candidate;
 
-    @Schema(title = "任务创建时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime;
+    @Schema(title = "任务创建时间（UTC）")
+    private Instant createTime;
 
-    @Schema(title = "任务完成时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date finishTime;
+    @Schema(title = "任务完成时间（UTC）")
+    private Instant finishTime;
 
 }

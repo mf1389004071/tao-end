@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.geek.common.utils.DateUtils;
 import com.geek.pay.domain.PayInvoice;
 import com.geek.pay.mapper.PayInvoiceMapper;
 import com.geek.pay.service.IPayInvoiceService;
@@ -55,7 +54,6 @@ public class PayInvoiceServiceImpl implements IPayInvoiceService
     @Override
     public int insertPayInvoice(PayInvoice payInvoice)
     {
-        payInvoice.setCreateTime(DateUtils.getNowDate());
         return payInvoiceMapper.insertPayInvoice(payInvoice);
     }
 
@@ -68,7 +66,6 @@ public class PayInvoiceServiceImpl implements IPayInvoiceService
     @Override
     public int updatePayInvoice(PayInvoice payInvoice)
     {
-        payInvoice.setUpdateTime(DateUtils.getNowDate());
         return payInvoiceMapper.updatePayInvoice(payInvoice);
     }
 

@@ -3,6 +3,8 @@ package com.geek.pay.domain;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.time.Instant;
+
 import com.geek.common.annotation.Excel;
 import com.geek.common.core.domain.BaseEntity;
 
@@ -62,10 +64,10 @@ public class PayOrder extends BaseEntity {
     @Excel(name = "支付方式")
     private String payType;
 
-    /** 支付时间 */
+    /** 支付时间（UTC） */
     @Schema(title = "支付时间")
     @Excel(name = "支付时间")
-    private java.util.Date payTime;
+    private Instant payTime;
 
     /** 支付人 */
     @Schema(title = "支付人")
@@ -144,11 +146,11 @@ public class PayOrder extends BaseEntity {
         return payType;
     }
 
-    public void setPayTime(java.util.Date payTime) {
+    public void setPayTime(Instant payTime) {
         this.payTime = payTime;
     }
 
-    public java.util.Date getPayTime() {
+    public Instant getPayTime() {
         return payTime;
     }
 

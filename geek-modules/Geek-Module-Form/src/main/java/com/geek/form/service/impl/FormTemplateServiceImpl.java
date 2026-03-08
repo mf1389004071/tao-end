@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.geek.common.utils.DateUtils;
 import com.geek.form.domain.FormTemplate;
 import com.geek.form.mapper.FormTemplateMapper;
 import com.geek.form.service.IFormTemplateService;
@@ -55,7 +54,6 @@ public class FormTemplateServiceImpl implements IFormTemplateService
     @Override
     public int insertFormTemplate(FormTemplate formTemplate)
     {
-        formTemplate.setCreateTime(DateUtils.getNowDate());
         return formTemplateMapper.insertFormTemplate(formTemplate);
     }
 
@@ -68,7 +66,6 @@ public class FormTemplateServiceImpl implements IFormTemplateService
     @Override
     public int updateFormTemplate(FormTemplate formTemplate)
     {
-        formTemplate.setUpdateTime(DateUtils.getNowDate());
         return formTemplateMapper.updateFormTemplate(formTemplate);
     }
 

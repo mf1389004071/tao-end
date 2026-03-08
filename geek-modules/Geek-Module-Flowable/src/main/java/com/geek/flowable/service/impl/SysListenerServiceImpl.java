@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.geek.common.utils.DateUtils;
 import com.geek.flowable.domain.SysListener;
 import com.geek.flowable.mapper.SysListenerMapper;
 import com.geek.flowable.service.ISysListenerService;
@@ -55,7 +54,6 @@ public class SysListenerServiceImpl implements ISysListenerService
     @Override
     public int insertSysListener(SysListener sysListener)
     {
-        sysListener.setCreateTime(DateUtils.getNowDate());
         return sysListenerMapper.insertSysListener(sysListener);
     }
 
@@ -68,7 +66,6 @@ public class SysListenerServiceImpl implements ISysListenerService
     @Override
     public int updateSysListener(SysListener sysListener)
     {
-        sysListener.setUpdateTime(DateUtils.getNowDate());
         return sysListenerMapper.updateSysListener(sysListener);
     }
 

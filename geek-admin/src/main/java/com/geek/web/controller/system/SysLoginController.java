@@ -1,10 +1,10 @@
 package com.geek.web.controller.system;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,19 +39,19 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 public class SysLoginController {
 
-    @Autowired
+    @Resource
     private SysLoginService loginService;
 
-    @Autowired
+    @Resource
     private ISysMenuService menuService;
 
-    @Autowired
+    @Resource
     private SysPermissionService permissionService;
 
-    @Autowired
+    @Resource
     private TokenService tokenService;
 
-    @Autowired
+    @Resource
     private ISysConfigService configService;
 
     /**
@@ -94,7 +94,7 @@ public class SysLoginController {
         if (user.getAvatar() != null) {
             try {
                 user.setAvatar(Sb.getURL(user.getAvatar()));
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         AjaxResult ajax = AjaxResult.success();
@@ -107,22 +107,21 @@ public class SysLoginController {
     }
 
     // 检查初始密码是否提醒修改
-    public boolean initPasswordIsModify(Date pwdUpdateDate) {
+    public boolean initPasswordIsModify(Instant pwdUpdateInstant) {
         Integer initPasswordModify = Convert.toInt(configService.selectConfigByKey("sys.account.initPasswordModify"));
-        return initPasswordModify != null && initPasswordModify == 1 && pwdUpdateDate == null;
+        return initPasswordModify != null && initPasswordModify == 1 && pwdUpdateInstant == null;
     }
 
     // 检查密码是否过期
-    public boolean passwordIsExpiration(Date pwdUpdateDate) {
+    public boolean passwordIsExpiration(Instant pwdUpdateInstant) {
         Integer passwordValidateDays = Convert
                 .toInt(configService.selectConfigByKey("sys.account.passwordValidateDays"));
         if (passwordValidateDays != null && passwordValidateDays > 0) {
-            if (StringUtils.isNull(pwdUpdateDate)) {
+            if (StringUtils.isNull(pwdUpdateInstant)) {
                 // 如果从未修改过初始密码，直接提醒过期
                 return true;
             }
-            Date nowDate = DateUtils.getNowDate();
-            return DateUtils.differentDaysByMillisecond(nowDate, pwdUpdateDate) > passwordValidateDays;
+            return DateUtils.differentDaysByMillisecond(DateUtils.getNowInstant(), pwdUpdateInstant) > passwordValidateDays;
         }
         return false;
     }

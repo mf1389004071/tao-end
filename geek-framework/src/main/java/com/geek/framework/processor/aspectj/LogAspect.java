@@ -118,12 +118,12 @@ public class LogAspect {
             getControllerMethodDescription(joinPoint, controllerLog, operLog, jsonResult);
             // 设置消耗时间
             operLog.setCostTime(System.currentTimeMillis() - TIME_THREADLOCAL.get());
+            operLog.setOperTime(com.geek.common.utils.DateUtils.getNowInstant());
             // 保存数据库
             AsyncManager.me().execute(AsyncFactory.recordOper(operLog));
         } catch (Exception exp) {
             // 记录本地异常日志
             log.error("异常信息:{}", exp.getMessage());
-            exp.printStackTrace();
         } finally {
             TIME_THREADLOCAL.remove();
         }
@@ -134,7 +134,6 @@ public class LogAspect {
      * 
      * @param log     日志
      * @param operLog 操作日志
-     * @throws Exception
      */
     public void getControllerMethodDescription(JoinPoint joinPoint, Log log, SysOperLog operLog, Object jsonResult)
             throws Exception {
@@ -178,19 +177,19 @@ public class LogAspect {
      * 参数拼装
      */
     private String argsArrayToString(Object[] paramsArray, String[] excludeParamNames) {
-        String params = "";
-        if (paramsArray != null && paramsArray.length > 0) {
+        StringBuilder params = new StringBuilder();
+        if (paramsArray != null) {
             for (Object o : paramsArray) {
                 if (StringUtils.isNotNull(o) && !isFilterObject(o)) {
                     try {
                         String jsonObj = JSON.toJSONString(o, excludePropertyPreFilter(excludeParamNames));
-                        params += jsonObj.toString() + " ";
-                    } catch (Exception e) {
+                        params.append(jsonObj).append(" ");
+                    } catch (Exception ignored) {
                     }
                 }
             }
         }
-        return params.trim();
+        return params.toString().trim();
     }
 
     /**

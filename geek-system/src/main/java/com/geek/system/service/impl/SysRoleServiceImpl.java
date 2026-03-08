@@ -62,9 +62,17 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 .eq(SysRole::getRoleId, role.getRoleId())
                 .like(SysRole::getRoleName, role.getRoleName())
                 .eq(SysRole::getStatus, role.getStatus())
-                .like(SysRole::getRoleKey, role.getRoleKey())
-                .le(SysRole::getCreateTime, role.getParams().get("beginTime"))
-                .ge(SysRole::getCreateTime, role.getParams().get("endTime"));
+                .like(SysRole::getRoleKey, role.getRoleKey());
+        if (role.getParams() != null) {
+            java.time.Instant begin = com.geek.common.utils.DateUtils.parseToInstant(role.getParams().get("beginTime"));
+            java.time.Instant end = com.geek.common.utils.DateUtils.parseToInstant(role.getParams().get("endTime"));
+            if (begin != null) {
+                q = q.ge(SysRole::getCreateTime, begin);
+            }
+            if (end != null) {
+                q = q.le(SysRole::getCreateTime, end);
+            }
+        }
         return q;
     }
 

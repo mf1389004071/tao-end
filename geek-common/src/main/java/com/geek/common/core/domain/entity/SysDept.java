@@ -1,8 +1,10 @@
 package com.geek.common.core.domain.entity;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.geek.common.annotation.Excel;
 import com.geek.common.core.domain.BaseEntity;
 import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
@@ -28,7 +30,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class SysDept extends BaseEntity {
-    private static final long serialVersionUID = 1L;
 
     /** 部门ID */
     @Schema(title = "部门ID")
@@ -37,40 +38,48 @@ public class SysDept extends BaseEntity {
 
     /** 父部门ID */
     @Schema(title = "父部门ID")
+    @Excel(name = "父部门id")
     private Long parentId;
 
     /** 祖级列表 */
     @Schema(title = "祖级列表")
+    @Excel(name = "祖级列表")
     private String ancestors;
 
     /** 部门名称 */
     @Schema(title = "部门名称")
+    @Excel(name = "部门名称")
     @NotBlank(message = "部门名称不能为空")
     @Size(min = 0, max = 30, message = "部门名称长度不能超过30个字符")
     private String deptName;
 
     /** 显示顺序 */
     @Schema(title = "显示顺序")
+    @Excel(name = "显示顺序")
     @NotNull(message = "显示顺序不能为空")
     private Integer orderNum;
 
     /** 负责人 */
     @Schema(title = "负责人")
+    @Excel(name = "负责人")
     private String leader;
 
     /** 联系电话 */
     @Schema(title = "联系电话")
+    @Excel(name = "联系电话")
     @Size(min = 0, max = 11, message = "联系电话长度不能超过11个字符")
     private String phone;
 
     /** 邮箱 */
     @Schema(title = "邮箱")
+    @Excel(name = "邮箱")
     @Email(message = "邮箱格式不正确")
     @Size(min = 0, max = 50, message = "邮箱长度不能超过50个字符")
     private String email;
 
-    /** 部门状态:0正常,1停用 */
+    /** 部门状态（0正常 1停用） */
     @Schema(title = "部门表", description = "0正常,1停用")
+    @Excel(name = "部门状态", readConverterExp = "0=正常,1=停用")
     private String status;
 
     /** 删除标志（0代表存在 2代表删除） */
@@ -88,4 +97,40 @@ public class SysDept extends BaseEntity {
     @Column(ignore = true)
     @RelationOneToMany(selfField = "deptId", targetTable = "sys_dept", targetField = "parentId")
     private List<SysDept> children = new ArrayList<>();
+    
+    
+    /** 部门编码，唯一 */
+    @Schema(title = "部门编码，唯一")
+    @Excel(name = "部门编码，唯一")
+    private String deptCode;
+
+    /** 删除时间(软删除) */
+    @Schema(title = "删除时间(软删除)")
+    @Excel(name = "删除时间(软删除)")
+    private Instant deleteTime;
+
+    /** 删除人ID(软删除) */
+    @Schema(title = "删除人ID(软删除)")
+    @Excel(name = "删除人ID(软删除)")
+    private String deleteId;
+
+    /** 扩展文本1 */
+    @Schema(title = "扩展文本1")
+    @Excel(name = "扩展文本1")
+    private String text1;
+
+    /** 扩展文本2 */
+    @Schema(title = "扩展文本2")
+    @Excel(name = "扩展文本2")
+    private String text2;
+
+    /** 扩展文本3 */
+    @Schema(title = "扩展文本3")
+    @Excel(name = "扩展文本3")
+    private String text3;
+
+    /** 扩展JSON */
+    @Schema(title = "扩展JSON")
+    @Excel(name = "扩展JSON")
+    private String jsonData;
 }

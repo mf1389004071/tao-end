@@ -1,10 +1,9 @@
 package com.geek.system.domain;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.geek.common.annotation.Excel;
 import com.geek.common.annotation.Excel.ColumnType;
@@ -106,11 +105,10 @@ public class SysOperLog {
     @Excel(name = "错误消息")
     private String errorMsg;
 
-    /** 操作时间 */
+    /** 操作时间（UTC） */
     @Schema(title = "操作时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Excel(name = "操作时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
-    private Date operTime;
+    private Instant operTime;
 
     /** 消耗时间 */
     @Schema(title = "消耗时间")

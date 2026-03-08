@@ -26,7 +26,7 @@ public class Message {
     private String receiver;
     /** 消息时间戳 */
     @Builder.Default
-    private Instant timestamp = Instant.now();
+    private Instant timestamp = com.geek.common.utils.DateUtils.getNowInstant();
     /** 消息类型（如命令、聊天、日志、事件等） */
     private MessageType type;
     /** 消息主题或事件名称 */

@@ -65,8 +65,7 @@ public class SysLoginService
      *
      * @param username 用户名
      * @param password 密码
-     * @param code 验证码
-     * @param uuid 唯一标识
+     * @param captchaVO 验证码
      * @return 结果
      */
     public String login(String username, String password, CaptchaVO captchaVO)
@@ -122,7 +121,6 @@ public class SysLoginService
      * @param username 用户名
      * @param code 验证码
      * @param uuid 唯一标识
-     * @return 结果
      */
     public void validateCaptcha(String username, String code, String uuid)
     {
@@ -191,7 +189,7 @@ public class SysLoginService
         sysUser.setUserId(userId);
         sysUser.setDeptId(null);
         sysUser.setLoginIp(IpUtils.getIpAddr());
-        sysUser.setLoginDate(DateUtils.getNowDate());
+        sysUser.setLoginDate(DateUtils.getNowInstant());
         userService.updateUserProfile(sysUser);
     }
 }

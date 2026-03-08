@@ -79,9 +79,9 @@ public abstract class AbstractQuartzJob implements Job
         sysJobLog.setJobName(sysJob.getJobName());
         sysJobLog.setJobGroup(sysJob.getJobGroup());
         sysJobLog.setInvokeTarget(sysJob.getInvokeTarget());
-        sysJobLog.setStartTime(startTime);
-        sysJobLog.setStopTime(new Date());
-        long runMs = sysJobLog.getStopTime().getTime() - sysJobLog.getStartTime().getTime();
+        sysJobLog.setStartTime(startTime != null ? startTime.toInstant() : null);
+        sysJobLog.setStopTime(com.geek.common.utils.DateUtils.getNowInstant());
+        long runMs = sysJobLog.getStopTime().toEpochMilli() - (sysJobLog.getStartTime() != null ? sysJobLog.getStartTime().toEpochMilli() : 0);
         sysJobLog.setJobMessage(sysJobLog.getJobName() + " 总共耗时：" + runMs + "毫秒");
         if (e != null)
         {
