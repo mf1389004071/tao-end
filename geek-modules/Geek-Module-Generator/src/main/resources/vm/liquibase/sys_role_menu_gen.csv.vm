@@ -1,0 +1,7 @@
+role_id,menu_id
+1,${baseMenuId}
+1,${baseMenuIdButton1}
+1,${baseMenuIdButton2}
+1,${baseMenuIdButton3}
+1,${baseMenuIdButton4}
+1,${baseMenuIdButton5}

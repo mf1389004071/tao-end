@@ -1,0 +1,7 @@
+menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
+${baseMenuId},${functionName},${parentMenuId},1,${businessName},${moduleName}/${businessName}/index,,,1,0,C,0,0,${permissionPrefix}:list,#,admin,2025-01-01 00:00:00,,,${functionName}菜单
+${baseMenuIdButton1},${functionName}查询,${baseMenuId},1,#,,,1,0,F,0,0,${permissionPrefix}:query,#,admin,2025-01-01 00:00:00,,,
+${baseMenuIdButton2},${functionName}新增,${baseMenuId},2,#,,,1,0,F,0,0,${permissionPrefix}:add,#,admin,2025-01-01 00:00:00,,,
+${baseMenuIdButton3},${functionName}修改,${baseMenuId},3,#,,,1,0,F,0,0,${permissionPrefix}:edit,#,admin,2025-01-01 00:00:00,,,
+${baseMenuIdButton4},${functionName}删除,${baseMenuId},4,#,,,1,0,F,0,0,${permissionPrefix}:remove,#,admin,2025-01-01 00:00:00,,,
+${baseMenuIdButton5},${functionName}导出,${baseMenuId},5,#,,,1,0,F,0,0,${permissionPrefix}:export,#,admin,2025-01-01 00:00:00,,,

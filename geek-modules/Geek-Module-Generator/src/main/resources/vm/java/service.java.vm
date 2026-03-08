@@ -1,0 +1,51 @@
+package ${packageName}.service;
+
+import ${packageName}.domain.${ClassName};
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.service.IService;
+
+import jakarta.servlet.http.HttpServletResponse;
+
+/**
+ * ${functionName} 服务层接口
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+public interface I${ClassName}Service extends IService<${ClassName}> {
+
+    /**
+     * 分页查询${functionName}
+     *
+     * @param ${className} 查询条件
+     * @param pageNum 页码
+     * @param pageSize 每页数量
+     * @return 分页结果
+     */
+    Page<${ClassName}> page(${ClassName} ${className}, int pageNum, int pageSize);
+
+    /**
+     * 导出${functionName}
+     *
+     * @param ${className} 查询条件
+     * @param response 响应
+     */
+    void export(${ClassName} ${className}, HttpServletResponse response);
+
+#if($table.tree)
+    /**
+     * 查询${functionName}列表（树）
+     *
+     * @param ${className} 查询条件
+     * @return 列表
+     */
+    java.util.List<${ClassName}> list(${ClassName} ${className});
+#end
+
+    /**
+     * 批量删除${functionName}
+     *
+     * @param ${pkColumn.javaField}s 主键数组
+     */
+    void removeByIds(${pkColumn.javaType}[] ${pkColumn.javaField}s);
+}

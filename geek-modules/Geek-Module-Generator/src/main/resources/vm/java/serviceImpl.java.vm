@@ -1,0 +1,94 @@
+package ${packageName}.service.impl;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.geek.common.utils.poi.ExcelUtil;
+import ${packageName}.domain.${ClassName};
+import ${packageName}.mapper.${ClassName}Mapper;
+import ${packageName}.service.I${ClassName}Service;
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryChain;
+import com.mybatisflex.spring.service.impl.ServiceImpl;
+
+import jakarta.servlet.http.HttpServletResponse;
+
+/**
+ * ${functionName} 服务层实现
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+@Service
+public class ${ClassName}ServiceImpl extends ServiceImpl<${ClassName}Mapper, ${ClassName}> implements I${ClassName}Service {
+
+    private QueryChain<${ClassName}> selectList(${ClassName} ${className}) {
+        QueryChain<${ClassName}> chain = this.queryChain();
+#foreach($column in $allColumns)
+#if($column.query)
+#set($capJavaField=$column.javaField.substring(0,1).toUpperCase() + $column.javaField.substring(1))
+#if($column.queryType == "EQ")
+        if (${className}.get${capJavaField}() != null#if($column.javaType == "String") && !${className}.get${capJavaField}().isEmpty()#end) {
+            chain.eq(${ClassName}::get${capJavaField}, ${className}.get${capJavaField}());
+        }
+#elseif($column.queryType == "NE")
+        if (${className}.get${capJavaField}() != null#if($column.javaType == "String") && !${className}.get${capJavaField}().isEmpty()#end) {
+            chain.ne(${ClassName}::get${capJavaField}, ${className}.get${capJavaField}());
+        }
+#elseif($column.queryType == "GT")
+        if (${className}.get${capJavaField}() != null) {
+            chain.gt(${ClassName}::get${capJavaField}, ${className}.get${capJavaField}());
+        }
+#elseif($column.queryType == "GTE")
+        if (${className}.get${capJavaField}() != null) {
+            chain.ge(${ClassName}::get${capJavaField}, ${className}.get${capJavaField}());
+        }
+#elseif($column.queryType == "LT")
+        if (${className}.get${capJavaField}() != null) {
+            chain.lt(${ClassName}::get${capJavaField}, ${className}.get${capJavaField}());
+        }
+#elseif($column.queryType == "LTE")
+        if (${className}.get${capJavaField}() != null) {
+            chain.le(${ClassName}::get${capJavaField}, ${className}.get${capJavaField}());
+        }
+#elseif($column.queryType == "LIKE")
+        if (${className}.get${capJavaField}() != null && !${className}.get${capJavaField}().isEmpty()) {
+            chain.like(${ClassName}::get${capJavaField}, ${className}.get${capJavaField}());
+        }
+#elseif($column.queryType == "BETWEEN")
+        if (${className}.getParams() != null && ${className}.getParams().get("begin${capJavaField}") != null && ${className}.getParams().get("end${capJavaField}") != null) {
+            chain.between(${ClassName}::get${capJavaField}, ${className}.getParams().get("begin${capJavaField}"), ${className}.getParams().get("end${capJavaField}"));
+        }
+#end
+#end
+#end
+        return chain;
+    }
+
+    @Override
+    public Page<${ClassName}> page(${ClassName} ${className}, int pageNum, int pageSize) {
+        return selectList(${className}).page(Page.of(pageNum, pageSize));
+    }
+
+    @Override
+    public void export(${ClassName} ${className}, HttpServletResponse response) {
+        List<${ClassName}> list = selectList(${className}).list();
+        ExcelUtil<${ClassName}> util = new ExcelUtil<>(${ClassName}.class);
+        util.exportExcel(response, list, "${functionName}数据");
+    }
+
+#if($table.tree)
+    @Override
+    public List<${ClassName}> list(${ClassName} ${className}) {
+        return selectList(${className}).list();
+    }
+#end
+
+    @Override
+    public void removeByIds(${pkColumn.javaType}[] ${pkColumn.javaField}s) {
+        for (${pkColumn.javaType} id : ${pkColumn.javaField}s) {
+            this.removeById(id);
+        }
+    }
+}

@@ -1,0 +1,75 @@
+package ${packageName}.domain;
+
+#foreach ($import in $importList)
+import ${import};
+#end
+import com.geek.common.annotation.Excel;
+import com.geek.common.annotation.Excel.ColumnType;
+#if($table.crud || $table.sub)
+import com.geek.common.core.domain.BaseEntity;
+#elseif($table.tree)
+import com.geek.common.core.domain.TreeEntity;
+#end
+import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.Table;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+/**
+ * ${functionName}对象 ${tableName}
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+#if($table.crud || $table.sub)
+#set($Entity="BaseEntity")
+#elseif($table.tree)
+#set($Entity="TreeEntity")
+#end
+@Table("${tableName}")
+@Schema(title = "${functionName}对象")
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class ${ClassName} extends ${Entity}
+{
+    private static final long serialVersionUID = 1L;
+
+#foreach ($column in $allColumns)
+#if(!$table.isSuperColumn($column.javaField))
+
+    /** $column.columnComment */
+    @Schema(title = "$column.columnComment")
+#if($column.pk)
+    @Id
+#end
+#if($column.list)
+#set($parentheseIndex=$column.columnComment.indexOf("（"))
+#if($parentheseIndex != -1)
+#set($comment=$column.columnComment.substring(0, $parentheseIndex))
+#else
+#set($comment=$column.columnComment)
+#end
+#if($column.dateFormatPattern)
+    @JsonFormat(pattern = "$column.dateFormatPattern")
+    @Excel(name = "${comment}", width = 30, dateFormat = "$column.dateFormatPattern")
+#elseif($parentheseIndex != -1)
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+#else
+    @Excel(name = "${comment}")
+#end
+#end
+    private $column.javaTypeForField $column.javaField;
+#if($column.subColumnTableName && $table.haveSubColumn == '1')
+
+    /** $column.javaField 到 $column.subColumnTableName 映射 */
+    private $column.subColumnJavaType $column.subColumnJavaField;
+#end
+#end
+#end
+#if($table.sub)
+    /** $table.subTable.functionName信息 */
+    private List<${subClassName}> ${subclassName}List;
+
+#end
+}
