@@ -3,6 +3,7 @@ package com.geek.generator.domain;
 import com.geek.common.core.domain.BaseEntity;
 import com.geek.common.utils.StringUtils;
 import com.geek.generator.constant.GenConstants;
+import com.geek.generator.util.GenUtils;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -16,7 +17,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class GenColumn extends BaseEntity {
-    private static final long serialVersionUID = 1L;
 
     /** 编号 */
     private Long columnId;
@@ -177,13 +177,53 @@ public class GenColumn extends BaseEntity {
     }
 
     /**
-     * 生成实体字段时的 Java 类型（日期/时间统一为 Instant，与 BaseEntity 一致，对应 timestamptz）
+     * 生成实体字段时的 Java 类型（日期/时间统一为 Instant；整型按数据库类型精确映射，避免 bigint→String）
      */
     public String getJavaTypeForField() {
         if (isDateOrTimeType()) {
             return "Instant";
         }
+        // 防御：若配置中 javaType 为 String 但列类型为数字/时间，按 columnType 推断正确类型
+        if (StringUtils.isNotEmpty(columnType) && GenConstants.TYPE_STRING.equals(javaType)) {
+            String inferred = inferJavaTypeFromColumnType(columnType);
+            if (inferred != null) {
+                return inferred;
+            }
+        }
         return javaType;
+    }
+
+    /**
+     * 根据数据库列类型推断 Java 类型（用于修正历史错误配置，如 bigint 被存成 String）
+     */
+    private static String inferJavaTypeFromColumnType(String columnType) {
+        String dataType = GenUtils.getDbType(columnType);
+        if (dataType == null) {
+            return null;
+        }
+        String lower = dataType.toLowerCase();
+        if ("bigint".equals(lower) || "int8".equals(lower) || "bigserial".equals(lower)) {
+            return "Long";
+        }
+        if ("int".equals(lower) || "integer".equals(lower) || "smallint".equals(lower)
+                || "mediumint".equals(lower) || "tinyint".equals(lower)
+                || "int4".equals(lower) || "int2".equals(lower) || "serial".equals(lower) || "smallserial".equals(lower)) {
+            return "Integer";
+        }
+        if ("datetime".equals(lower) || "timestamp".equals(lower) || "timestamptz".equals(lower)
+                || "date".equals(lower) || "time".equals(lower)) {
+            return "Instant";
+        }
+        if ("decimal".equals(lower) || "numeric".equals(lower)) {
+            return "BigDecimal";
+        }
+        if ("float".equals(lower) || "double".equals(lower)) {
+            return "Double";
+        }
+        if ("bit".equals(lower) || "bool".equals(lower) || "boolean".equals(lower)) {
+            return "Boolean";
+        }
+        return null;
     }
 
     /**
@@ -211,13 +251,13 @@ public class GenColumn extends BaseEntity {
 
     public String readConverterExp() {
         String remarks = StringUtils.substringBetween(this.columnComment, "（", "）");
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if (StringUtils.isNotEmpty(remarks)) {
             for (String value : remarks.split(" ")) {
                 if (StringUtils.isNotEmpty(value)) {
                     Object startStr = value.subSequence(0, 1);
                     String endStr = value.substring(1);
-                    sb.append("").append(startStr).append("=").append(endStr).append(",");
+                    sb.append(startStr).append("=").append(endStr).append(",");
                 }
             }
             return sb.deleteCharAt(sb.length() - 1).toString();

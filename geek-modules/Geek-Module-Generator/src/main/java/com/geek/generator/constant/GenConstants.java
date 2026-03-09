@@ -31,32 +31,34 @@ public class GenConstants
     /** 上级菜单名称字段 */
     public static final String PARENT_MENU_NAME = "parentMenuName";
 
-    /** 数据库字符串类型 */
-    public static final String[] COLUMNTYPE_STR = { "char", "varchar", "nvarchar", "varchar2" };
+    /** 数据库字符串类型（含 PostgreSQL bpchar） */
+    public static final String[] COLUMNTYPE_STR = { "char", "varchar", "nvarchar", "varchar2", "bpchar" };
 
     /** 数据库文本类型 */
     public static final String[] COLUMNTYPE_TEXT = { "tinytext", "text", "mediumtext", "longtext" };
 
-    /** 数据库时间类型 */
-    public static final String[] COLUMNTYPE_TIME = { "datetime", "time", "date", "timestamp" };
+    /** 数据库时间类型（含 Postgres timestamptz，对应 Java Instant） */
+    public static final String[] COLUMNTYPE_TIME = { "datetime", "time", "date", "timestamp", "timestamptz" };
 
-    /** 数据库数字类型 */
+    /** 数据库数字/布尔类型（含 Postgres int2/int4/int8/bool/serial） */
     public static final String[] COLUMNTYPE_NUMBER = { "tinyint", "smallint", "mediumint", "int", "number", "integer",
-            "bit", "bigint", "float", "double", "decimal" };
+            "bit", "bigint", "float", "double", "decimal", "numeric",
+            "int2", "int4", "int8", "bool", "boolean", "serial", "bigserial", "smallserial" };
 
-    /** 页面不需要编辑字段 */
-    public static final String[] COLUMNNAME_NOT_EDIT = { "id", "create_by", "create_time", "del_flag" };
+    /** 页面不需要编辑字段（新增/修改表单均不展示，由后端或监听器填充） */
+    public static final String[] COLUMNNAME_NOT_EDIT = { "id", "create_by", "create_time", "del_flag", 
+            "create_id", "update_id", "update_by", "update_time", "delete_id", "delete_time" };
 
     /** 页面不需要显示的列表字段 */
     public static final String[] COLUMNNAME_NOT_LIST = { "id", "create_by", "create_time", "del_flag", "update_by",
-            "update_time" };
+            "update_time", "create_id", "update_id", "delete_id", "delete_time" };
 
     /** 页面不需要查询字段 */
     public static final String[] COLUMNNAME_NOT_QUERY = { "id", "create_by", "create_time", "del_flag", "update_by",
-            "update_time", "remark" };
+            "update_time", "remark", "create_id", "update_id", "delete_id", "delete_time" };
 
     /** Entity基类字段 */
-    public static final String[] BASE_ENTITY = { "createBy", "createTime", "updateBy", "updateTime", "remark" };
+    public static final String[] BASE_ENTITY = { "createBy", "createTime", "updateBy", "updateTime", "remark", "createId", "updateId" };
 
     /** Tree基类字段 */
     public static final String[] TREE_ENTITY = { "parentName", "parentId", "orderNum", "ancestors", "children" };
@@ -112,13 +114,13 @@ public class GenConstants
     /** 布尔类型 */
     public static final String TYPE_BOOLEAN = "Boolean";
 
-    /** 日期类型（仅日期，java.time.Instant，存 UTC） */
+    /** 日期类型（仅日期，生成 java.time.Instant） */
     public static final String TYPE_DATE = "Date";
 
-    /** 时间类型（仅时间，java.time.Instant） */
+    /** 时间类型（仅时间，生成 java.time.Instant） */
     public static final String TYPE_TIME = "Time";
 
-    /** 日期时间类型（java.time.Instant，对应 timestamptz） */
+    /** 日期时间类型（生成 java.time.Instant，对应 timestamptz） */
     public static final String TYPE_DATETIME = "DateTime";
 
     /** 模糊查询 */

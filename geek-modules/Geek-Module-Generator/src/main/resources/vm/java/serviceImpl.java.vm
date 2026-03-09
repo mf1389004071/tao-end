@@ -85,10 +85,4 @@ public class ${ClassName}ServiceImpl extends ServiceImpl<${ClassName}Mapper, ${C
     }
 #end
 
-    @Override
-    public void removeByIds(${pkColumn.javaType}[] ${pkColumn.javaField}s) {
-        for (${pkColumn.javaType} id : ${pkColumn.javaField}s) {
-            this.removeById(id);
-        }
-    }
 }

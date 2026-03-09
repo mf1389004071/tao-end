@@ -9,8 +9,6 @@
         <addColumn tableName="sys_dept">
             <column name="dept_code" type="VARCHAR(255)" remarks="部门编码，唯一"/>
             <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间(软删除)"/>
-            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
             <column name="delete_id" type="BIGINT" remarks="删除人ID(软删除)"/>
             <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
             <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
@@ -551,15 +549,12 @@
             <column name="width" type="INT" remarks="图片宽度"/>
             <column name="height" type="INT" remarks="图片高度"/>
             <column name="duration" type="INT" remarks="音视频时长(秒)"/>
-            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
             <column name="delete_id" type="BIGINT" remarks="删除人ID"/>
             <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间(软删除)"/>
             <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
             <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
             <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
             <column name="json_data" type="jsonb" remarks="扩展JSON"/>
-            <column name="status" type="CHAR(1)" defaultValue="0" remarks="状态（0正常 1停用）"/>
         </addColumn>
         <createIndex indexName="idx_sys_file_info_folder_id" tableName="sys_file_info"><column name="folder_id"/></createIndex>
         <createIndex indexName="idx_sys_file_info_create_id" tableName="sys_file_info"><column name="create_id"/></createIndex>
@@ -819,9 +814,6 @@
             <column name="category" type="VARCHAR(100)" remarks="配置分类"/>
             <column name="is_public" type="BOOLEAN" defaultValueBoolean="false" remarks="是否对前端开放"/>
             <column name="value_type" type="VARCHAR(50)" defaultValue="STRING" remarks="值类型：字符串/数字/布尔/JSON.config_type"/>
-            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
-            <column name="status" type="CHAR(1)" defaultValue="0" remarks="状态（0正常 1停用）"/>
         </addColumn>
         <createIndex indexName="idx_sys_config_category" tableName="sys_config"><column name="category"/></createIndex>
     </changeSet>

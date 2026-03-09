@@ -117,7 +117,6 @@
                 <constraints unique="true"/>
             </column>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column name="create_id" type="BIGINT" remarks="创建者ID"/>
             <column name="update_id" type="BIGINT" remarks="更新者ID"/>
             <column defaultValue="" name="create_by" remarks="创建者" type="VARCHAR(64)"/>
@@ -192,7 +191,6 @@
                 <constraints nullable="false"/>
             </column>
             <column name="notice_content" remarks="公告内容" type="TEXT"/>
-            <column defaultValue="0" name="status" remarks="公告状态（0正常 1关闭）" type="CHAR(1)"/>
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column name="create_id" type="BIGINT" remarks="创建者ID"/>
@@ -254,7 +252,6 @@
             <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)">
                 <constraints nullable="false"/>
             </column>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
             <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
             <column name="create_id" type="BIGINT" remarks="创建者ID"/>
             <column name="update_id" type="BIGINT" remarks="更新者ID"/>

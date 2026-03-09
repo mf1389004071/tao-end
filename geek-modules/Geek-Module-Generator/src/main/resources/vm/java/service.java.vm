@@ -42,10 +42,4 @@ public interface I${ClassName}Service extends IService<${ClassName}> {
     java.util.List<${ClassName}> list(${ClassName} ${className});
 #end
 
-    /**
-     * 批量删除${functionName}
-     *
-     * @param ${pkColumn.javaField}s 主键数组
-     */
-    void removeByIds(${pkColumn.javaType}[] ${pkColumn.javaField}s);
 }

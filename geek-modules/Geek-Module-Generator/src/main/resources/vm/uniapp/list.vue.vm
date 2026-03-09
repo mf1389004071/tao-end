@@ -3,6 +3,7 @@
     <uni-table border stripe type="selection" emptyText="暂无更多数据" :loading="loading">
       <uni-tr>
 #foreach($column in $columns)
+#if($column.list || $column.pk)
 #set($parentheseIndex=$column.columnComment.indexOf("（"))
 #if($parentheseIndex != -1)
 #set($comment=$column.columnComment.substring(0, $parentheseIndex))
@@ -11,29 +12,21 @@
 #end
         <uni-th>${comment}</uni-th>
 #end
-      </uni-tr>
-      <uni-tr  v-for="(item,index) in ${businessName}List" :key="index">
-#foreach($column in $columns)
-#set($javaField=$column.javaField)
-#set($parentheseIndex=$column.columnComment.indexOf("（"))
-#if($parentheseIndex != -1)
-#set($comment=$column.columnComment.substring(0, $parentheseIndex))
-#else
-#set($comment=$column.columnComment)
 #end
+      </uni-tr>
+      <uni-tr v-for="(item,index) in ${businessName}List" :key="index">
+#foreach($column in $columns)
+#if($column.list || $column.pk)
+#set($javaField=$column.javaField)
 #if($column.pk)
         <uni-td>{{ item.${javaField} }}</uni-td>
-#elseif($column.list && $column.htmlType == "time")
+#elseif($column.htmlType == "time" || $column.htmlType == "date" || $column.htmlType == "datetime")
         <uni-td>{{ item.${javaField} }}</uni-td>
-#elseif($column.list && $column.htmlType == "date")
-        <uni-td>{{ item.${javaField} }}</uni-td>
-#elseif($column.list && $column.htmlType == "datetime")
-        <uni-td>{{ item.${javaField} }}</uni-td>
-#elseif($column.list && $column.htmlType == "imageUpload")
+#elseif($column.htmlType == "imageUpload")
         <uni-td>
           <u-album :urls="addBaseUrl(item.${javaField}.split(','))"></u-album>
         </uni-td>
-#elseif($column.list && "" != $column.dictType)
+#elseif("" != $column.dictType)
 #if($column.htmlType == "checkbox")
         <uni-td>
           <dict-tag :options="${javaField}Options" :value="item.${javaField} ? item.${javaField}.split(',') : []"/>
@@ -43,8 +36,9 @@
           <dict-tag :options="${javaField}Options" :value="item.${javaField}"/>
         </uni-td>
 #end
-#elseif($column.list && "" != $javaField)
+#else
         <uni-td>{{ item.${javaField} }}</uni-td>
+#end
 #end
 #end
       </uni-tr>

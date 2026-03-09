@@ -8,6 +8,8 @@ import com.mybatisflex.core.BaseMapper;
 import com.mybatisflex.core.query.QueryChain;
 import com.mybatisflex.core.query.QueryMethods;
 
+import static com.geek.common.core.domain.entity.table.SysRoleTableDef.SYS_ROLE;
+
 /**
  * 角色表 数据层
  * 

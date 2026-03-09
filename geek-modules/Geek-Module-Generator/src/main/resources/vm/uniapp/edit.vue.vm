@@ -3,7 +3,7 @@
         <uni-forms ref="form" :model="form" :rules="rules" label-width="80px">
 #foreach($column in $columns)
 #set($field=$column.javaField)
-#if($column.insert && !$column.pk)
+#if($column.edit && !$column.pk)
 #if(($column.usableColumn) || (!$column.superColumn))
 #set($parentheseIndex=$column.columnComment.indexOf("（"))
 #if($parentheseIndex != -1)

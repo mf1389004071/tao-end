@@ -283,8 +283,12 @@ public class GenTableServiceImpl implements IGenTableService {
             Template tpl = Velocity.getTemplate(template, Constants.UTF8);
             tpl.merge(context, sw);
             try {
+                String content = sw.toString();
+                if (template.contains("sys_menu_gen.csv.vm")) {
+                    content = VelocityUtils.normalizeSysMenuGenCsv(content);
+                }
                 String path = getGenPath(table, template);
-                FileUtils.writeStringToFile(new File(path), sw.toString(), CharsetKit.UTF_8);
+                FileUtils.writeStringToFile(new File(path), content, CharsetKit.UTF_8);
             } catch (IOException e) {
                 throw new ServiceException("渲染模板失败，表名：" + table.getTableName());
             }
@@ -381,9 +385,13 @@ public class GenTableServiceImpl implements IGenTableService {
             Template tpl = Velocity.getTemplate(template, Constants.UTF8);
             tpl.merge(context, sw);
             try {
+                String content = sw.toString();
+                if (template.contains("sys_menu_gen.csv.vm")) {
+                    content = VelocityUtils.normalizeSysMenuGenCsv(content);
+                }
                 // 添加到zip
                 zip.putNextEntry(new ZipEntry(VelocityUtils.getFileName(template, table)));
-                IOUtils.write(sw.toString(), zip, Constants.UTF8);
+                IOUtils.write(content, zip, Constants.UTF8);
                 IOUtils.closeQuietly(sw);
                 zip.flush();
                 zip.closeEntry();

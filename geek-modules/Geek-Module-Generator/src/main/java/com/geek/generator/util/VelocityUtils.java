@@ -58,7 +58,7 @@ public class VelocityUtils {
         velocityContext.put("author", genTable.getFunctionAuthor());
         velocityContext.put("datetime", DateUtils.getDate());
         velocityContext.put("pkColumn", genTable.getPkColumn());
-        velocityContext.put("importList", getImportList(genTable));
+        velocityContext.put("importList", getImportList(genTable, genTableVo.getAllGenTableColumns()));
         velocityContext.put("permissionPrefix", getPermissionPrefix(moduleName, businessName));
         velocityContext.put("columns", genTable.getColumns());
         velocityContext.put("table", genTable);
@@ -237,13 +237,14 @@ public class VelocityUtils {
     }
 
     /**
-     * 根据列类型获取导入包
+     * 根据列类型获取导入包（含主表+关联表所有列，保证 Instant/BigDecimal 等正确导入）
      *
-     * @param genTable 业务表对象
+     * @param genTable  业务表对象
+     * @param allColumns 主表与关联表全部列，为 null 时仅用 genTable.getColumns()
      * @return 返回需要导入的包列表
      */
-    public static HashSet<String> getImportList(GenTable genTable) {
-        List<GenColumn> columns = genTable.getColumns();
+    public static HashSet<String> getImportList(GenTable genTable, List<GenColumn> allColumns) {
+        List<GenColumn> columns = (allColumns != null && !allColumns.isEmpty()) ? allColumns : genTable.getColumns();
         GenTable subGenTable = genTable.getSubTable();
         HashSet<String> importList = new HashSet<>();
         if (StringUtils.isNotNull(subGenTable)) {
@@ -253,13 +254,19 @@ public class VelocityUtils {
             if (column.isSuperColumn()) {
                 continue;
             }
-            if (column.isDateOrTimeType()) {
+            if ("Instant".equals(column.getJavaTypeForField())) {
                 importList.add("java.time.Instant");
-            } else if (GenConstants.TYPE_BIGDECIMAL.equals(column.getJavaType())) {
+            } else if (GenConstants.TYPE_BIGDECIMAL.equals(column.getJavaType())
+                    || "BigDecimal".equals(column.getJavaTypeForField())) {
                 importList.add("java.math.BigDecimal");
             }
         }
         return importList;
+    }
+
+    /** @see #getImportList(GenTable, List) */
+    public static HashSet<String> getImportList(GenTable genTable) {
+        return getImportList(genTable, null);
     }
 
     /**
@@ -293,6 +300,53 @@ public class VelocityUtils {
                 dicts.add("'" + column.getDictType() + "'");
             }
         }
+    }
+
+    /**
+     * 规范化 sys_menu 生成 CSV：确保每行数据列数与表头一致，避免 Liquibase loadData 报错
+     * （表头 20 列时，数据行若仅 19 列会报 "Line N has 19 values, Header has 20"）
+     *
+     * @param csvContent 模板渲染后的 CSV 内容
+     * @return 每行列数与表头一致的 CSV 内容
+     */
+    public static String normalizeSysMenuGenCsv(String csvContent) {
+        if (StringUtils.isEmpty(csvContent)) {
+            return csvContent;
+        }
+        String[] lines = csvContent.split("\n", -1);
+        if (lines.length < 2) {
+            return csvContent;
+        }
+        int headerCommas = countCommas(lines[0]);
+        StringBuilder sb = new StringBuilder(csvContent.length() + 32);
+        sb.append(lines[0]);
+        for (int i = 1; i < lines.length; i++) {
+            String line = lines[i];
+            if (line.isEmpty()) {
+                sb.append('\n');
+                continue;
+            }
+            int lineCommas = countCommas(line);
+            if (lineCommas < headerCommas) {
+                sb.append('\n').append(line);
+                for (int j = lineCommas; j < headerCommas; j++) {
+                    sb.append(',');
+                }
+            } else {
+                sb.append('\n').append(line);
+            }
+        }
+        return sb.toString();
+    }
+
+    private static int countCommas(CharSequence s) {
+        int n = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == ',') {
+                n++;
+            }
+        }
+        return n;
     }
 
     /**

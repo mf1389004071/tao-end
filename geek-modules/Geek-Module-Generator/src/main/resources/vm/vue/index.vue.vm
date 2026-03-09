@@ -175,7 +175,7 @@
 #foreach($column in $columns)
 #set($field=$column.javaField)
 #set($Field = $column.javaField.substring(0, 1).toUpperCase() + $column.javaField.substring(1))
-#if($column.insert && !$column.pk)
+#if($column.edit && !$column.pk)
 #if(($column.usableColumn) || (!$column.superColumn))
 #set($parentheseIndex=$column.columnComment.indexOf("（"))
 #if($parentheseIndex != -1)

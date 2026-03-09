@@ -37,9 +37,9 @@ export function update${BusinessName}(data) {
 
 // 删除${functionName}（支持单个 id 或 id 数组）
 export function del${BusinessName}(${pkColumn.javaField}s) {
-  const ids = Array.isArray(${pkColumn.javaField}s) ? ${pkColumn.javaField}s.join(',') : ${pkColumn.javaField}s
+  const _ids = Array.isArray(${pkColumn.javaField}s) ? ${pkColumn.javaField}s.join(',') : ${pkColumn.javaField}s
   return request({
-    url: `/${moduleName}/${businessName}/${ids}`,
+    url: `/${moduleName}/${businessName}/${_ids}`,
     method: 'delete'
   })
 }

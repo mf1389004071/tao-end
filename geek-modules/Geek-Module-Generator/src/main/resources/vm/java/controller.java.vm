@@ -27,6 +27,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.util.List;
+
 /**
  * ${functionName}Controller
  *
@@ -113,7 +115,7 @@ public class ${ClassName}Controller extends BaseController {
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:remove')")
     @Log(title = "${functionName}", businessType = BusinessType.DELETE)
     @DeleteMapping("/{${pkColumn.javaField}s}")
-    public AjaxResult remove(@PathVariable("${pkColumn.javaField}s") ${pkColumn.javaType}[] ${pkColumn.javaField}s) {
+    public AjaxResult remove(@PathVariable("${pkColumn.javaField}s") List<Long> ${pkColumn.javaField}s) {
         return toAjax(${className}Service.removeByIds(${pkColumn.javaField}s));
     }
 }

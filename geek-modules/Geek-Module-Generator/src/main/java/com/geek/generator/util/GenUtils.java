@@ -70,14 +70,15 @@ public class GenUtils
         }
         else if (arraysContains(GenConstants.COLUMNTYPE_TIME, dataType))
         {
-            // 统一使用 java.util.Date，格式由 getDateFormatPattern() 根据 columnType 推导
-            column.setJavaType(GenConstants.TYPE_DATE);
+            // 时刻字段统一生成 java.time.Instant（与时间类型与多时区架构评估一致，对应 timestamptz）
+            column.setJavaType(GenConstants.TYPE_DATETIME);
             column.setHtmlType(GenConstants.HTML_DATETIME);
         }
         else if (arraysContains(GenConstants.COLUMNTYPE_NUMBER, dataType))
         {
-            column.setHtmlType(GenConstants.HTML_INPUT);
             column.setJavaType(resolveJavaTypeForNumber(column.getColumnType(), dataType));
+            column.setHtmlType(GenConstants.TYPE_BOOLEAN.equals(column.getJavaType())
+                    ? GenConstants.HTML_CHECKBOX : GenConstants.HTML_INPUT);
         }
 
         // 插入字段（默认所有字段都需要插入）
@@ -158,16 +159,14 @@ public class GenUtils
     }
 
     /**
-     * 获取业务名
+     * 获取业务名, 移除所有下划线并转为全小写
      * 
      * @param tableName 表名
      * @return 业务名
      */
     public static String getBusinessName(String tableName)
     {
-        int lastIndex = tableName.lastIndexOf("_");
-        int nameLength = tableName.length();
-        return StringUtils.substring(tableName, lastIndex + 1, nameLength);
+        return StringUtils.replace(tableName.toLowerCase(), "_", "");
     }
 
     /**
@@ -240,8 +239,8 @@ public class GenUtils
         if ("float".equals(lower) || "double".equals(lower)) {
             return GenConstants.TYPE_DOUBLE;
         }
-        // 布尔：bit、tinyint(1) -> Boolean
-        if ("bit".equals(lower)) {
+        // 布尔：bit、bool、tinyint(1) -> Boolean（PostgreSQL 为 bool）
+        if ("bit".equals(lower) || "bool".equals(lower) || "boolean".equals(lower)) {
             return GenConstants.TYPE_BOOLEAN;
         }
         if ("tinyint".equals(lower) && parts != null && parts.length == 1) {
@@ -253,13 +252,14 @@ public class GenUtils
                 // fall through to Integer
             }
         }
-        // 长整型：bigint -> Long
-        if ("bigint".equals(lower)) {
+        // 长整型：bigint、int8、bigserial -> Long（PostgreSQL 为 int8）
+        if ("bigint".equals(lower) || "int8".equals(lower) || "bigserial".equals(lower)) {
             return GenConstants.TYPE_LONG;
         }
-        // 整型：int/integer/smallint/mediumint/tinyint -> Integer
+        // 整型：int4/int/integer/smallint/int2/mediumint/tinyint/serial/smallserial -> Integer（PostgreSQL 为 int4/int2）
         if ("int".equals(lower) || "integer".equals(lower) || "smallint".equals(lower)
-                || "mediumint".equals(lower) || "tinyint".equals(lower)) {
+                || "mediumint".equals(lower) || "tinyint".equals(lower)
+                || "int4".equals(lower) || "int2".equals(lower) || "serial".equals(lower) || "smallserial".equals(lower)) {
             return GenConstants.TYPE_INTEGER;
         }
         // 默认长整

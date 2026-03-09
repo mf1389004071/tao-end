@@ -3,6 +3,7 @@ gen:
   # 作者
   author: qm.wu
   # 默认生成包路径 system 需改成自己的模块名称 如 system monitor tool
+  # gen_path: /Users/msc/workings/workspace/demo/bt10/tao-end/geek-admin/src 
   packageName: com.geek.tao.bt10
   # 自动去除表前缀，默认是false
   autoRemovePre: false
