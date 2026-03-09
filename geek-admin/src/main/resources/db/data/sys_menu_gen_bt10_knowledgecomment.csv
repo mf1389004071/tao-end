@@ -1,0 +1,7 @@
+menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
+12000,知识内容评论与回复,3,1,knowledgecomment,bt10/knowledgecomment/index,,,1,0,C,0,0,bt10:knowledgecomment:list,#,admin,2025-01-01 00:00:00,,,知识内容评论与回复菜单
+12001,知识内容评论与回复查询,12000,1,#,,,,1,0,F,0,0,bt10:knowledgecomment:query,#,admin,2025-01-01 00:00:00,,,""
+12002,知识内容评论与回复新增,12000,2,#,,,,1,0,F,0,0,bt10:knowledgecomment:add,#,admin,2025-01-01 00:00:00,,,""
+12003,知识内容评论与回复修改,12000,3,#,,,,1,0,F,0,0,bt10:knowledgecomment:edit,#,admin,2025-01-01 00:00:00,,,""
+12004,知识内容评论与回复删除,12000,4,#,,,,1,0,F,0,0,bt10:knowledgecomment:remove,#,admin,2025-01-01 00:00:00,,,""
+12005,知识内容评论与回复导出,12000,5,#,,,,1,0,F,0,0,bt10:knowledgecomment:export,#,admin,2025-01-01 00:00:00,,,""
