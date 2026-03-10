@@ -1,7 +1,7 @@
 menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
-2000,系统级通知与公告,3,1,notices,bt10/notices/index,,,1,0,C,0,0,bt10:notices:list,#,admin,2025-01-01 00:00:00,,,系统级通知与公告菜单
-2001,系统级通知与公告查询,2000,1,#,,,1,0,F,0,0,bt10:notices:query,#,admin,2025-01-01 00:00:00,,,"",
-2002,系统级通知与公告新增,2000,2,#,,,1,0,F,0,0,bt10:notices:add,#,admin,2025-01-01 00:00:00,,,"",
-2003,系统级通知与公告修改,2000,3,#,,,1,0,F,0,0,bt10:notices:edit,#,admin,2025-01-01 00:00:00,,,"",
-2004,系统级通知与公告删除,2000,4,#,,,1,0,F,0,0,bt10:notices:remove,#,admin,2025-01-01 00:00:00,,,"",
-2005,系统级通知与公告导出,2000,5,#,,,1,0,F,0,0,bt10:notices:export,#,admin,2025-01-01 00:00:00,,,"",
+12200,系统级通知与公告,3,1,notices,bt10/notices/index,,,1,0,C,0,0,bt10:notices:list,#,admin,2025-01-01 00:00:00,,,系统级通知与公告菜单
+12201,系统级通知与公告查询,12200,1,#,,,,1,0,F,0,0,bt10:notices:query,#,admin,2025-01-01 00:00:00,,,""
+12202,系统级通知与公告新增,12200,2,#,,,,1,0,F,0,0,bt10:notices:add,#,admin,2025-01-01 00:00:00,,,""
+12203,系统级通知与公告修改,12200,3,#,,,,1,0,F,0,0,bt10:notices:edit,#,admin,2025-01-01 00:00:00,,,""
+12204,系统级通知与公告删除,12200,4,#,,,,1,0,F,0,0,bt10:notices:remove,#,admin,2025-01-01 00:00:00,,,""
+12205,系统级通知与公告导出,12200,5,#,,,,1,0,F,0,0,bt10:notices:export,#,admin,2025-01-01 00:00:00,,,""

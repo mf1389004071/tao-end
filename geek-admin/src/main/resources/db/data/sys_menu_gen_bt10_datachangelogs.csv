@@ -1,7 +1,7 @@
 menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
-2000,通用业务数据变更审计,3,1,datachangelogs,bt10/datachangelogs/index,,,1,0,C,0,0,bt10:datachangelogs:list,#,admin,2025-01-01 00:00:00,,,通用业务数据变更审计菜单
-2001,通用业务数据变更审计查询,2000,1,#,,,1,0,F,0,0,bt10:datachangelogs:query,#,admin,2025-01-01 00:00:00,,,"",
-2002,通用业务数据变更审计新增,2000,2,#,,,1,0,F,0,0,bt10:datachangelogs:add,#,admin,2025-01-01 00:00:00,,,"",
-2003,通用业务数据变更审计修改,2000,3,#,,,1,0,F,0,0,bt10:datachangelogs:edit,#,admin,2025-01-01 00:00:00,,,"",
-2004,通用业务数据变更审计删除,2000,4,#,,,1,0,F,0,0,bt10:datachangelogs:remove,#,admin,2025-01-01 00:00:00,,,"",
-2005,通用业务数据变更审计导出,2000,5,#,,,1,0,F,0,0,bt10:datachangelogs:export,#,admin,2025-01-01 00:00:00,,,"",
+12060,通用业务数据变更审计,3,1,datachangelogs,bt10/datachangelogs/index,,,1,0,C,0,0,bt10:datachangelogs:list,#,admin,2025-01-01 00:00:00,,,通用业务数据变更审计菜单
+12061,通用业务数据变更审计查询,12060,1,#,,,,1,0,F,0,0,bt10:datachangelogs:query,#,admin,2025-01-01 00:00:00,,,""
+12062,通用业务数据变更审计新增,12060,2,#,,,,1,0,F,0,0,bt10:datachangelogs:add,#,admin,2025-01-01 00:00:00,,,""
+12063,通用业务数据变更审计修改,12060,3,#,,,,1,0,F,0,0,bt10:datachangelogs:edit,#,admin,2025-01-01 00:00:00,,,""
+12064,通用业务数据变更审计删除,12060,4,#,,,,1,0,F,0,0,bt10:datachangelogs:remove,#,admin,2025-01-01 00:00:00,,,""
+12065,通用业务数据变更审计导出,12060,5,#,,,,1,0,F,0,0,bt10:datachangelogs:export,#,admin,2025-01-01 00:00:00,,,""

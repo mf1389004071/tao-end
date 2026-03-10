@@ -1,7 +1,7 @@
 menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
-2000,邀请关系与奖励记录,3,1,userinvite,bt10/userinvite/index,,,1,0,C,0,0,bt10:userinvite:list,#,admin,2025-01-01 00:00:00,,,邀请关系与奖励记录菜单
-2001,邀请关系与奖励记录查询,2000,1,#,,,1,0,F,0,0,bt10:userinvite:query,#,admin,2025-01-01 00:00:00,,,"",
-2002,邀请关系与奖励记录新增,2000,2,#,,,1,0,F,0,0,bt10:userinvite:add,#,admin,2025-01-01 00:00:00,,,"",
-2003,邀请关系与奖励记录修改,2000,3,#,,,1,0,F,0,0,bt10:userinvite:edit,#,admin,2025-01-01 00:00:00,,,"",
-2004,邀请关系与奖励记录删除,2000,4,#,,,1,0,F,0,0,bt10:userinvite:remove,#,admin,2025-01-01 00:00:00,,,"",
-2005,邀请关系与奖励记录导出,2000,5,#,,,1,0,F,0,0,bt10:userinvite:export,#,admin,2025-01-01 00:00:00,,,"",
+12330,邀请关系与奖励记录,3,1,userinvite,bt10/userinvite/index,,,1,0,C,0,0,bt10:userinvite:list,#,admin,2025-01-01 00:00:00,,,邀请关系与奖励记录菜单
+12331,邀请关系与奖励记录查询,12330,1,#,,,,1,0,F,0,0,bt10:userinvite:query,#,admin,2025-01-01 00:00:00,,,""
+12332,邀请关系与奖励记录新增,12330,2,#,,,,1,0,F,0,0,bt10:userinvite:add,#,admin,2025-01-01 00:00:00,,,""
+12333,邀请关系与奖励记录修改,12330,3,#,,,,1,0,F,0,0,bt10:userinvite:edit,#,admin,2025-01-01 00:00:00,,,""
+12334,邀请关系与奖励记录删除,12330,4,#,,,,1,0,F,0,0,bt10:userinvite:remove,#,admin,2025-01-01 00:00:00,,,""
+12335,邀请关系与奖励记录导出,12330,5,#,,,,1,0,F,0,0,bt10:userinvite:export,#,admin,2025-01-01 00:00:00,,,""

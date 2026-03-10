@@ -1,7 +1,7 @@
 menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
-2000,合伙人创建的社群,3,1,communityinfo,bt10/communityinfo/index,,,1,0,C,0,0,bt10:communityinfo:list,#,admin,2025-01-01 00:00:00,,,合伙人创建的社群菜单
-2001,合伙人创建的社群查询,2000,1,#,,,1,0,F,0,0,bt10:communityinfo:query,#,admin,2025-01-01 00:00:00,,,"",
-2002,合伙人创建的社群新增,2000,2,#,,,1,0,F,0,0,bt10:communityinfo:add,#,admin,2025-01-01 00:00:00,,,"",
-2003,合伙人创建的社群修改,2000,3,#,,,1,0,F,0,0,bt10:communityinfo:edit,#,admin,2025-01-01 00:00:00,,,"",
-2004,合伙人创建的社群删除,2000,4,#,,,1,0,F,0,0,bt10:communityinfo:remove,#,admin,2025-01-01 00:00:00,,,"",
-2005,合伙人创建的社群导出,2000,5,#,,,1,0,F,0,0,bt10:communityinfo:export,#,admin,2025-01-01 00:00:00,,,"",
+12040,合伙人创建的社群,3,1,communityinfo,bt10/communityinfo/index,,,1,0,C,0,0,bt10:communityinfo:list,#,admin,2025-01-01 00:00:00,,,合伙人创建的社群菜单
+12041,合伙人创建的社群查询,12040,1,#,,,,1,0,F,0,0,bt10:communityinfo:query,#,admin,2025-01-01 00:00:00,,,""
+12042,合伙人创建的社群新增,12040,2,#,,,,1,0,F,0,0,bt10:communityinfo:add,#,admin,2025-01-01 00:00:00,,,""
+12043,合伙人创建的社群修改,12040,3,#,,,,1,0,F,0,0,bt10:communityinfo:edit,#,admin,2025-01-01 00:00:00,,,""
+12044,合伙人创建的社群删除,12040,4,#,,,,1,0,F,0,0,bt10:communityinfo:remove,#,admin,2025-01-01 00:00:00,,,""
+12045,合伙人创建的社群导出,12040,5,#,,,,1,0,F,0,0,bt10:communityinfo:export,#,admin,2025-01-01 00:00:00,,,""

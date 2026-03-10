@@ -1,7 +1,7 @@
 menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
-2000,知识库分类,3,1,knowledgecategory,bt10/knowledgecategory/index,,,1,0,C,0,0,bt10:knowledgecategory:list,#,admin,2025-01-01 00:00:00,,,知识库分类菜单
-2001,知识库分类查询,2000,1,#,,,1,0,F,0,0,bt10:knowledgecategory:query,#,admin,2025-01-01 00:00:00,,,"",
-2002,知识库分类新增,2000,2,#,,,1,0,F,0,0,bt10:knowledgecategory:add,#,admin,2025-01-01 00:00:00,,,"",
-2003,知识库分类修改,2000,3,#,,,1,0,F,0,0,bt10:knowledgecategory:edit,#,admin,2025-01-01 00:00:00,,,"",
-2004,知识库分类删除,2000,4,#,,,1,0,F,0,0,bt10:knowledgecategory:remove,#,admin,2025-01-01 00:00:00,,,"",
-2005,知识库分类导出,2000,5,#,,,1,0,F,0,0,bt10:knowledgecategory:export,#,admin,2025-01-01 00:00:00,,,"",
+12170,知识库分类,3,1,knowledgecategory,bt10/knowledgecategory/index,,,1,0,C,0,0,bt10:knowledgecategory:list,#,admin,2025-01-01 00:00:00,,,知识库分类菜单
+12171,知识库分类查询,12170,1,#,,,,1,0,F,0,0,bt10:knowledgecategory:query,#,admin,2025-01-01 00:00:00,,,""
+12172,知识库分类新增,12170,2,#,,,,1,0,F,0,0,bt10:knowledgecategory:add,#,admin,2025-01-01 00:00:00,,,""
+12173,知识库分类修改,12170,3,#,,,,1,0,F,0,0,bt10:knowledgecategory:edit,#,admin,2025-01-01 00:00:00,,,""
+12174,知识库分类删除,12170,4,#,,,,1,0,F,0,0,bt10:knowledgecategory:remove,#,admin,2025-01-01 00:00:00,,,""
+12175,知识库分类导出,12170,5,#,,,,1,0,F,0,0,bt10:knowledgecategory:export,#,admin,2025-01-01 00:00:00,,,""

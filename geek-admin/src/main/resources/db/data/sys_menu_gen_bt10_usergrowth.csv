@@ -1,7 +1,7 @@
 menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
-2000,用户成长阶段变更历史,3,1,usergrowth,bt10/usergrowth/index,,,1,0,C,0,0,bt10:usergrowth:list,#,admin,2025-01-01 00:00:00,,,用户成长阶段变更历史菜单
-2001,用户成长阶段变更历史查询,2000,1,#,,,1,0,F,0,0,bt10:usergrowth:query,#,admin,2025-01-01 00:00:00,,,"",
-2002,用户成长阶段变更历史新增,2000,2,#,,,1,0,F,0,0,bt10:usergrowth:add,#,admin,2025-01-01 00:00:00,,,"",
-2003,用户成长阶段变更历史修改,2000,3,#,,,1,0,F,0,0,bt10:usergrowth:edit,#,admin,2025-01-01 00:00:00,,,"",
-2004,用户成长阶段变更历史删除,2000,4,#,,,1,0,F,0,0,bt10:usergrowth:remove,#,admin,2025-01-01 00:00:00,,,"",
-2005,用户成长阶段变更历史导出,2000,5,#,,,1,0,F,0,0,bt10:usergrowth:export,#,admin,2025-01-01 00:00:00,,,"",
+12310,用户成长阶段变更历史,3,1,usergrowth,bt10/usergrowth/index,,,1,0,C,0,0,bt10:usergrowth:list,#,admin,2025-01-01 00:00:00,,,用户成长阶段变更历史菜单
+12311,用户成长阶段变更历史查询,12310,1,#,,,,1,0,F,0,0,bt10:usergrowth:query,#,admin,2025-01-01 00:00:00,,,""
+12312,用户成长阶段变更历史新增,12310,2,#,,,,1,0,F,0,0,bt10:usergrowth:add,#,admin,2025-01-01 00:00:00,,,""
+12313,用户成长阶段变更历史修改,12310,3,#,,,,1,0,F,0,0,bt10:usergrowth:edit,#,admin,2025-01-01 00:00:00,,,""
+12314,用户成长阶段变更历史删除,12310,4,#,,,,1,0,F,0,0,bt10:usergrowth:remove,#,admin,2025-01-01 00:00:00,,,""
+12315,用户成长阶段变更历史导出,12310,5,#,,,,1,0,F,0,0,bt10:usergrowth:export,#,admin,2025-01-01 00:00:00,,,""

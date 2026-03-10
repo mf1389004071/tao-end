@@ -1,7 +1,7 @@
 menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
-2000,单次签到记录,3,1,eventcheckin,bt10/eventcheckin/index,,,1,0,C,0,0,bt10:eventcheckin:list,#,admin,2025-01-01 00:00:00,,,单次签到记录菜单
-2001,单次签到记录查询,2000,1,#,,,1,0,F,0,0,bt10:eventcheckin:query,#,admin,2025-01-01 00:00:00,,,"",
-2002,单次签到记录新增,2000,2,#,,,1,0,F,0,0,bt10:eventcheckin:add,#,admin,2025-01-01 00:00:00,,,"",
-2003,单次签到记录修改,2000,3,#,,,1,0,F,0,0,bt10:eventcheckin:edit,#,admin,2025-01-01 00:00:00,,,"",
-2004,单次签到记录删除,2000,4,#,,,1,0,F,0,0,bt10:eventcheckin:remove,#,admin,2025-01-01 00:00:00,,,"",
-2005,单次签到记录导出,2000,5,#,,,1,0,F,0,0,bt10:eventcheckin:export,#,admin,2025-01-01 00:00:00,,,"",
+12080,单次签到记录,3,1,eventcheckin,bt10/eventcheckin/index,,,1,0,C,0,0,bt10:eventcheckin:list,#,admin,2025-01-01 00:00:00,,,单次签到记录菜单
+12081,单次签到记录查询,12080,1,#,,,,1,0,F,0,0,bt10:eventcheckin:query,#,admin,2025-01-01 00:00:00,,,""
+12082,单次签到记录新增,12080,2,#,,,,1,0,F,0,0,bt10:eventcheckin:add,#,admin,2025-01-01 00:00:00,,,""
+12083,单次签到记录修改,12080,3,#,,,,1,0,F,0,0,bt10:eventcheckin:edit,#,admin,2025-01-01 00:00:00,,,""
+12084,单次签到记录删除,12080,4,#,,,,1,0,F,0,0,bt10:eventcheckin:remove,#,admin,2025-01-01 00:00:00,,,""
+12085,单次签到记录导出,12080,5,#,,,,1,0,F,0,0,bt10:eventcheckin:export,#,admin,2025-01-01 00:00:00,,,""

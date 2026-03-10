@@ -6,6 +6,7 @@
     <!-- 知识内容评论与回复，支持楼中楼与置顶 菜单及按钮：由代码生成器生成，项目启动时由 Liquibase 自动加载。
          这里显式声明每一列的类型，确保字符串值（如 menu_type = 'F'）不会被误解析为布尔或列名。 -->
     <changeSet author="qm.wu" id="gen-menu-bt10-knowledgecomment">
+        <validCheckSum>9:966f55fde5b9211ada3ee038d225f552</validCheckSum>
         <loadData tableName="sys_menu"
                   file="../data/sys_menu_gen_bt10_knowledgecomment.csv"
                   separator=","
@@ -27,7 +28,7 @@
             <column name="perms" type="VARCHAR(100)"/>
             <column name="icon" type="VARCHAR(100)"/>
             <column name="create_by" type="VARCHAR(64)"/>
-            <column name="create_time" type="TIMESTAMP"/>
+            <column name="create_time" type="TIMESTAMPTZ"/>
             <column name="update_by" type="VARCHAR(64)"/>
             <column name="update_time" type="TIMESTAMPTZ"/>
             <column name="remark" type="VARCHAR(500)"/>

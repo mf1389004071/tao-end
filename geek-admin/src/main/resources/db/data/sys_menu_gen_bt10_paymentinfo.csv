@@ -1,7 +1,7 @@
 menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
-2000,统一支付订单,3,1,paymentinfo,bt10/paymentinfo/index,,,1,0,C,0,0,bt10:paymentinfo:list,#,admin,2025-01-01 00:00:00,,,统一支付订单菜单
-2001,统一支付订单查询,2000,1,#,,,1,0,F,0,0,bt10:paymentinfo:query,#,admin,2025-01-01 00:00:00,,,"",
-2002,统一支付订单新增,2000,2,#,,,1,0,F,0,0,bt10:paymentinfo:add,#,admin,2025-01-01 00:00:00,,,"",
-2003,统一支付订单修改,2000,3,#,,,1,0,F,0,0,bt10:paymentinfo:edit,#,admin,2025-01-01 00:00:00,,,"",
-2004,统一支付订单删除,2000,4,#,,,1,0,F,0,0,bt10:paymentinfo:remove,#,admin,2025-01-01 00:00:00,,,"",
-2005,统一支付订单导出,2000,5,#,,,1,0,F,0,0,bt10:paymentinfo:export,#,admin,2025-01-01 00:00:00,,,"",
+12220,统一支付订单,3,1,paymentinfo,bt10/paymentinfo/index,,,1,0,C,0,0,bt10:paymentinfo:list,#,admin,2025-01-01 00:00:00,,,统一支付订单菜单
+12221,统一支付订单查询,12220,1,#,,,,1,0,F,0,0,bt10:paymentinfo:query,#,admin,2025-01-01 00:00:00,,,""
+12222,统一支付订单新增,12220,2,#,,,,1,0,F,0,0,bt10:paymentinfo:add,#,admin,2025-01-01 00:00:00,,,""
+12223,统一支付订单修改,12220,3,#,,,,1,0,F,0,0,bt10:paymentinfo:edit,#,admin,2025-01-01 00:00:00,,,""
+12224,统一支付订单删除,12220,4,#,,,,1,0,F,0,0,bt10:paymentinfo:remove,#,admin,2025-01-01 00:00:00,,,""
+12225,统一支付订单导出,12220,5,#,,,,1,0,F,0,0,bt10:paymentinfo:export,#,admin,2025-01-01 00:00:00,,,""

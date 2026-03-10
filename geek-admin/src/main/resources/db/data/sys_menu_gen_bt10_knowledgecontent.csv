@@ -1,7 +1,7 @@
 menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
-2000,知识库内容,3,1,knowledgecontent,bt10/knowledgecontent/index,,,1,0,C,0,0,bt10:knowledgecontent:list,#,admin,2025-01-01 00:00:00,,,知识库内容菜单
-2001,知识库内容查询,2000,1,#,,,1,0,F,0,0,bt10:knowledgecontent:query,#,admin,2025-01-01 00:00:00,,,"",
-2002,知识库内容新增,2000,2,#,,,1,0,F,0,0,bt10:knowledgecontent:add,#,admin,2025-01-01 00:00:00,,,"",
-2003,知识库内容修改,2000,3,#,,,1,0,F,0,0,bt10:knowledgecontent:edit,#,admin,2025-01-01 00:00:00,,,"",
-2004,知识库内容删除,2000,4,#,,,1,0,F,0,0,bt10:knowledgecontent:remove,#,admin,2025-01-01 00:00:00,,,"",
-2005,知识库内容导出,2000,5,#,,,1,0,F,0,0,bt10:knowledgecontent:export,#,admin,2025-01-01 00:00:00,,,"",
+12180,知识库内容,3,1,knowledgecontent,bt10/knowledgecontent/index,,,1,0,C,0,0,bt10:knowledgecontent:list,#,admin,2025-01-01 00:00:00,,,知识库内容菜单
+12181,知识库内容查询,12180,1,#,,,,1,0,F,0,0,bt10:knowledgecontent:query,#,admin,2025-01-01 00:00:00,,,""
+12182,知识库内容新增,12180,2,#,,,,1,0,F,0,0,bt10:knowledgecontent:add,#,admin,2025-01-01 00:00:00,,,""
+12183,知识库内容修改,12180,3,#,,,,1,0,F,0,0,bt10:knowledgecontent:edit,#,admin,2025-01-01 00:00:00,,,""
+12184,知识库内容删除,12180,4,#,,,,1,0,F,0,0,bt10:knowledgecontent:remove,#,admin,2025-01-01 00:00:00,,,""
+12185,知识库内容导出,12180,5,#,,,,1,0,F,0,0,bt10:knowledgecontent:export,#,admin,2025-01-01 00:00:00,,,""

@@ -1,7 +1,7 @@
 menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
-2000,用户活动报名记录,3,1,eventjoin,bt10/eventjoin/index,,,1,0,C,0,0,bt10:eventjoin:list,#,admin,2025-01-01 00:00:00,,,用户活动报名记录菜单
-2001,用户活动报名记录查询,2000,1,#,,,1,0,F,0,0,bt10:eventjoin:query,#,admin,2025-01-01 00:00:00,,,"",
-2002,用户活动报名记录新增,2000,2,#,,,1,0,F,0,0,bt10:eventjoin:add,#,admin,2025-01-01 00:00:00,,,"",
-2003,用户活动报名记录修改,2000,3,#,,,1,0,F,0,0,bt10:eventjoin:edit,#,admin,2025-01-01 00:00:00,,,"",
-2004,用户活动报名记录删除,2000,4,#,,,1,0,F,0,0,bt10:eventjoin:remove,#,admin,2025-01-01 00:00:00,,,"",
-2005,用户活动报名记录导出,2000,5,#,,,1,0,F,0,0,bt10:eventjoin:export,#,admin,2025-01-01 00:00:00,,,"",
+12110,用户活动报名记录,3,1,eventjoin,bt10/eventjoin/index,,,1,0,C,0,0,bt10:eventjoin:list,#,admin,2025-01-01 00:00:00,,,用户活动报名记录菜单
+12111,用户活动报名记录查询,12110,1,#,,,,1,0,F,0,0,bt10:eventjoin:query,#,admin,2025-01-01 00:00:00,,,""
+12112,用户活动报名记录新增,12110,2,#,,,,1,0,F,0,0,bt10:eventjoin:add,#,admin,2025-01-01 00:00:00,,,""
+12113,用户活动报名记录修改,12110,3,#,,,,1,0,F,0,0,bt10:eventjoin:edit,#,admin,2025-01-01 00:00:00,,,""
+12114,用户活动报名记录删除,12110,4,#,,,,1,0,F,0,0,bt10:eventjoin:remove,#,admin,2025-01-01 00:00:00,,,""
+12115,用户活动报名记录导出,12110,5,#,,,,1,0,F,0,0,bt10:eventjoin:export,#,admin,2025-01-01 00:00:00,,,""

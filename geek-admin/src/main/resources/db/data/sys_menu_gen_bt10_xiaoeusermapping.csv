@@ -1,7 +1,7 @@
 menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
-2000,本平台用户与小鹅通用户ID映射,3,1,xiaoeusermapping,bt10/xiaoeusermapping/index,,,1,0,C,0,0,bt10:xiaoeusermapping:list,#,admin,2025-01-01 00:00:00,,,本平台用户与小鹅通用户ID映射菜单
-2001,本平台用户与小鹅通用户ID映射查询,2000,1,#,,,1,0,F,0,0,bt10:xiaoeusermapping:query,#,admin,2025-01-01 00:00:00,,,"",
-2002,本平台用户与小鹅通用户ID映射新增,2000,2,#,,,1,0,F,0,0,bt10:xiaoeusermapping:add,#,admin,2025-01-01 00:00:00,,,"",
-2003,本平台用户与小鹅通用户ID映射修改,2000,3,#,,,1,0,F,0,0,bt10:xiaoeusermapping:edit,#,admin,2025-01-01 00:00:00,,,"",
-2004,本平台用户与小鹅通用户ID映射删除,2000,4,#,,,1,0,F,0,0,bt10:xiaoeusermapping:remove,#,admin,2025-01-01 00:00:00,,,"",
-2005,本平台用户与小鹅通用户ID映射导出,2000,5,#,,,1,0,F,0,0,bt10:xiaoeusermapping:export,#,admin,2025-01-01 00:00:00,,,"",
+12380,本平台用户与小鹅通用户ID映射,3,1,xiaoeusermapping,bt10/xiaoeusermapping/index,,,1,0,C,0,0,bt10:xiaoeusermapping:list,#,admin,2025-01-01 00:00:00,,,本平台用户与小鹅通用户ID映射菜单
+12381,本平台用户与小鹅通用户ID映射查询,12380,1,#,,,,1,0,F,0,0,bt10:xiaoeusermapping:query,#,admin,2025-01-01 00:00:00,,,""
+12382,本平台用户与小鹅通用户ID映射新增,12380,2,#,,,,1,0,F,0,0,bt10:xiaoeusermapping:add,#,admin,2025-01-01 00:00:00,,,""
+12383,本平台用户与小鹅通用户ID映射修改,12380,3,#,,,,1,0,F,0,0,bt10:xiaoeusermapping:edit,#,admin,2025-01-01 00:00:00,,,""
+12384,本平台用户与小鹅通用户ID映射删除,12380,4,#,,,,1,0,F,0,0,bt10:xiaoeusermapping:remove,#,admin,2025-01-01 00:00:00,,,""
+12385,本平台用户与小鹅通用户ID映射导出,12380,5,#,,,,1,0,F,0,0,bt10:xiaoeusermapping:export,#,admin,2025-01-01 00:00:00,,,""

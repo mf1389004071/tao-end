@@ -1,7 +1,7 @@
 menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
-2000,知识内容与标签多对多关联,3,1,knowledgecontenttags,bt10/knowledgecontenttags/index,,,1,0,C,0,0,bt10:knowledgecontenttags:list,#,admin,2025-01-01 00:00:00,,,知识内容与标签多对多关联菜单
-2001,知识内容与标签多对多关联查询,2000,1,#,,,1,0,F,0,0,bt10:knowledgecontenttags:query,#,admin,2025-01-01 00:00:00,,,"",
-2002,知识内容与标签多对多关联新增,2000,2,#,,,1,0,F,0,0,bt10:knowledgecontenttags:add,#,admin,2025-01-01 00:00:00,,,"",
-2003,知识内容与标签多对多关联修改,2000,3,#,,,1,0,F,0,0,bt10:knowledgecontenttags:edit,#,admin,2025-01-01 00:00:00,,,"",
-2004,知识内容与标签多对多关联删除,2000,4,#,,,1,0,F,0,0,bt10:knowledgecontenttags:remove,#,admin,2025-01-01 00:00:00,,,"",
-2005,知识内容与标签多对多关联导出,2000,5,#,,,1,0,F,0,0,bt10:knowledgecontenttags:export,#,admin,2025-01-01 00:00:00,,,"",
+12190,知识内容与标签多对多关联,3,1,knowledgecontenttags,bt10/knowledgecontenttags/index,,,1,0,C,0,0,bt10:knowledgecontenttags:list,#,admin,2025-01-01 00:00:00,,,知识内容与标签多对多关联菜单
+12191,知识内容与标签多对多关联查询,12190,1,#,,,,1,0,F,0,0,bt10:knowledgecontenttags:query,#,admin,2025-01-01 00:00:00,,,""
+12192,知识内容与标签多对多关联新增,12190,2,#,,,,1,0,F,0,0,bt10:knowledgecontenttags:add,#,admin,2025-01-01 00:00:00,,,""
+12193,知识内容与标签多对多关联修改,12190,3,#,,,,1,0,F,0,0,bt10:knowledgecontenttags:edit,#,admin,2025-01-01 00:00:00,,,""
+12194,知识内容与标签多对多关联删除,12190,4,#,,,,1,0,F,0,0,bt10:knowledgecontenttags:remove,#,admin,2025-01-01 00:00:00,,,""
+12195,知识内容与标签多对多关联导出,12190,5,#,,,,1,0,F,0,0,bt10:knowledgecontenttags:export,#,admin,2025-01-01 00:00:00,,,""

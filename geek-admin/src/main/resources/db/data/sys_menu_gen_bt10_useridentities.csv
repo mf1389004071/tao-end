@@ -1,7 +1,7 @@
 menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
-2000,用户身份关系表,3,1,useridentities,bt10/useridentities/index,,,1,0,C,0,0,bt10:useridentities:list,#,admin,2025-01-01 00:00:00,,,用户身份关系表菜单
-2001,用户身份关系表查询,2000,1,#,,,1,0,F,0,0,bt10:useridentities:query,#,admin,2025-01-01 00:00:00,,,"",
-2002,用户身份关系表新增,2000,2,#,,,1,0,F,0,0,bt10:useridentities:add,#,admin,2025-01-01 00:00:00,,,"",
-2003,用户身份关系表修改,2000,3,#,,,1,0,F,0,0,bt10:useridentities:edit,#,admin,2025-01-01 00:00:00,,,"",
-2004,用户身份关系表删除,2000,4,#,,,1,0,F,0,0,bt10:useridentities:remove,#,admin,2025-01-01 00:00:00,,,"",
-2005,用户身份关系表导出,2000,5,#,,,1,0,F,0,0,bt10:useridentities:export,#,admin,2025-01-01 00:00:00,,,"",
+12320,用户身份关系表,3,1,useridentities,bt10/useridentities/index,,,1,0,C,0,0,bt10:useridentities:list,#,admin,2025-01-01 00:00:00,,,用户身份关系表菜单
+12321,用户身份关系表查询,12320,1,#,,,,1,0,F,0,0,bt10:useridentities:query,#,admin,2025-01-01 00:00:00,,,""
+12322,用户身份关系表新增,12320,2,#,,,,1,0,F,0,0,bt10:useridentities:add,#,admin,2025-01-01 00:00:00,,,""
+12323,用户身份关系表修改,12320,3,#,,,,1,0,F,0,0,bt10:useridentities:edit,#,admin,2025-01-01 00:00:00,,,""
+12324,用户身份关系表删除,12320,4,#,,,,1,0,F,0,0,bt10:useridentities:remove,#,admin,2025-01-01 00:00:00,,,""
+12325,用户身份关系表导出,12320,5,#,,,,1,0,F,0,0,bt10:useridentities:export,#,admin,2025-01-01 00:00:00,,,""

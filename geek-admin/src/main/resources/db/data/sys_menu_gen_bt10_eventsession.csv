@@ -1,7 +1,7 @@
 menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
-2000,周期活动的单场次,3,1,eventsession,bt10/eventsession/index,,,1,0,C,0,0,bt10:eventsession:list,#,admin,2025-01-01 00:00:00,,,周期活动的单场次菜单
-2001,周期活动的单场次查询,2000,1,#,,,1,0,F,0,0,bt10:eventsession:query,#,admin,2025-01-01 00:00:00,,,"",
-2002,周期活动的单场次新增,2000,2,#,,,1,0,F,0,0,bt10:eventsession:add,#,admin,2025-01-01 00:00:00,,,"",
-2003,周期活动的单场次修改,2000,3,#,,,1,0,F,0,0,bt10:eventsession:edit,#,admin,2025-01-01 00:00:00,,,"",
-2004,周期活动的单场次删除,2000,4,#,,,1,0,F,0,0,bt10:eventsession:remove,#,admin,2025-01-01 00:00:00,,,"",
-2005,周期活动的单场次导出,2000,5,#,,,1,0,F,0,0,bt10:eventsession:export,#,admin,2025-01-01 00:00:00,,,"",
+12140,周期活动的单场次,3,1,eventsession,bt10/eventsession/index,,,1,0,C,0,0,bt10:eventsession:list,#,admin,2025-01-01 00:00:00,,,周期活动的单场次菜单
+12141,周期活动的单场次查询,12140,1,#,,,,1,0,F,0,0,bt10:eventsession:query,#,admin,2025-01-01 00:00:00,,,""
+12142,周期活动的单场次新增,12140,2,#,,,,1,0,F,0,0,bt10:eventsession:add,#,admin,2025-01-01 00:00:00,,,""
+12143,周期活动的单场次修改,12140,3,#,,,,1,0,F,0,0,bt10:eventsession:edit,#,admin,2025-01-01 00:00:00,,,""
+12144,周期活动的单场次删除,12140,4,#,,,,1,0,F,0,0,bt10:eventsession:remove,#,admin,2025-01-01 00:00:00,,,""
+12145,周期活动的单场次导出,12140,5,#,,,,1,0,F,0,0,bt10:eventsession:export,#,admin,2025-01-01 00:00:00,,,""

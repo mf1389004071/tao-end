@@ -1,7 +1,7 @@
 menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
-2000,AI异步任务,3,1,aitasks,bt10/aitasks/index,,,1,0,C,0,0,bt10:aitasks:list,#,admin,2025-01-01 00:00:00,,,AI异步任务菜单
-2001,AI异步任务查询,2000,1,#,,,1,0,F,0,0,bt10:aitasks:query,#,admin,2025-01-01 00:00:00,,,"",
-2002,AI异步任务新增,2000,2,#,,,1,0,F,0,0,bt10:aitasks:add,#,admin,2025-01-01 00:00:00,,,"",
-2003,AI异步任务修改,2000,3,#,,,1,0,F,0,0,bt10:aitasks:edit,#,admin,2025-01-01 00:00:00,,,"",
-2004,AI异步任务删除,2000,4,#,,,1,0,F,0,0,bt10:aitasks:remove,#,admin,2025-01-01 00:00:00,,,"",
-2005,AI异步任务导出,2000,5,#,,,1,0,F,0,0,bt10:aitasks:export,#,admin,2025-01-01 00:00:00,,,"",
+12020,AI异步任务,3,1,aitasks,bt10/aitasks/index,,,1,0,C,0,0,bt10:aitasks:list,#,admin,2025-01-01 00:00:00,,,AI异步任务菜单
+12021,AI异步任务查询,12020,1,#,,,,1,0,F,0,0,bt10:aitasks:query,#,admin,2025-01-01 00:00:00,,,""
+12022,AI异步任务新增,12020,2,#,,,,1,0,F,0,0,bt10:aitasks:add,#,admin,2025-01-01 00:00:00,,,""
+12023,AI异步任务修改,12020,3,#,,,,1,0,F,0,0,bt10:aitasks:edit,#,admin,2025-01-01 00:00:00,,,""
+12024,AI异步任务删除,12020,4,#,,,,1,0,F,0,0,bt10:aitasks:remove,#,admin,2025-01-01 00:00:00,,,""
+12025,AI异步任务导出,12020,5,#,,,,1,0,F,0,0,bt10:aitasks:export,#,admin,2025-01-01 00:00:00,,,""

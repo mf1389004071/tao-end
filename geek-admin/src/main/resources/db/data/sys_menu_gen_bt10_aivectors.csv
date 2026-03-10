@@ -1,7 +1,7 @@
 menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
-2000,AI向量,3,1,aivectors,bt10/aivectors/index,,,1,0,C,0,0,bt10:aivectors:list,#,admin,2025-01-01 00:00:00,,,AI向量菜单
-2001,AI向量查询,2000,1,#,,,1,0,F,0,0,bt10:aivectors:query,#,admin,2025-01-01 00:00:00,,,"",
-2002,AI向量新增,2000,2,#,,,1,0,F,0,0,bt10:aivectors:add,#,admin,2025-01-01 00:00:00,,,"",
-2003,AI向量修改,2000,3,#,,,1,0,F,0,0,bt10:aivectors:edit,#,admin,2025-01-01 00:00:00,,,"",
-2004,AI向量删除,2000,4,#,,,1,0,F,0,0,bt10:aivectors:remove,#,admin,2025-01-01 00:00:00,,,"",
-2005,AI向量导出,2000,5,#,,,1,0,F,0,0,bt10:aivectors:export,#,admin,2025-01-01 00:00:00,,,"",
+12030,AI向量,3,1,aivectors,bt10/aivectors/index,,,1,0,C,0,0,bt10:aivectors:list,#,admin,2025-01-01 00:00:00,,,AI向量菜单
+12031,AI向量查询,12030,1,#,,,,1,0,F,0,0,bt10:aivectors:query,#,admin,2025-01-01 00:00:00,,,""
+12032,AI向量新增,12030,2,#,,,,1,0,F,0,0,bt10:aivectors:add,#,admin,2025-01-01 00:00:00,,,""
+12033,AI向量修改,12030,3,#,,,,1,0,F,0,0,bt10:aivectors:edit,#,admin,2025-01-01 00:00:00,,,""
+12034,AI向量删除,12030,4,#,,,,1,0,F,0,0,bt10:aivectors:remove,#,admin,2025-01-01 00:00:00,,,""
+12035,AI向量导出,12030,5,#,,,,1,0,F,0,0,bt10:aivectors:export,#,admin,2025-01-01 00:00:00,,,""

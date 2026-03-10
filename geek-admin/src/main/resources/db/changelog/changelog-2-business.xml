@@ -59,10 +59,18 @@
             <column name="related_type" type="VARCHAR(50)" remarks="关联业务类型如EVENT/CONTENT"/>
             <column name="related_id" type="BIGINT" remarks="关联业务主键"/>
             <column name="expired_time" type="TIMESTAMPTZ" remarks="该笔积分过期时间"/>
-            <column name="remark" type="TEXT" remarks="备注"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="发生时间"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+            
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+            
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="user_point_logs" baseColumnNames="user_id" constraintName="fk_user_point_logs_user" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
         <createIndex indexName="idx_user_point_logs_user_id" tableName="user_point_logs"><column name="user_id"/></createIndex>
@@ -78,13 +86,21 @@
             <column name="amount" type="DECIMAL(24,4)" remarks="本次变动金额"><constraints nullable="false"/></column>
             <column name="balance_before" type="DECIMAL(24,4)" remarks="变动前贡献点余额"><constraints nullable="false"/></column>
             <column name="balance_after" type="DECIMAL(24,4)" remarks="变动后贡献点余额"><constraints nullable="false"/></column>
-            <column name="remark" type="TEXT" remarks="说明"/>
             <column name="related_type" type="VARCHAR(50)" remarks="关联业务类型"/>
             <column name="related_id" type="BIGINT" remarks="关联业务ID"/>
             <column name="payment_no" type="VARCHAR(255)" remarks="支付单号"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="发生时间"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="user_contrib_logs" baseColumnNames="user_id" constraintName="fk_user_contrib_logs_user" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
         <createIndex indexName="idx_user_contrib_logs_user_id" tableName="user_contrib_logs"><column name="user_id"/></createIndex>
@@ -103,9 +119,18 @@
             <column name="reward_claimed" type="BOOLEAN" defaultValueBoolean="false" remarks="邀请人是否已领取奖励"/>
             <column name="reward_points" type="INT" defaultValueNumeric="0" remarks="邀请奖励积分"/>
             <column name="reward_contrib" type="DECIMAL(24,4)" defaultValueNumeric="0" remarks="邀请奖励贡献点"/>
-            <column name="remark" type="TEXT" remarks="备注"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="user_invite" baseColumnNames="user_id" constraintName="fk_user_invite_user" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
         <addForeignKeyConstraint baseTableName="user_invite" baseColumnNames="inviter_id" constraintName="fk_user_invite_inviter" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="SET NULL"/>
@@ -122,10 +147,18 @@
             <column name="stage_to" type="VARCHAR(50)" remarks="新阶段"><constraints nullable="false"/></column>
             <column name="trigger_type" type="VARCHAR(50)" remarks="触发方式：自动/手动/任务完成等"/>
             <column name="trigger_data" type="jsonb" remarks="触发上下文数据"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="变更时间"/>
-            <column name="remark" type="TEXT" remarks="备注"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="user_growth" baseColumnNames="user_id" constraintName="fk_user_growth_user" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
         <createIndex indexName="idx_user_growth_user_id" tableName="user_growth"><column name="user_id"/></createIndex>
@@ -138,24 +171,31 @@
             <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
             <column name="name" type="VARCHAR(255)" remarks="分类名称"><constraints nullable="false"/></column>
             <column name="slug" type="VARCHAR(255)" remarks="URL/唯一标识"><constraints nullable="false" unique="true"/></column>
-            <column name="remark" type="TEXT" remarks="备注"/>
             <column name="parent_id" type="BIGINT" remarks="父分类ID"/>
             <column name="order_num" type="INT" defaultValueNumeric="0" remarks="排序"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
             <column name="icon" type="VARCHAR(255)" remarks="图标"/>
             <column name="color" type="VARCHAR(50)" remarks="主题色"/>
             <column name="permission_level" type="INT" defaultValueNumeric="1" remarks="可见权限等级1-5"/>
-            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
-            <column name="delete_id" type="BIGINT" remarks="删除人ID"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
-            <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
+            
             <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
             <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
             <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
             <column name="json_data" type="jsonb" remarks="扩展JSON"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="delete_id" remarks="删除人ID" type="BIGINT"/>
+            <column name="delete_time" remarks="删除时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="knowledge_category" baseColumnNames="parent_id" constraintName="fk_knowledge_category_parent" referencedTableName="knowledge_category" referencedColumnNames="id" onDelete="SET NULL"/>
         <createIndex indexName="idx_knowledge_category_parent_id" tableName="knowledge_category"><column name="parent_id"/></createIndex>
@@ -191,19 +231,26 @@
             <column name="source_from" type="VARCHAR(255)" remarks="来源"/>
             <column name="difficulty_level" type="VARCHAR(10)" remarks="难度等级"/>
             <column name="ai_summary" type="TEXT" remarks="AI生成摘要"/>
-            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
-            <column name="delete_id" type="BIGINT" remarks="删除人ID"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
-            <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
+            
             <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
             <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
             <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
             <column name="json_data" type="jsonb" remarks="扩展JSON"/>
-            <column name="remark" type="TEXT" remarks="备注"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="delete_id" remarks="删除人ID" type="BIGINT"/>
+            <column name="delete_time" remarks="删除时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="knowledge_content" baseColumnNames="category_id" constraintName="fk_knowledge_content_category" referencedTableName="knowledge_category" referencedColumnNames="id" onDelete="SET NULL"/>
         <addForeignKeyConstraint baseTableName="knowledge_content" baseColumnNames="author_id" constraintName="fk_knowledge_content_author" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
@@ -226,15 +273,18 @@
             <column name="like_count" type="INT" defaultValueNumeric="0" remarks="点赞数"/>
             <column name="is_pinned" type="BOOLEAN" defaultValueBoolean="false" remarks="是否置顶"/>
             <column name="biz_status" type="VARCHAR(20)" defaultValue="PUBLISHED" remarks="状态：已发布/隐藏"/>
-            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
-            <column name="delete_id" type="BIGINT" remarks="删除人ID"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
-            <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
-            <column name="remark" type="TEXT" remarks="备注"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="knowledge_comment" baseColumnNames="content_id" constraintName="fk_knowledge_comment_content" referencedTableName="knowledge_content" referencedColumnNames="id" onDelete="CASCADE"/>
         <addForeignKeyConstraint baseTableName="knowledge_comment" baseColumnNames="user_id" constraintName="fk_knowledge_comment_user" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
@@ -250,9 +300,18 @@
             <column name="content_id" type="BIGINT" remarks="知识内容ID"><constraints nullable="false"/></column>
             <column name="action_type" type="VARCHAR(10)" remarks="类型：点赞/反对/收藏/分享等"><constraints nullable="false"/></column>
             <column name="user_id" type="BIGINT" remarks="用户ID"><constraints nullable="false"/></column>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="点赞时间"/>
-            <column name="remark" type="TEXT" remarks="备注"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="knowledge_action" baseColumnNames="content_id" constraintName="fk_knowledge_action_content" referencedTableName="knowledge_content" referencedColumnNames="id" onDelete="CASCADE"/>
         <addForeignKeyConstraint baseTableName="knowledge_action" baseColumnNames="user_id" constraintName="fk_knowledge_action_user" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
@@ -264,7 +323,6 @@
         <createTable remarks="活动/线下课程主表，含时间地点、容量、状态、课程与运营配置，支持周期活动" tableName="event_info">
             <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
             <column name="title" type="VARCHAR(500)" remarks="活动标题"><constraints nullable="false"/></column>
-            <column name="remark" type="TEXT" remarks="备注"/>
             <column name="join_type" type="VARCHAR(50)" defaultValue="ONLINE" remarks="参与方式：线上/线下/混合"/>
             <column name="category" type="VARCHAR(50)" remarks="活动分类"/>
             <column name="start_time" type="TIMESTAMPTZ" remarks="开始时间"><constraints nullable="false"/></column>
@@ -301,18 +359,26 @@
             <column name="organizer" type="VARCHAR(200)" remarks="主办方"/>
             <column name="contact" type="VARCHAR(255)" remarks="联系方式"/>
             <column name="pm_user_id" type="BIGINT" remarks="负责人ID"/>
-            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
-            <column name="delete_id" type="BIGINT" remarks="删除人ID"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
-            <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
+            
             <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
             <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
             <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
             <column name="json_data" type="jsonb" remarks="扩展配置"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="delete_id" remarks="删除人ID" type="BIGINT"/>
+            <column name="delete_time" remarks="删除时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="event_info" baseColumnNames="parent_event_id" constraintName="fk_event_info_parent" referencedTableName="event_info" referencedColumnNames="id" onDelete="SET NULL"/>
         <addForeignKeyConstraint baseTableName="event_info" baseColumnNames="pm_user_id" constraintName="fk_event_info_pm_user" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="SET NULL"/>
@@ -338,13 +404,18 @@
             <column name="responsibilities" type="TEXT" remarks="职责说明"/>
             <column name="requirements" type="TEXT" remarks="任职要求"/>
             <column name="order_num" type="INT" defaultValueNumeric="0" remarks="排序"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
-            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
-            <column name="remark" type="TEXT" remarks="备注"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="event_role" baseColumnNames="event_id" constraintName="fk_event_role_event" referencedTableName="event_info" referencedColumnNames="id" onDelete="CASCADE"/>
         <createIndex indexName="idx_event_role_event_id" tableName="event_role"><column name="event_id"/></createIndex>
@@ -370,19 +441,23 @@
             <column name="conversion_product_id" type="BIGINT" remarks="转化产品ID"/>
             <column name="conversion_amount" type="DECIMAL(24,4)" remarks="转化金额"/>
             <column name="conversion_notes" type="TEXT" remarks="转化备注"/>
-            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
-            <column name="delete_id" type="BIGINT" remarks="删除人ID"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="报名时间"/>
-            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
-            <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
+            
             <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
             <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
             <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
             <column name="json_data" type="jsonb" remarks="扩展JSON"/>
-            <column name="remark" type="TEXT" remarks="备注"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="event_join" baseColumnNames="event_id" constraintName="fk_event_join_event" referencedTableName="event_info" referencedColumnNames="id" onDelete="CASCADE"/>
         <addForeignKeyConstraint baseTableName="event_join" baseColumnNames="user_id" constraintName="fk_event_join_user" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
@@ -401,8 +476,18 @@
             <column name="assigned_time" type="TIMESTAMPTZ" remarks="分配时间"/>
             <column name="confirmed_time" type="TIMESTAMPTZ" remarks="确认时间"/>
             <column name="biz_status" type="VARCHAR(20)" defaultValue="ASSIGNED" remarks="状态：已分配/已确认/已拒绝"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
-            <column name="remark" type="TEXT" remarks="备注"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="event_joiner_role" baseColumnNames="join_id" constraintName="fk_event_reg_roles_reg" referencedTableName="event_join" referencedColumnNames="id" onDelete="CASCADE"/>
         <addForeignKeyConstraint baseTableName="event_joiner_role" baseColumnNames="role_id" constraintName="fk_event_reg_roles_role" referencedTableName="event_role" referencedColumnNames="id" onDelete="CASCADE"/>
@@ -421,12 +506,18 @@
             <column name="check_in_count" type="INT" defaultValueNumeric="0" remarks="本场签到人数"/>
             <column name="summary_text" type="TEXT" remarks="AI生成场次总结"/>
             <column name="meeting_url" type="TEXT" remarks="本场会议链接"/>
-            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="event_session" baseColumnNames="event_id" constraintName="fk_event_session_event" referencedTableName="event_info" referencedColumnNames="id" onDelete="CASCADE"/>
         <createIndex indexName="idx_event_session_event_id" tableName="event_session"><column name="event_id"/></createIndex>
@@ -443,9 +534,18 @@
             <column name="check_in_method" type="VARCHAR(50)" remarks="签到方式：二维码/定位/手动"/>
             <column name="check_in_location" type="jsonb" remarks="签到位置"/>
             <column name="operator_id" type="BIGINT" remarks="操作人ID(手动签到时)"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
-            <column name="remark" type="TEXT" remarks="备注"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="event_check_in" baseColumnNames="join_id" constraintName="fk_event_check_in_reg" referencedTableName="event_join" referencedColumnNames="id" onDelete="CASCADE"/>
         <addForeignKeyConstraint baseTableName="event_check_in" baseColumnNames="session_id" constraintName="fk_event_check_in_session" referencedTableName="event_session" referencedColumnNames="id" onDelete="SET NULL"/>
@@ -472,15 +572,21 @@
             <column name="model_used" type="VARCHAR(100)" remarks="使用模型"/>
             <column name="start_time" type="TIMESTAMPTZ" remarks="开始时间"/>
             <column name="complete_time" type="TIMESTAMPTZ" remarks="完成时间"/>
-            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
             <column name="delete_id" type="BIGINT" remarks="删除人ID"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
             <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
-            <column name="remark" type="TEXT" remarks="备注"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <createIndex indexName="idx_ai_tasks_biz_status" tableName="ai_tasks"><column name="biz_status"/></createIndex>
         <createIndex indexName="idx_ai_tasks_task_type" tableName="ai_tasks"><column name="task_type"/></createIndex>
@@ -499,12 +605,18 @@
             <column name="summary" type="TEXT" remarks="AI摘要"/>
             <column name="key_points" type="jsonb" remarks="关键点"/>
             <column name="action_items" type="jsonb" remarks="行动清单"/>
-            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
-            <column name="remark" type="TEXT" remarks="备注"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="ai_meeting_transcripts" baseColumnNames="event_id" constraintName="fk_ai_meeting_transcripts_event" referencedTableName="event_info" referencedColumnNames="id" onDelete="SET NULL"/>
         <addForeignKeyConstraint baseTableName="ai_meeting_transcripts" baseColumnNames="session_id" constraintName="fk_ai_meeting_transcripts_session" referencedTableName="event_session" referencedColumnNames="id" onDelete="SET NULL"/>
@@ -525,25 +637,31 @@
             <column name="spu_type" type="VARCHAR(50)" remarks="SPU类型"/>
             <column name="pay_state" type="VARCHAR(20)" remarks="支付状态"/>
             <column name="pay_type" type="VARCHAR(50)" remarks="支付方式"/>
-            <column name="trade_no" type="VARCHAR(255)" remarks="第三方交易号">
-                <constraints unique="true"/>
-            </column>
+            <column name="trade_no" type="VARCHAR(255)" remarks="第三方交易号"/>
             <column name="xiaoe_create_time" type="TIMESTAMPTZ" remarks="小鹅通侧创建时间"/>
             <column name="student_info" type="jsonb" remarks="学员信息快照"/>
             <column name="invoice_info" type="jsonb" remarks="发票信息"/>
             <column name="sync_status" type="VARCHAR(20)" defaultValue="PENDING" remarks="同步状态：待同步/已同步/失败"/>
             <column name="last_sync_time" type="TIMESTAMPTZ" remarks="最近同步时间"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="本地创建时间"/>
-            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
             <column name="order_no" type="VARCHAR(255)" remarks="本地订单号"/>
-            <column name="remark" type="VARCHAR(255)" remarks="备注"/>
             <column name="process_status" type="VARCHAR(255)" remarks="处理状态"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
+            
             <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
             <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
             <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
             <column name="json_data" type="jsonb" remarks="原始数据"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="xiaoe_orders" baseColumnNames="user_id" constraintName="fk_xiaoe_orders_user" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="SET NULL"/>
         <createIndex indexName="idx_xiaoe_orders_user_id" tableName="xiaoe_orders"><column name="user_id"/></createIndex>
@@ -560,11 +678,18 @@
             <column name="mapping_type" type="VARCHAR(20)" defaultValue="AUTO" remarks="映射方式：自动/手动"/>
             <column name="confidence_score" type="DECIMAL(3,4)" remarks="匹配置信度0-1"/>
             <column name="mapped_time" type="TIMESTAMPTZ" remarks="建立映射时间"/>
-            <column name="last_update_time" type="TIMESTAMPTZ" remarks="最后更新时间"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
-            <column name="remark" type="TEXT" remarks="备注"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="xiaoe_user_mapping" baseColumnNames="user_id" constraintName="fk_xiaoe_user_mapping_user" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
         <createIndex indexName="idx_xiaoe_user_mapping_user_id" tableName="xiaoe_user_mapping"><column name="user_id"/></createIndex>
@@ -575,7 +700,6 @@
         <createTable remarks="积分商城商品(优惠券/咨询/实物/会员等)，所需积分与库存" tableName="point_product">
             <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
             <column name="name" type="VARCHAR(255)" remarks="商品名称"><constraints nullable="false"/></column>
-            <column name="remark" type="TEXT" remarks="描述"/>
             <column name="product_type" type="VARCHAR(50)" remarks="类型：优惠券/咨询/实物/会员等"/>
             <column name="points_required" type="INT" remarks="兑换所需积分"><constraints nullable="false"/></column>
             <column name="stock_quantity" type="INT" remarks="库存数量，-1表示不限"/>
@@ -585,18 +709,23 @@
             <column name="valid_days" type="INT" remarks="有效天数"/>
             <column name="biz_status" type="VARCHAR(20)" defaultValue="ACTIVE" remarks="状态：上架/下架/售罄"/>
             <column name="order_num" type="INT" defaultValueNumeric="0" remarks="排序"/>
-            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
-            <column name="delete_id" type="BIGINT" remarks="删除人ID"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
-            <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
+            
             <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
             <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
             <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
             <column name="json_data" type="jsonb" remarks="扩展JSON"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <createIndex indexName="idx_point_product_biz_status" tableName="point_product"><column name="biz_status"/></createIndex>
         <createIndex indexName="idx_point_product_product_type" tableName="point_product"><column name="product_type"/></createIndex>
@@ -609,23 +738,29 @@
             <column name="user_id" type="BIGINT" remarks="用户ID"><constraints nullable="false"/></column>
             <column name="product_id" type="BIGINT" remarks="兑换商品ID"><constraints nullable="false"/></column>
             <column name="points_used" type="INT" remarks="消耗积分"><constraints nullable="false"/></column>
-            <column name="biz_status" type="VARCHAR(20)" defaultValue="PENDING" remarks="状态：待发放/已完成/已取消/已过期"/>
+            <column name="biz_status" type="VARCHAR(20)" defaultValue="PENDING" remarks="状态：待发放/已核销/已取消/已过期"/>
             <column name="redemption_code" type="VARCHAR(100)" remarks="兑换码">
                 <constraints unique="true"/>
             </column>
             <column name="used_time" type="TIMESTAMPTZ" remarks="使用/核销时间"/>
             <column name="expired_time" type="TIMESTAMPTZ" remarks="过期时间"/>
-            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="兑换时间"/>
-            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
+            
             <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
             <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
             <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
             <column name="json_data" type="jsonb" remarks="扩展JSON"/>
-            <column name="remark" type="TEXT" remarks="备注"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="point_redemption" baseColumnNames="user_id" constraintName="fk_point_redemption_user" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
         <addForeignKeyConstraint baseTableName="point_redemption" baseColumnNames="product_id" constraintName="fk_point_redemption_product" referencedTableName="point_product" referencedColumnNames="id" onDelete="RESTRICT"/>
@@ -654,17 +789,23 @@
             <column name="refund_amount" type="DECIMAL(24,4)" defaultValueNumeric="0" remarks="退款金额"/>
             <column name="refund_reason" type="TEXT" remarks="退款原因"/>
             <column name="refunded_time" type="TIMESTAMPTZ" remarks="退款时间"/>
-            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
+            
             <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
             <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
             <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
             <column name="json_data" type="jsonb" remarks="扩展JSON"/>
-            <column name="remark" type="TEXT" remarks="备注"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="payment_info" baseColumnNames="user_id" constraintName="fk_payment_info_user" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
         <createIndex indexName="idx_payment_info_order_no" tableName="payment_info"><column name="order_no"/></createIndex>
@@ -678,7 +819,6 @@
         <createTable remarks="合伙人创建的社群，用于运营与成员管理" tableName="community_info">
             <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
             <column name="name" type="VARCHAR(255)" remarks="社群名称"><constraints nullable="false"/></column>
-            <column name="remark" type="TEXT" remarks="备注"/>
             <column name="owner_id" type="BIGINT" remarks="创建者(合伙人)用户ID"><constraints nullable="false"/></column>
             <column name="is_public" type="BOOLEAN" defaultValueBoolean="true" remarks="是否公开可见"/>
             <column name="max_members" type="INT" remarks="最大成员数"/>
@@ -686,18 +826,26 @@
             <column name="cover_image_url" type="TEXT" remarks="封面图"/>
             <column name="city" type="VARCHAR(100)" remarks="所在城市"/>
             <column name="biz_status" type="VARCHAR(20)" defaultValue="ACTIVE" remarks="状态：正常/已归档/已解散"/>
-            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
-            <column name="delete_id" type="BIGINT" remarks="删除人ID"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
-            <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
+            
             <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
             <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
             <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
             <column name="json_data" type="jsonb" remarks="扩展JSON"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="delete_id" type="BIGINT" remarks="删除人ID"/>
+            <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="community_info" baseColumnNames="owner_id" constraintName="fk_community_info_owner" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
         <createIndex indexName="idx_community_info_owner_id" tableName="community_info"><column name="owner_id"/></createIndex>
@@ -715,9 +863,18 @@
             <column name="biz_status" type="VARCHAR(20)" defaultValue="ACTIVE" remarks="状态：在群/已退出/被移出"/>
             <column name="joined_time" type="TIMESTAMPTZ" remarks="加入时间"/>
             <column name="left_time" type="TIMESTAMPTZ" remarks="离开时间"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
-            <column name="remark" type="TEXT" remarks="备注"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="community_member" baseColumnNames="community_id" constraintName="fk_community_member_community" referencedTableName="community_info" referencedColumnNames="id" onDelete="CASCADE"/>
         <addForeignKeyConstraint baseTableName="community_member" baseColumnNames="user_id" constraintName="fk_community_member_user" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
@@ -743,7 +900,6 @@
             <column name="changed_time" type="TIMESTAMPTZ" remarks="变更时间"/>
             <column name="metadata" type="jsonb" remarks="扩展元数据"/>
             <column name="remark" type="TEXT" remarks="备注"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="data_change_logs" baseColumnNames="operator_id" constraintName="fk_data_change_logs_operator" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="SET NULL"/>
         <createIndex indexName="idx_data_change_logs_table_record" tableName="data_change_logs"><column name="table_name"/><column name="record_id"/></createIndex>
@@ -764,7 +920,6 @@
             <column name="changed_time" type="TIMESTAMPTZ" remarks="变更时间"/>
             <column name="metadata" type="jsonb" remarks="扩展信息"/>
             <column name="remark" type="TEXT" remarks="备注"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="user_change_log" baseColumnNames="user_id" constraintName="fk_user_change_log_user" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
         <addForeignKeyConstraint baseTableName="user_change_log" baseColumnNames="operator_id" constraintName="fk_user_change_log_operator" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="SET NULL"/>
@@ -786,7 +941,6 @@
             <column name="changed_time" type="TIMESTAMPTZ" remarks="变更时间"/>
             <column name="metadata" type="jsonb" remarks="扩展信息"/>
             <column name="remark" type="TEXT" remarks="备注"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="event_change_logs" baseColumnNames="event_id" constraintName="fk_event_change_logs_event" referencedTableName="event_info" referencedColumnNames="id" onDelete="CASCADE"/>
         <addForeignKeyConstraint baseTableName="event_change_logs" baseColumnNames="operator_id" constraintName="fk_event_change_logs_operator" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="SET NULL"/>
@@ -810,8 +964,18 @@
             <column name="operator_type" type="VARCHAR(50)" remarks="操作人类型"/>
             <column name="changed_time" type="TIMESTAMPTZ" remarks="变更时间"/>
             <column name="metadata" type="jsonb" remarks="扩展信息"/>
-            <column name="remark" type="TEXT" remarks="备注"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="point_change_logs" baseColumnNames="user_id" constraintName="fk_point_change_logs_user" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
         <createIndex indexName="idx_point_change_logs_user_id" tableName="point_change_logs"><column name="user_id"/></createIndex>
@@ -830,9 +994,18 @@
             <column name="related_id" type="BIGINT" remarks="关联业务ID"/>
             <column name="is_read" type="BOOLEAN" defaultValueBoolean="false" remarks="是否已读"/>
             <column name="read_time" type="TIMESTAMPTZ" remarks="阅读时间"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
-            <column name="remark" type="TEXT" remarks="备注"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="notifications" baseColumnNames="user_id" constraintName="fk_notifications_user" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
         <createIndex indexName="idx_notifications_user_id" tableName="notifications"><column name="user_id"/></createIndex>
@@ -849,16 +1022,23 @@
             <column name="type" type="VARCHAR(50)" defaultValue="system" remarks="类型：system等"/>
             <column name="is_urgent" type="BOOLEAN" defaultValueBoolean="false" remarks="是否紧急"/>
             <column name="publish_time" type="TIMESTAMPTZ" remarks="发布时间"/>
-            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
+            
             <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
             <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
             <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
             <column name="json_data" type="jsonb" remarks="扩展JSON"/>
-            <column name="remark" type="TEXT" remarks="备注"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <createIndex indexName="idx_notices_type" tableName="notices"><column name="type"/></createIndex>
         <createIndex indexName="idx_notices_is_urgent" tableName="notices"><column name="is_urgent"/></createIndex>
@@ -897,9 +1077,7 @@
     <!-- 39. 用户画像扩展表：拆出重画像字段与商业定位等 -->
     <changeSet author="tao-business" id="business-039-user_profiles">
         <createTable remarks="用户画像扩展表，一对一补充详细画像与商业定位信息" tableName="user_profiles">
-            <column name="user_id" type="BIGINT" remarks="用户ID(主键且外键)">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
+            <column name="user_id" type="BIGINT" remarks="用户ID(主键且外键)"><constraints nullable="false" primaryKey="true"/></column>
             <column name="real_name" type="VARCHAR(255)" remarks="真实姓名"/>
             <column name="points" type="INT" defaultValueNumeric="0" remarks="当前积分余额"/>
             <column name="total_points" type="INT" defaultValueNumeric="0" remarks="历史累计获得积分"/>
@@ -911,7 +1089,11 @@
             <column name="wechat_unionid" type="VARCHAR(255)" remarks="微信开放平台 unionid"/>
             <column name="wechat_openid" type="VARCHAR(255)" remarks="微信开放平台 openid"/>
             <column name="miniapp_openid" type="VARCHAR(255)" remarks="小程序 openid"/>
-            <column name="work_userid" type="VARCHAR(255)" remarks="企业微信用户ID"/>
+            <column name="wx_work_userid" type="VARCHAR(255)" remarks="企业微信用户ID"/>
+            <column name="facebook_userid" type="VARCHAR(255)" remarks="Facebook用户ID"/>
+            <column name="google_userid" type="VARCHAR(255)" remarks="Google用户ID"/>
+            <column name="apple_userid" type="VARCHAR(255)" remarks="Apple用户ID"/>
+            <column name="outlook_userid" type="VARCHAR(255)" remarks="Outlook用户ID"/>
             <column name="xiaoe_user_id" type="VARCHAR(255)" remarks="小鹅通用户ID(同步)"/>
             <column name="xiaoe_data" type="jsonb" remarks="小鹅通原始数据快照"/>
             <column name="inviter_id" type="BIGINT" remarks="邀请人用户ID(sys_user.user_id)"/>
@@ -928,17 +1110,23 @@
             <column name="available_time_slots" type="TEXT" remarks="可交流时段描述"/>
             <column name="appointment_status" type="VARCHAR(20)" remarks="可约状态：可约/已约/不约"/>
             <column name="extra_profile" type="jsonb" remarks="额外画像信息(JSON)，如家庭成员/挑战列表等"/>
-            <column name="remark" type="TEXT" remarks="备注"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
-            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
+            
             <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
             <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
             <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
             <column name="json_data" type="jsonb" remarks="扩展JSON"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="user_profiles" baseColumnNames="user_id"
                                  constraintName="fk_user_profiles_user"
@@ -957,22 +1145,24 @@
     <!-- 40. 通用标签表：承载能力/兴趣/行业/资源/需求等多维标签 -->
     <changeSet author="tao-business" id="business-040-tags">
         <createTable remarks="通用标签定义表，统一管理多维标签(能力/兴趣/行业/资源等)" tableName="tags">
-            <column name="id" type="BIGINT" autoIncrement="true" remarks="主键">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
+            <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
             <column name="tag_type" type="VARCHAR(50)" remarks="标签类型：ABILITY/INTEREST/INDUSTRY/RESOURCE/NEED等"/>
             <column name="code" type="VARCHAR(100)" remarks="标签编码(同类型内唯一)"/>
-            <column name="name" type="VARCHAR(255)" remarks="标签名称">
-                <constraints nullable="false"/>
-            </column>
-            <column name="remark" type="TEXT" remarks="标签说明"/>
+            <column name="name" type="VARCHAR(255)" remarks="标签名称"><constraints nullable="false"/></column>
             <column name="parent_id" type="BIGINT" remarks="父标签ID(可选)"/>
             <column name="order_num" type="INT" defaultValueNumeric="0" remarks="排序"/>
-            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
-            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <createIndex indexName="idx_tags_type" tableName="tags">
             <column name="tag_type"/>
@@ -994,21 +1184,23 @@
     <!-- 41. 用户标签关系表：用户与多维标签关联，用于画像与推荐 -->
     <changeSet author="tao-business" id="business-041-user_tags">
         <createTable remarks="用户与多维标签关联表，用于画像与推荐" tableName="user_tags">
-            <column name="id" type="BIGINT" autoIncrement="true" remarks="主键">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="user_id" type="BIGINT" remarks="用户ID">
-                <constraints nullable="false"/>
-            </column>
-            <column name="tag_id" type="BIGINT" remarks="标签ID">
-                <constraints nullable="false"/>
-            </column>
+            <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
+            <column name="user_id" type="BIGINT" remarks="用户ID"><constraints nullable="false"/></column>
+            <column name="tag_id" type="BIGINT" remarks="标签ID"><constraints nullable="false"/></column>
             <column name="weight" type="DECIMAL(5,4)" remarks="权重(0-1或0-100，越大代表相关性越高)"/>
             <column name="source" type="VARCHAR(50)" remarks="来源：SYSTEM/SELF/COACH等"/>
-            <column name="remark" type="TEXT" remarks="备注/说明"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="user_tags" baseColumnNames="user_id"
                                  constraintName="fk_user_tags_user"
@@ -1027,12 +1219,8 @@
     <!-- 42. 用户行为日志表：记录全量行为轨迹用于画像与分析 -->
     <changeSet author="tao-business" id="business-042-user_activity_logs">
         <createTable remarks="用户行为轨迹日志，记录登录/浏览/点赞/分享等所有关键行为" tableName="user_activity_logs">
-            <column name="id" type="BIGINT" autoIncrement="true" remarks="主键">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="user_id" type="BIGINT" remarks="用户ID">
-                <constraints nullable="false"/>
-            </column>
+            <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
+            <column name="user_id" type="BIGINT" remarks="用户ID"><constraints nullable="false"/></column>
             <column name="occurred_time" type="TIMESTAMPTZ" remarks="发生时间"/>
             <column name="ip_address" type="VARCHAR(50)" remarks="IP 地址"/>
             <column name="device" type="VARCHAR(100)" remarks="终端设备信息"/>
@@ -1047,8 +1235,14 @@
             <column name="contrib_balance_before" type="DECIMAL(24,4)" remarks="变更前贡献点余额"/>
             <column name="contrib_balance_after" type="DECIMAL(24,4)" remarks="变更后贡献点余额"/>
             <column name="extra" type="jsonb" remarks="额外上下文(如停留时长、入口渠道等)"/>
-            <column name="remark" type="TEXT" remarks="备注"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="user_activity_logs" baseColumnNames="user_id"
                                  constraintName="fk_user_activity_logs_user"
@@ -1068,13 +1262,9 @@
     <!-- 43. 身份定义表：创始人/联创/合伙人/高手/粉丝/城市主理人/合作方等 -->
     <changeSet author="tao-business" id="business-043-identities">
         <createTable remarks="系统身份定义表，描述身份等级、权责利与价格" tableName="identities">
-            <column name="identity_code" type="VARCHAR(50)" remarks="身份编码(如 FOUNDER/PARTNER)" >
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
+            <column name="identity_code" type="VARCHAR(50)" remarks="身份编码(如 FOUNDER/PARTNER)" ><constraints nullable="false" primaryKey="true"/></column>
             <column name="identity_level" type="INT" remarks="身份数值等级(如 0/10/20/30/50/60)"/>
-            <column name="name" type="VARCHAR(100)" remarks="身份名称，如 创始人/联创/合伙人/高手/粉丝/城市主理人/合作方">
-                <constraints nullable="false"/>
-            </column>
+            <column name="name" type="VARCHAR(100)" remarks="身份名称，如 创始人/联创/合伙人/高手/粉丝/城市主理人/合作方"><constraints nullable="false"/></column>
             <column name="icon" type="VARCHAR(255)" remarks="身份图标URL或名称"/>
             <column name="theme_color" type="VARCHAR(50)" remarks="身份主题色"/>
             <column name="intro" type="TEXT" remarks="身份简介"/>
@@ -1084,37 +1274,45 @@
             <column name="benefits_text" type="TEXT" remarks="利益说明"/>
             <column name="upgrade_rules_text" type="TEXT" remarks="晋升说明"/>
             <column name="price_amount" type="DECIMAL(24,4)" remarks="身份付费金额(人民币)"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
-            <column name="remark" type="TEXT" remarks="备注"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
     </changeSet>
 
     <!-- 44. 用户身份关系表：记录用户拥有哪些身份及来源 -->
     <changeSet author="tao-business" id="business-044-user_identities">
         <createTable remarks="用户身份关系表，支持多身份与历史记录" tableName="user_identities">
-            <column name="id" type="BIGINT" autoIncrement="true" remarks="主键">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="user_id" type="BIGINT" remarks="用户ID">
-                <constraints nullable="false"/>
-            </column>
-            <column name="identity_code" type="VARCHAR(50)" remarks="身份编码">
-                <constraints nullable="false"/>
-            </column>
+            <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
+            <column name="user_id" type="BIGINT" remarks="用户ID"><constraints nullable="false"/></column>
+            <column name="identity_code" type="VARCHAR(50)" remarks="身份编码"><constraints nullable="false"/></column>
             <column name="is_primary" type="BOOLEAN" defaultValueBoolean="false" remarks="是否当前主身份"/>
             <column name="biz_status" type="VARCHAR(20)" defaultValue="ACTIVE" remarks="状态：ACTIVE/EXPIRED/REVOKED"/>
             <column name="acquired_time" type="TIMESTAMPTZ" remarks="获得时间"/>
             <column name="expired_time" type="TIMESTAMPTZ" remarks="到期时间(可为空)"/>
             <column name="source_type" type="VARCHAR(50)" remarks="来源类型：PAYMENT/EVENT/MANUAL等"/>
             <column name="source_id" type="BIGINT" remarks="来源业务ID(如支付订单ID)"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
-            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
-            <column name="remark" type="TEXT" remarks="备注"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="user_identities" baseColumnNames="user_id"
                                  constraintName="fk_user_identities_user"
@@ -1138,15 +1336,9 @@
             <column name="id" type="BIGINT" autoIncrement="true" remarks="主键">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="payment_id" type="BIGINT" remarks="支付订单ID">
-                <constraints nullable="false"/>
-            </column>
-            <column name="item_type" type="VARCHAR(50)" remarks="明细类型：PRODUCT/SERVICE/COUPON/IDENTITY等">
-                <constraints nullable="false"/>
-            </column>
-            <column name="item_name" type="VARCHAR(255)" remarks="明细名称(商品/服务/身份等)">
-                <constraints nullable="false"/>
-            </column>
+            <column name="payment_id" type="BIGINT" remarks="支付订单ID"><constraints nullable="false"/></column>
+            <column name="item_type" type="VARCHAR(50)" remarks="明细类型：PRODUCT/SERVICE/COUPON/IDENTITY等"><constraints nullable="false"/></column>
+            <column name="item_name" type="VARCHAR(255)" remarks="明细名称(商品/服务/身份等)"><constraints nullable="false"/></column>
             <column name="original_amount" type="DECIMAL(24,4)" remarks="原价(单价)"/>
             <column name="amount" type="DECIMAL(24,4)" remarks="实际计价金额(单价，可为0表示赠送)"/>
             <column name="quantity" type="INT" defaultValueNumeric="1" remarks="数量"/>
@@ -1158,10 +1350,18 @@
             <column name="related_type" type="VARCHAR(50)" remarks="关联业务类型：EVENT/COURSE/IDENTITY/POINT_PRODUCT等"/>
             <column name="related_id" type="BIGINT" remarks="关联业务ID"/>
             <column name="json_data" type="jsonb" remarks="扩展JSON，如可转让规则等"/>
-            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
-            <column name="remark" type="TEXT" remarks="备注"/>
-            <column defaultValue="0" name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT"/>
-            <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
+
+            <column name="create_id" remarks="创建者ID" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="create_time" remarks="创建时间" type="TIMESTAMPTZ"/>
+
+            <column name="update_id" remarks="更新者ID" type="BIGINT"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
+            <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
+            <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
+            <column name="remark" remarks="备注" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="payment_items" baseColumnNames="payment_id"
                                  constraintName="fk_payment_items_payment"
@@ -1175,15 +1375,9 @@
     <!-- 46. 知识内容-标签关联表：按 tag_id 查询/过滤/统计，与 tags 统一 -->
     <changeSet author="tao-business" id="business-046-knowledge_content_tags">
         <createTable remarks="知识内容与标签多对多关联，用于按标签查询、过滤、统计" tableName="knowledge_content_tags">
-            <column name="id" type="BIGINT" autoIncrement="true" remarks="主键">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="content_id" type="BIGINT" remarks="知识内容ID">
-                <constraints nullable="false"/>
-            </column>
-            <column name="tag_id" type="BIGINT" remarks="标签ID">
-                <constraints nullable="false"/>
-            </column>
+            <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
+            <column name="content_id" type="BIGINT" remarks="知识内容ID"><constraints nullable="false"/></column>
+            <column name="tag_id" type="BIGINT" remarks="标签ID"><constraints nullable="false"/></column>
             <column name="order_num" type="INT" defaultValueNumeric="0" remarks="排序"/>
             <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
         </createTable>
@@ -1207,15 +1401,9 @@
     <!-- 47. 活动-标签关联表：按 tag_id 查询/过滤/统计，与 tags 统一 -->
     <changeSet author="tao-business" id="business-047-event_info_tags">
         <createTable remarks="活动与标签多对多关联，用于按标签查询、过滤、统计" tableName="event_info_tags">
-            <column name="id" type="BIGINT" autoIncrement="true" remarks="主键">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="event_id" type="BIGINT" remarks="活动ID">
-                <constraints nullable="false"/>
-            </column>
-            <column name="tag_id" type="BIGINT" remarks="标签ID">
-                <constraints nullable="false"/>
-            </column>
+            <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
+            <column name="event_id" type="BIGINT" remarks="活动ID"><constraints nullable="false"/></column>
+            <column name="tag_id" type="BIGINT" remarks="标签ID"><constraints nullable="false"/></column>
             <column name="order_num" type="INT" defaultValueNumeric="0" remarks="排序"/>
             <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
         </createTable>
