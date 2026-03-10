@@ -10,6 +10,7 @@ import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import com.geek.common.constant.HttpStatus;
 import com.geek.common.core.domain.AjaxResult;
@@ -95,6 +96,16 @@ public class GlobalExceptionHandler {
         String requestURI = request.getRequestURI();
         log.error("请求地址'{}',发生未知异常.", requestURI, e);
         return AjaxResult.error(e.getMessage());
+    }
+
+    /**
+     * 静态资源未找到（如 /profile/files/master/ 等目录型请求），直接返回 404，不记 ERROR
+     */
+    @ExceptionHandler(NoResourceFoundException.class)
+    public AjaxResult handleNoResourceFoundException(NoResourceFoundException e, HttpServletRequest request) {
+        String requestURI = request.getRequestURI();
+        log.error("请求地址'{}',无对应静态资源.", requestURI, e);
+        return AjaxResult.error(HttpStatus.NOT_FOUND, "资源不存在");
     }
 
     /**
