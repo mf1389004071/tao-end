@@ -18,6 +18,35 @@
         <createIndex indexName="uk_sys_dept_dept_code" tableName="sys_dept" unique="true"><column name="dept_code"/></createIndex>
     </changeSet>
 
+    <!-- 23.1 将 files 能力合并到 sys_file_info：扩展 sys_file_info 字段 -->
+    <changeSet author="tao-business" id="business-023-sys_file_info_merge_files">
+        <addColumn tableName="sys_file_info">
+            <column name="folder_id" type="BIGINT" remarks="所属文件夹ID"/>
+            <column name="mime_type" type="VARCHAR(100)" remarks="MIME类型"/>
+            <column name="width" type="INT" remarks="图片宽度"/>
+            <column name="height" type="INT" remarks="图片高度"/>
+            <column name="duration" type="INT" remarks="音视频时长(秒)"/>
+            <column name="delete_id" type="BIGINT" remarks="删除人ID"/>
+            <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间(软删除)"/>
+            <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
+            <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
+            <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
+            <column name="json_data" type="jsonb" remarks="扩展JSON"/>
+        </addColumn>
+        <createIndex indexName="idx_sys_file_info_folder_id" tableName="sys_file_info"><column name="folder_id"/></createIndex>
+        <createIndex indexName="idx_sys_file_info_create_id" tableName="sys_file_info"><column name="create_id"/></createIndex>
+    </changeSet>
+
+    <!-- 33.1 将 system_configs 能力合并到 sys_config：扩展 sys_config 字段 -->
+    <changeSet author="tao-business" id="business-033-sys_config_merge_system_configs">
+        <addColumn tableName="sys_config">
+            <column name="category" type="VARCHAR(100)" remarks="配置分类"/>
+            <column name="is_public" type="BOOLEAN" defaultValueBoolean="false" remarks="是否对前端开放"/>
+            <column name="value_type" type="VARCHAR(50)" defaultValue="STRING" remarks="值类型：字符串/数字/布尔/JSON.config_type"/>
+        </addColumn>
+        <createIndex indexName="idx_sys_config_category" tableName="sys_config"><column name="category"/></createIndex>
+    </changeSet>
+
     <!-- 4. 用户积分流水表 -->
     <changeSet author="tao-business" id="business-004-user_point_logs">
         <createTable remarks="用户积分收支流水，记录每笔获得/消耗及变动前后余额，支持过期" tableName="user_point_logs">
@@ -541,25 +570,6 @@
         <createIndex indexName="idx_xiaoe_user_mapping_user_id" tableName="xiaoe_user_mapping"><column name="user_id"/></createIndex>
     </changeSet>
 
-    <!-- 23.1 将 files 能力合并到 sys_file_info：扩展 sys_file_info 字段 -->
-    <changeSet author="tao-business" id="business-023-sys_file_info_merge_files">
-        <addColumn tableName="sys_file_info">
-            <column name="folder_id" type="BIGINT" remarks="所属文件夹ID"/>
-            <column name="mime_type" type="VARCHAR(100)" remarks="MIME类型"/>
-            <column name="width" type="INT" remarks="图片宽度"/>
-            <column name="height" type="INT" remarks="图片高度"/>
-            <column name="duration" type="INT" remarks="音视频时长(秒)"/>
-            <column name="delete_id" type="BIGINT" remarks="删除人ID"/>
-            <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间(软删除)"/>
-            <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
-            <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
-            <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
-            <column name="json_data" type="jsonb" remarks="扩展JSON"/>
-        </addColumn>
-        <createIndex indexName="idx_sys_file_info_folder_id" tableName="sys_file_info"><column name="folder_id"/></createIndex>
-        <createIndex indexName="idx_sys_file_info_create_id" tableName="sys_file_info"><column name="create_id"/></createIndex>
-    </changeSet>
-
     <!-- 24. 积分商品表 -->
     <changeSet author="tao-business" id="business-024-point_product">
         <createTable remarks="积分商城商品(优惠券/咨询/实物/会员等)，所需积分与库存" tableName="point_product">
@@ -806,16 +816,6 @@
         <addForeignKeyConstraint baseTableName="point_change_logs" baseColumnNames="user_id" constraintName="fk_point_change_logs_user" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
         <createIndex indexName="idx_point_change_logs_user_id" tableName="point_change_logs"><column name="user_id"/></createIndex>
         <createIndex indexName="idx_point_change_logs_changed_time" tableName="point_change_logs"><column name="changed_time"/></createIndex>
-    </changeSet>
-
-    <!-- 33.1 将 system_configs 能力合并到 sys_config：扩展 sys_config 字段 -->
-    <changeSet author="tao-business" id="business-033-sys_config_merge_system_configs">
-        <addColumn tableName="sys_config">
-            <column name="category" type="VARCHAR(100)" remarks="配置分类"/>
-            <column name="is_public" type="BOOLEAN" defaultValueBoolean="false" remarks="是否对前端开放"/>
-            <column name="value_type" type="VARCHAR(50)" defaultValue="STRING" remarks="值类型：字符串/数字/布尔/JSON.config_type"/>
-        </addColumn>
-        <createIndex indexName="idx_sys_config_category" tableName="sys_config"><column name="category"/></createIndex>
     </changeSet>
 
     <!-- 34. 通知消息表 -->
