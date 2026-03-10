@@ -47,15 +47,15 @@ public class GenConstants
 
     /** 页面不需要编辑字段（新增/修改表单均不展示，由后端或监听器填充） */
     public static final String[] COLUMNNAME_NOT_EDIT = { "id", "create_by", "create_time", "del_flag", 
-            "create_id", "update_id", "update_by", "update_time", "delete_id", "delete_time" };
+            "create_id", "update_id", "update_by", "update_time", "delete_id", "delete_time", "text1", "text2", "text3", "json_data" };
 
     /** 页面不需要显示的列表字段 */
     public static final String[] COLUMNNAME_NOT_LIST = { "id", "create_by", "create_time", "del_flag", "update_by",
-            "update_time", "create_id", "update_id", "delete_id", "delete_time" };
+            "update_time", "create_id", "update_id", "delete_id", "delete_time", "remark", "text1", "text2", "text3", "json_data" };
 
     /** 页面不需要查询字段 */
     public static final String[] COLUMNNAME_NOT_QUERY = { "id", "create_by", "create_time", "del_flag", "update_by",
-            "update_time", "remark", "create_id", "update_id", "delete_id", "delete_time" };
+            "update_time", "remark", "create_id", "update_id", "delete_id", "delete_time", "text1", "text2", "text3", "json_data" };
 
     /** Entity基类字段 */
     public static final String[] BASE_ENTITY = { "createBy", "createTime", "updateBy", "updateTime", "remark", "createId", "updateId" };
