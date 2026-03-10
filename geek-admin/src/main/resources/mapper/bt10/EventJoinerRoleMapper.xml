@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geek.tao.bt10.mapper.EventJoinerRoleMapper">
+
+    <resultMap type="com.geek.tao.bt10.domain.EventJoinerRole" id="EventJoinerRoleResult">
+        <result property="id" column="id" />
+        <result property="joinId" column="join_id" />
+        <result property="roleId" column="role_id" />
+        <result property="assignedTime" column="assigned_time" />
+        <result property="confirmedTime" column="confirmed_time" />
+        <result property="bizStatus" column="biz_status" />
+        <result property="delFlag" column="del_flag" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+</mapper>

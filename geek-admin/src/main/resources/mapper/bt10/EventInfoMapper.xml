@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geek.tao.bt10.mapper.EventInfoMapper">
+
+    <resultMap type="com.geek.tao.bt10.domain.EventInfo" id="EventInfoResult">
+        <result property="id" column="id" />
+        <result property="title" column="title" />
+        <result property="remark" column="remark" />
+        <result property="joinType" column="join_type" />
+        <result property="category" column="category" />
+        <result property="startTime" column="start_time" />
+        <result property="endTime" column="end_time" />
+        <result property="joinDeadline" column="join_deadline" />
+        <result property="maxParticipants" column="max_participants" />
+        <result property="registeredCount" column="registered_count" />
+        <result property="checkedInCount" column="checked_in_count" />
+        <result property="version" column="version" />
+        <result property="location" column="location" />
+        <result property="meetingUrl" column="meeting_url" />
+        <result property="address" column="address" />
+        <result property="city" column="city" />
+        <result property="coverImageUrl" column="cover_image_url" />
+        <result property="listImageUrl" column="list_image_url" />
+        <result property="detailImageUrl" column="detail_image_url" />
+        <result property="posterImageUrl" column="poster_image_url" />
+        <result property="bizStatus" column="biz_status" />
+        <result property="isPublic" column="is_public" />
+        <result property="basePointsReward" column="base_points_reward" />
+        <result property="recurrenceRule" column="recurrence_rule" />
+        <result property="isRecurring" column="is_recurring" />
+        <result property="parentEventId" column="parent_event_id" />
+        <result property="eventPrice" column="event_price" />
+        <result property="eventType" column="event_type" />
+        <result property="targetAudience" column="target_audience" />
+        <result property="learningObjectives" column="learning_objectives" />
+        <result property="eventStructure" column="event_structure" />
+        <result property="curriculum" column="curriculum" />
+        <result property="conversionStrategy" column="conversion_strategy" />
+        <result property="followUpPlan" column="follow_up_plan" />
+        <result property="riskManagement" column="risk_management" />
+        <result property="eventTags" column="event_tags" />
+        <result property="organizer" column="organizer" />
+        <result property="contact" column="contact" />
+        <result property="pmUserId" column="pm_user_id" />
+        <result property="createId" column="create_id" />
+        <result property="updateId" column="update_id" />
+        <result property="deleteId" column="delete_id" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+        <result property="deleteTime" column="delete_time" />
+        <result property="delFlag" column="del_flag" />
+        <result property="text1" column="text1" />
+        <result property="text2" column="text2" />
+        <result property="text3" column="text3" />
+        <result property="jsonData" column="json_data" />
+        <result property="status" column="status" />
+    </resultMap>
+
+</mapper>

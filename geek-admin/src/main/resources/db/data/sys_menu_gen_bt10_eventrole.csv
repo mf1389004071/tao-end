@@ -1,0 +1,7 @@
+menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
+2000,活动所需角色,3,1,eventrole,bt10/eventrole/index,,,1,0,C,0,0,bt10:eventrole:list,#,admin,2025-01-01 00:00:00,,,活动所需角色菜单
+2001,活动所需角色查询,2000,1,#,,,1,0,F,0,0,bt10:eventrole:query,#,admin,2025-01-01 00:00:00,,,"",
+2002,活动所需角色新增,2000,2,#,,,1,0,F,0,0,bt10:eventrole:add,#,admin,2025-01-01 00:00:00,,,"",
+2003,活动所需角色修改,2000,3,#,,,1,0,F,0,0,bt10:eventrole:edit,#,admin,2025-01-01 00:00:00,,,"",
+2004,活动所需角色删除,2000,4,#,,,1,0,F,0,0,bt10:eventrole:remove,#,admin,2025-01-01 00:00:00,,,"",
+2005,活动所需角色导出,2000,5,#,,,1,0,F,0,0,bt10:eventrole:export,#,admin,2025-01-01 00:00:00,,,"",

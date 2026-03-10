@@ -1,0 +1,7 @@
+menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
+2000,音视频转写与AI摘要,3,1,aimeetingtranscripts,bt10/aimeetingtranscripts/index,,,1,0,C,0,0,bt10:aimeetingtranscripts:list,#,admin,2025-01-01 00:00:00,,,音视频转写与AI摘要菜单
+2001,音视频转写与AI摘要查询,2000,1,#,,,1,0,F,0,0,bt10:aimeetingtranscripts:query,#,admin,2025-01-01 00:00:00,,,"",
+2002,音视频转写与AI摘要新增,2000,2,#,,,1,0,F,0,0,bt10:aimeetingtranscripts:add,#,admin,2025-01-01 00:00:00,,,"",
+2003,音视频转写与AI摘要修改,2000,3,#,,,1,0,F,0,0,bt10:aimeetingtranscripts:edit,#,admin,2025-01-01 00:00:00,,,"",
+2004,音视频转写与AI摘要删除,2000,4,#,,,1,0,F,0,0,bt10:aimeetingtranscripts:remove,#,admin,2025-01-01 00:00:00,,,"",
+2005,音视频转写与AI摘要导出,2000,5,#,,,1,0,F,0,0,bt10:aimeetingtranscripts:export,#,admin,2025-01-01 00:00:00,,,"",

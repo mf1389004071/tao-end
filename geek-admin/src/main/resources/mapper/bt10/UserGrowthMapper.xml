@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geek.tao.bt10.mapper.UserGrowthMapper">
+
+    <resultMap type="com.geek.tao.bt10.domain.UserGrowth" id="UserGrowthResult">
+        <result property="id" column="id" />
+        <result property="userId" column="user_id" />
+        <result property="stageFrom" column="stage_from" />
+        <result property="stageTo" column="stage_to" />
+        <result property="triggerType" column="trigger_type" />
+        <result property="triggerData" column="trigger_data" />
+        <result property="delFlag" column="del_flag" />
+        <result property="createTime" column="create_time" />
+        <result property="remark" column="remark" />
+        <result property="status" column="status" />
+    </resultMap>
+
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geek.tao.bt10.mapper.UserActivityLogsMapper">
+
+    <resultMap type="com.geek.tao.bt10.domain.UserActivityLogs" id="UserActivityLogsResult">
+        <result property="id" column="id" />
+        <result property="userId" column="user_id" />
+        <result property="occurredTime" column="occurred_time" />
+        <result property="ipAddress" column="ip_address" />
+        <result property="device" column="device" />
+        <result property="eventType" column="event_type" />
+        <result property="eventSourceType" column="event_source_type" />
+        <result property="eventSourceId" column="event_source_id" />
+        <result property="eventTags" column="event_tags" />
+        <result property="pointChange" column="point_change" />
+        <result property="pointBalanceBefore" column="point_balance_before" />
+        <result property="pointBalanceAfter" column="point_balance_after" />
+        <result property="contribChange" column="contrib_change" />
+        <result property="contribBalanceBefore" column="contrib_balance_before" />
+        <result property="contribBalanceAfter" column="contrib_balance_after" />
+        <result property="extra" column="extra" />
+        <result property="remark" column="remark" />
+        <result property="status" column="status" />
+    </resultMap>
+
+</mapper>

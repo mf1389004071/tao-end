@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geek.tao.bt10.mapper.CommunityInfoMapper">
+
+    <resultMap type="com.geek.tao.bt10.domain.CommunityInfo" id="CommunityInfoResult">
+        <result property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="remark" column="remark" />
+        <result property="ownerId" column="owner_id" />
+        <result property="isPublic" column="is_public" />
+        <result property="maxMembers" column="max_members" />
+        <result property="memberCount" column="member_count" />
+        <result property="coverImageUrl" column="cover_image_url" />
+        <result property="city" column="city" />
+        <result property="bizStatus" column="biz_status" />
+        <result property="createId" column="create_id" />
+        <result property="updateId" column="update_id" />
+        <result property="deleteId" column="delete_id" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+        <result property="deleteTime" column="delete_time" />
+        <result property="delFlag" column="del_flag" />
+        <result property="text1" column="text1" />
+        <result property="text2" column="text2" />
+        <result property="text3" column="text3" />
+        <result property="jsonData" column="json_data" />
+        <result property="status" column="status" />
+    </resultMap>
+
+</mapper>

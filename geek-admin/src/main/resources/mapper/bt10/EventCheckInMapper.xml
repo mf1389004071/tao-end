@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geek.tao.bt10.mapper.EventCheckInMapper">
+
+    <resultMap type="com.geek.tao.bt10.domain.EventCheckIn" id="EventCheckInResult">
+        <result property="id" column="id" />
+        <result property="joinId" column="join_id" />
+        <result property="sessionId" column="session_id" />
+        <result property="checkInTime" column="check_in_time" />
+        <result property="checkInMethod" column="check_in_method" />
+        <result property="checkInLocation" column="check_in_location" />
+        <result property="operatorId" column="operator_id" />
+        <result property="delFlag" column="del_flag" />
+        <result property="remark" column="remark" />
+        <result property="status" column="status" />
+    </resultMap>
+
+</mapper>

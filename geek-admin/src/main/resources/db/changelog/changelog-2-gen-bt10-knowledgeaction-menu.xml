@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- 用户对知识内容的行为记录 菜单及按钮：由代码生成器生成，项目启动时由 Liquibase 自动加载 -->
+    <changeSet author="qm.wu" id="gen-menu-bt10-knowledgeaction">
+        <loadData tableName="sys_menu" file="../data/sys_menu_gen_bt10_knowledgeaction.csv" separator="," encoding="UTF-8" relativeToChangelogFile="true">
+            <column name="menu_id" type="BIGINT"/>
+            <column name="menu_name" type="VARCHAR(50)"/>
+            <column name="parent_id" type="BIGINT"/>
+            <column name="order_num" type="INT"/>
+            <column name="path" type="VARCHAR(200)"/>
+            <column name="component" type="VARCHAR(255)"/>
+            <column name="query" type="VARCHAR(255)"/>
+            <column name="route_name" type="VARCHAR(50)"/>
+            <column name="is_frame" type="INT"/>
+            <column name="is_cache" type="INT"/>
+            <column name="menu_type" type="CHAR(1)"/>
+            <column name="visible" type="CHAR(1)"/>
+            <column name="status" type="CHAR(1)"/>
+            <column name="perms" type="VARCHAR(100)"/>
+            <column name="icon" type="VARCHAR(100)"/>
+            <column name="create_by" type="VARCHAR(64)"/>
+            <column name="create_time" type="TIMESTAMPTZ"/>
+            <column name="update_by" type="VARCHAR(64)"/>
+            <column name="update_time" type="TIMESTAMPTZ"/>
+            <column name="remark" type="VARCHAR(500)"/>
+        </loadData>
+    </changeSet>
+    <changeSet author="qm.wu" id="gen-role-menu-bt10-knowledgeaction">
+        <loadData tableName="sys_role_menu" file="../data/sys_role_menu_gen_bt10_knowledgeaction.csv" separator="," encoding="UTF-8" relativeToChangelogFile="true">
+            <column name="role_id" type="BIGINT"/>
+            <column name="menu_id" type="BIGINT"/>
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

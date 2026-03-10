@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geek.tao.bt10.mapper.XiaoeOrdersMapper">
+
+    <resultMap type="com.geek.tao.bt10.domain.XiaoeOrders" id="XiaoeOrdersResult">
+        <result property="id" column="id" />
+        <result property="xiaoeOrderNo" column="xiaoe_order_no" />
+        <result property="userId" column="user_id" />
+        <result property="orderState" column="order_state" />
+        <result property="actualFee" column="actual_fee" />
+        <result property="goodsName" column="goods_name" />
+        <result property="goodsType" column="goods_type" />
+        <result property="spuType" column="spu_type" />
+        <result property="payState" column="pay_state" />
+        <result property="payType" column="pay_type" />
+        <result property="tradeNo" column="trade_no" />
+        <result property="xiaoeCreateTime" column="xiaoe_create_time" />
+        <result property="studentInfo" column="student_info" />
+        <result property="invoiceInfo" column="invoice_info" />
+        <result property="syncStatus" column="sync_status" />
+        <result property="lastSyncTime" column="last_sync_time" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+        <result property="orderNo" column="order_no" />
+        <result property="remark" column="remark" />
+        <result property="processStatus" column="process_status" />
+        <result property="delFlag" column="del_flag" />
+        <result property="text1" column="text1" />
+        <result property="text2" column="text2" />
+        <result property="text3" column="text3" />
+        <result property="jsonData" column="json_data" />
+        <result property="status" column="status" />
+    </resultMap>
+
+</mapper>

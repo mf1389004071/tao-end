@@ -1,0 +1,7 @@
+menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
+2000,系统身份定义表,3,1,identities,bt10/identities/index,,,1,0,C,0,0,bt10:identities:list,#,admin,2025-01-01 00:00:00,,,系统身份定义表菜单
+2001,系统身份定义表查询,2000,1,#,,,1,0,F,0,0,bt10:identities:query,#,admin,2025-01-01 00:00:00,,,"",
+2002,系统身份定义表新增,2000,2,#,,,1,0,F,0,0,bt10:identities:add,#,admin,2025-01-01 00:00:00,,,"",
+2003,系统身份定义表修改,2000,3,#,,,1,0,F,0,0,bt10:identities:edit,#,admin,2025-01-01 00:00:00,,,"",
+2004,系统身份定义表删除,2000,4,#,,,1,0,F,0,0,bt10:identities:remove,#,admin,2025-01-01 00:00:00,,,"",
+2005,系统身份定义表导出,2000,5,#,,,1,0,F,0,0,bt10:identities:export,#,admin,2025-01-01 00:00:00,,,"",

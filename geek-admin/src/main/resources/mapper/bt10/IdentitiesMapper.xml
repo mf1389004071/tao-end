@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geek.tao.bt10.mapper.IdentitiesMapper">
+
+    <resultMap type="com.geek.tao.bt10.domain.Identities" id="IdentitiesResult">
+        <result property="identityCode" column="identity_code" />
+        <result property="identityLevel" column="identity_level" />
+        <result property="name" column="name" />
+        <result property="icon" column="icon" />
+        <result property="themeColor" column="theme_color" />
+        <result property="intro" column="intro" />
+        <result property="legalText" column="legal_text" />
+        <result property="rightsText" column="rights_text" />
+        <result property="dutiesText" column="duties_text" />
+        <result property="benefitsText" column="benefits_text" />
+        <result property="upgradeRulesText" column="upgrade_rules_text" />
+        <result property="priceAmount" column="price_amount" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+        <result property="remark" column="remark" />
+        <result property="delFlag" column="del_flag" />
+        <result property="status" column="status" />
+    </resultMap>
+
+</mapper>

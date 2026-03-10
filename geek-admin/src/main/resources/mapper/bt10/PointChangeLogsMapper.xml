@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geek.tao.bt10.mapper.PointChangeLogsMapper">
+
+    <resultMap type="com.geek.tao.bt10.domain.PointChangeLogs" id="PointChangeLogsResult">
+        <result property="id" column="id" />
+        <result property="userId" column="user_id" />
+        <result property="changeType" column="change_type" />
+        <result property="pointsChange" column="points_change" />
+        <result property="balanceBefore" column="balance_before" />
+        <result property="balanceAfter" column="balance_after" />
+        <result property="changeReason" column="change_reason" />
+        <result property="relatedType" column="related_type" />
+        <result property="relatedId" column="related_id" />
+        <result property="operatorId" column="operator_id" />
+        <result property="operatorType" column="operator_type" />
+        <result property="changedTime" column="changed_time" />
+        <result property="metadata" column="metadata" />
+        <result property="remark" column="remark" />
+        <result property="status" column="status" />
+    </resultMap>
+
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geek.tao.bt10.mapper.AiMeetingTranscriptsMapper">
+
+    <resultMap type="com.geek.tao.bt10.domain.AiMeetingTranscripts" id="AiMeetingTranscriptsResult">
+        <result property="id" column="id" />
+        <result property="eventId" column="event_id" />
+        <result property="sessionId" column="session_id" />
+        <result property="fileId" column="file_id" />
+        <result property="transcriptJson" column="transcript_json" />
+        <result property="fullText" column="full_text" />
+        <result property="summary" column="summary" />
+        <result property="keyPoints" column="key_points" />
+        <result property="actionItems" column="action_items" />
+        <result property="createId" column="create_id" />
+        <result property="updateId" column="update_id" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+        <result property="remark" column="remark" />
+        <result property="status" column="status" />
+    </resultMap>
+
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geek.tao.bt10.mapper.UserProfilesMapper">
+
+    <resultMap type="com.geek.tao.bt10.domain.UserProfiles" id="UserProfilesResult">
+        <result property="userId" column="user_id" />
+        <result property="realName" column="real_name" />
+        <result property="points" column="points" />
+        <result property="totalPoints" column="total_points" />
+        <result property="contributionPoints" column="contribution_points" />
+        <result property="totalContributionPoints" column="total_contribution_points" />
+        <result property="growthStage" column="growth_stage" />
+        <result property="joinDate" column="join_date" />
+        <result property="lastActiveAt" column="last_active_at" />
+        <result property="wechatUnionid" column="wechat_unionid" />
+        <result property="wechatOpenid" column="wechat_openid" />
+        <result property="miniappOpenid" column="miniapp_openid" />
+        <result property="workUserid" column="work_userid" />
+        <result property="xiaoeUserId" column="xiaoe_user_id" />
+        <result property="xiaoeData" column="xiaoe_data" />
+        <result property="inviterId" column="inviter_id" />
+        <result property="invitationCode" column="invitation_code" />
+        <result property="bizRole" column="biz_role" />
+        <result property="bestPhotoUrl" column="best_photo_url" />
+        <result property="avatarWechatUrl" column="avatar_wechat_url" />
+        <result property="avatarPromoUrl" column="avatar_promo_url" />
+        <result property="promoImageUrl" column="promo_image_url" />
+        <result property="heartTreeUrl" column="heart_tree_url" />
+        <result property="heartKeyUrl" column="heart_key_url" />
+        <result property="businessPositioning" column="business_positioning" />
+        <result property="talentSummary" column="talent_summary" />
+        <result property="availableTimeSlots" column="available_time_slots" />
+        <result property="appointmentStatus" column="appointment_status" />
+        <result property="extraProfile" column="extra_profile" />
+        <result property="remark" column="remark" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+        <result property="createId" column="create_id" />
+        <result property="updateId" column="update_id" />
+        <result property="text1" column="text1" />
+        <result property="text2" column="text2" />
+        <result property="text3" column="text3" />
+        <result property="jsonData" column="json_data" />
+        <result property="delFlag" column="del_flag" />
+        <result property="status" column="status" />
+    </resultMap>
+
+</mapper>

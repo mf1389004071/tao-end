@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geek.tao.bt10.mapper.KnowledgeContentMapper">
+
+    <resultMap type="com.geek.tao.bt10.domain.KnowledgeContent" id="KnowledgeContentResult">
+        <result property="id" column="id" />
+        <result property="title" column="title" />
+        <result property="subtitle" column="subtitle" />
+        <result property="content" column="content" />
+        <result property="contentType" column="content_type" />
+        <result property="categoryId" column="category_id" />
+        <result property="authorId" column="author_id" />
+        <result property="founderId" column="founder_id" />
+        <result property="keyContributors" column="key_contributors" />
+        <result property="managerId" column="manager_id" />
+        <result property="promotionalText" column="promotional_text" />
+        <result property="coreValues" column="core_values" />
+        <result property="tags" column="tags" />
+        <result property="bizStatus" column="biz_status" />
+        <result property="publishTime" column="publish_time" />
+        <result property="viewCount" column="view_count" />
+        <result property="likeCount" column="like_count" />
+        <result property="commentCount" column="comment_count" />
+        <result property="shareCount" column="share_count" />
+        <result property="collectCount" column="collect_count" />
+        <result property="seoTitle" column="seo_title" />
+        <result property="seoDescription" column="seo_description" />
+        <result property="seoKeywords" column="seo_keywords" />
+        <result property="sourceFrom" column="source_from" />
+        <result property="difficultyLevel" column="difficulty_level" />
+        <result property="aiSummary" column="ai_summary" />
+        <result property="createId" column="create_id" />
+        <result property="updateId" column="update_id" />
+        <result property="deleteId" column="delete_id" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+        <result property="deleteTime" column="delete_time" />
+        <result property="delFlag" column="del_flag" />
+        <result property="text1" column="text1" />
+        <result property="text2" column="text2" />
+        <result property="text3" column="text3" />
+        <result property="jsonData" column="json_data" />
+        <result property="remark" column="remark" />
+        <result property="status" column="status" />
+    </resultMap>
+
+</mapper>

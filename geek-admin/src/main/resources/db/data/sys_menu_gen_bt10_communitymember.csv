@@ -1,0 +1,7 @@
+menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
+2000,社群与用户的成员关系,3,1,communitymember,bt10/communitymember/index,,,1,0,C,0,0,bt10:communitymember:list,#,admin,2025-01-01 00:00:00,,,社群与用户的成员关系菜单
+2001,社群与用户的成员关系查询,2000,1,#,,,1,0,F,0,0,bt10:communitymember:query,#,admin,2025-01-01 00:00:00,,,"",
+2002,社群与用户的成员关系新增,2000,2,#,,,1,0,F,0,0,bt10:communitymember:add,#,admin,2025-01-01 00:00:00,,,"",
+2003,社群与用户的成员关系修改,2000,3,#,,,1,0,F,0,0,bt10:communitymember:edit,#,admin,2025-01-01 00:00:00,,,"",
+2004,社群与用户的成员关系删除,2000,4,#,,,1,0,F,0,0,bt10:communitymember:remove,#,admin,2025-01-01 00:00:00,,,"",
+2005,社群与用户的成员关系导出,2000,5,#,,,1,0,F,0,0,bt10:communitymember:export,#,admin,2025-01-01 00:00:00,,,"",

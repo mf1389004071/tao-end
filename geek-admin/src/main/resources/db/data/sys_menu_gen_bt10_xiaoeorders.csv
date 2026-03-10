@@ -1,0 +1,7 @@
+menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
+2000,小鹅通订单同步表,3,1,xiaoeorders,bt10/xiaoeorders/index,,,1,0,C,0,0,bt10:xiaoeorders:list,#,admin,2025-01-01 00:00:00,,,小鹅通订单同步表菜单
+2001,小鹅通订单同步表查询,2000,1,#,,,1,0,F,0,0,bt10:xiaoeorders:query,#,admin,2025-01-01 00:00:00,,,"",
+2002,小鹅通订单同步表新增,2000,2,#,,,1,0,F,0,0,bt10:xiaoeorders:add,#,admin,2025-01-01 00:00:00,,,"",
+2003,小鹅通订单同步表修改,2000,3,#,,,1,0,F,0,0,bt10:xiaoeorders:edit,#,admin,2025-01-01 00:00:00,,,"",
+2004,小鹅通订单同步表删除,2000,4,#,,,1,0,F,0,0,bt10:xiaoeorders:remove,#,admin,2025-01-01 00:00:00,,,"",
+2005,小鹅通订单同步表导出,2000,5,#,,,1,0,F,0,0,bt10:xiaoeorders:export,#,admin,2025-01-01 00:00:00,,,"",

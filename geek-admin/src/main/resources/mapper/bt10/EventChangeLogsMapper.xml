@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geek.tao.bt10.mapper.EventChangeLogsMapper">
+
+    <resultMap type="com.geek.tao.bt10.domain.EventChangeLogs" id="EventChangeLogsResult">
+        <result property="id" column="id" />
+        <result property="eventId" column="event_id" />
+        <result property="changeField" column="change_field" />
+        <result property="oldValue" column="old_value" />
+        <result property="newValue" column="new_value" />
+        <result property="changeReason" column="change_reason" />
+        <result property="operatorId" column="operator_id" />
+        <result property="operatorType" column="operator_type" />
+        <result property="changedTime" column="changed_time" />
+        <result property="metadata" column="metadata" />
+        <result property="remark" column="remark" />
+        <result property="status" column="status" />
+    </resultMap>
+
+</mapper>
