@@ -52,10 +52,10 @@ public class SysProfileController extends BaseController {
     public AjaxResult profile() {
         LoginUser loginUser = getLoginUser();
         SysUser user = loginUser.getUser();
-        if (user.getAvatar() != null) {
+        if (StringUtils.isNotEmpty(user.getAvatar()) && !user.getAvatar().startsWith("http")) {
             try {
                 user.setAvatar(Sb.getURL(user.getAvatar()));
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         AjaxResult ajax = AjaxResult.success(user);
