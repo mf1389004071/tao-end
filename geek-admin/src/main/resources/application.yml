@@ -47,6 +47,8 @@ logging:
     "[org.springframework.context.support.PostProcessorRegistrationDelegate]": ERROR
     "[com.alibaba.druid.spring.boot3.autoconfigure.stat.DruidSpringAopConfiguration]": ERROR
     "[com.alibaba.druid.spring.boot3.autoconfigure.properties.DruidStatProperties]": ERROR
+    # 打开 Mapper 层 SQL 日志（依赖 mybatis-config.xml 中 logImpl = SLF4J）
+    "com.geek.**.mapper": DEBUG
 
 # 用户配置
 user:
