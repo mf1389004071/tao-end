@@ -73,7 +73,7 @@ public class EventInfoController extends BaseController {
     @PreAuthorize("@ss.hasPermi('bt10:eventinfo:query')")
     @GetMapping("/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id) {
-        return success(eventInfoService.getById(id));
+        return success(eventInfoService.getInfo(id));
     }
 
     /**

@@ -2,9 +2,14 @@ package com.geek.tao.bt10.domain;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.geek.common.annotation.Excel;
+import com.geek.common.processor.deserializer.InstantFlexDeserializer;
 import com.geek.common.core.domain.BaseEntity;
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.RelationManyToOne;
 import com.mybatisflex.annotation.Table;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -47,16 +52,19 @@ public class EventInfo extends BaseEntity
     /** 开始时间 */
     @Schema(title = "开始时间")
     @Excel(name = "开始时间")
+    @JsonDeserialize(using = InstantFlexDeserializer.class)
     private Instant startTime;
 
     /** 结束时间 */
     @Schema(title = "结束时间")
     @Excel(name = "结束时间")
+    @JsonDeserialize(using = InstantFlexDeserializer.class)
     private Instant endTime;
 
     /** 报名截止时间 */
     @Schema(title = "报名截止时间")
     @Excel(name = "报名截止时间")
+    @JsonDeserialize(using = InstantFlexDeserializer.class)
     private Instant joinDeadline;
 
     /** 最大参与人数 */
@@ -213,6 +221,12 @@ public class EventInfo extends BaseEntity
     @Schema(title = "负责人ID")
     @Excel(name = "负责人ID")
     private Long pmUserId;
+
+    /** 负责人昵称（多对一关联 sys_user.nick_name，不落库） */
+    @Schema(title = "负责人昵称")
+    @Column(ignore = true)
+    @RelationManyToOne(selfField = "pmUserId", targetTable = "sys_user", targetField = "userId", valueField = "nickName")
+    private String pmUserNickName;
 
     /** 扩展文本1 */
     @Schema(title = "扩展文本1")

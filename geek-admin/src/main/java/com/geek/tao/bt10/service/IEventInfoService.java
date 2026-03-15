@@ -32,5 +32,12 @@ public interface IEventInfoService extends IService<EventInfo> {
      */
     void export(EventInfo eventInfo, HttpServletResponse response);
 
+    /**
+     * 根据ID获取详情（含负责人昵称等关联填充）
+     *
+     * @param id 主键
+     * @return 详情，未找到返回 null
+     */
+    EventInfo getInfo(Long id);
 
 }

@@ -1,12 +1,13 @@
 # 配置文件存储
+# 本地存储默认使用「当前项目运行目录/data/files/master」；可覆盖：在环境变量或 application.yml 中设置 storage.local.path
 storage:
   primary: MASTER
   buckets:
     MASTER:
       # 指定文件服务类型(值为local代表使用本地作为文件操作服务,minio代表使用minio作为文件操作服务,oss代表使用oss作为文件操作服务)
       type: local
-      permission: public 
-      path: /data/files/master
+      permission: public
+      path: ${storage.local.path:${user.dir}/data/files/master}
       # 建议public权限的api以 /profile开头就不需要再从SecurityConfig配置权限了
       # private需要自己编写一个api例如FileController中的/file/resource
       api: /profile/files/master

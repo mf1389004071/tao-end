@@ -10,9 +10,9 @@
             <column name="dept_code" type="VARCHAR(255)" remarks="部门编码，唯一"/>
             <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间(软删除)"/>
             <column name="delete_id" type="BIGINT" remarks="删除人ID(软删除)"/>
-            <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
-            <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
-            <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
+            <column name="text1" type="TEXT" remarks="扩展文本1"/>
+            <column name="text2" type="TEXT" remarks="扩展文本2"/>
+            <column name="text3" type="TEXT" remarks="扩展文本3"/>
             <column name="json_data" type="jsonb" remarks="扩展JSON"/>
         </addColumn>
         <createIndex indexName="uk_sys_dept_dept_code" tableName="sys_dept" unique="true"><column name="dept_code"/></createIndex>
@@ -28,9 +28,9 @@
             <column name="duration" type="INT" remarks="音视频时长(秒)"/>
             <column name="delete_id" type="BIGINT" remarks="删除人ID"/>
             <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间(软删除)"/>
-            <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
-            <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
-            <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
+            <column name="text1" type="TEXT" remarks="扩展文本1"/>
+            <column name="text2" type="TEXT" remarks="扩展文本2"/>
+            <column name="text3" type="TEXT" remarks="扩展文本3"/>
             <column name="json_data" type="jsonb" remarks="扩展JSON"/>
         </addColumn>
         <createIndex indexName="idx_sys_file_info_folder_id" tableName="sys_file_info"><column name="folder_id"/></createIndex>
@@ -177,9 +177,9 @@
             <column name="color" type="VARCHAR(50)" remarks="主题色"/>
             <column name="permission_level" type="INT" defaultValueNumeric="1" remarks="可见权限等级1-5"/>
             
-            <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
-            <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
-            <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
+            <column name="text1" type="TEXT" remarks="扩展文本1"/>
+            <column name="text2" type="TEXT" remarks="扩展文本2"/>
+            <column name="text3" type="TEXT" remarks="扩展文本3"/>
             <column name="json_data" type="jsonb" remarks="扩展JSON"/>
 
             <column name="create_id" remarks="创建者ID" type="BIGINT"/>
@@ -232,9 +232,9 @@
             <column name="difficulty_level" type="VARCHAR(10)" remarks="难度等级"/>
             <column name="ai_summary" type="TEXT" remarks="AI生成摘要"/>
             
-            <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
-            <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
-            <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
+            <column name="text1" type="TEXT" remarks="扩展文本1"/>
+            <column name="text2" type="TEXT" remarks="扩展文本2"/>
+            <column name="text3" type="TEXT" remarks="扩展文本3"/>
             <column name="json_data" type="jsonb" remarks="扩展JSON"/>
 
             <column name="create_id" remarks="创建者ID" type="BIGINT"/>
@@ -363,9 +363,9 @@
             <column name="contact" type="VARCHAR(255)" remarks="联系方式"/>
             <column name="pm_user_id" type="BIGINT" remarks="负责人ID"/>
             
-            <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
-            <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
-            <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
+            <column name="text1" type="TEXT" remarks="扩展文本1"/>
+            <column name="text2" type="TEXT" remarks="扩展文本2"/>
+            <column name="text3" type="TEXT" remarks="扩展文本3"/>
             <column name="json_data" type="jsonb" remarks="扩展配置"/>
 
             <column name="create_id" remarks="创建者ID" type="BIGINT"/>
@@ -445,9 +445,9 @@
             <column name="conversion_amount" type="DECIMAL(24,4)" remarks="转化金额"/>
             <column name="conversion_notes" type="TEXT" remarks="转化备注"/>
             
-            <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
-            <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
-            <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
+            <column name="text1" type="TEXT" remarks="扩展文本1"/>
+            <column name="text2" type="TEXT" remarks="扩展文本2"/>
+            <column name="text3" type="TEXT" remarks="扩展文本3"/>
             <column name="json_data" type="jsonb" remarks="扩展JSON"/>
 
             <column name="create_id" remarks="创建者ID" type="BIGINT"/>
@@ -652,9 +652,9 @@
             <column name="order_no" type="VARCHAR(255)" remarks="本地订单号"/>
             <column name="process_status" type="VARCHAR(255)" remarks="处理状态"/>
             
-            <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
-            <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
-            <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
+            <column name="text1" type="TEXT" remarks="扩展文本1"/>
+            <column name="text2" type="TEXT" remarks="扩展文本2"/>
+            <column name="text3" type="TEXT" remarks="扩展文本3"/>
             <column name="json_data" type="jsonb" remarks="原始数据"/>
 
             <column name="create_id" remarks="创建者ID" type="BIGINT"/>
@@ -716,9 +716,9 @@
             <column name="biz_status" type="VARCHAR(20)" defaultValue="ACTIVE" remarks="状态：上架/下架/售罄"/>
             <column name="order_num" type="INT" defaultValueNumeric="0" remarks="排序"/>
             
-            <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
-            <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
-            <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
+            <column name="text1" type="TEXT" remarks="扩展文本1"/>
+            <column name="text2" type="TEXT" remarks="扩展文本2"/>
+            <column name="text3" type="TEXT" remarks="扩展文本3"/>
             <column name="json_data" type="jsonb" remarks="扩展JSON"/>
 
             <column name="create_id" remarks="创建者ID" type="BIGINT"/>
@@ -754,9 +754,9 @@
             <column name="used_time" type="TIMESTAMPTZ" remarks="使用/核销时间"/>
             <column name="expired_time" type="TIMESTAMPTZ" remarks="过期时间"/>
             
-            <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
-            <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
-            <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
+            <column name="text1" type="TEXT" remarks="扩展文本1"/>
+            <column name="text2" type="TEXT" remarks="扩展文本2"/>
+            <column name="text3" type="TEXT" remarks="扩展文本3"/>
             <column name="json_data" type="jsonb" remarks="扩展JSON"/>
 
             <column name="create_id" remarks="创建者ID" type="BIGINT"/>
@@ -799,9 +799,9 @@
             <column name="refund_reason" type="TEXT" remarks="退款原因"/>
             <column name="refunded_time" type="TIMESTAMPTZ" remarks="退款时间"/>
             
-            <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
-            <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
-            <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
+            <column name="text1" type="TEXT" remarks="扩展文本1"/>
+            <column name="text2" type="TEXT" remarks="扩展文本2"/>
+            <column name="text3" type="TEXT" remarks="扩展文本3"/>
             <column name="json_data" type="jsonb" remarks="扩展JSON"/>
 
             <column name="create_id" remarks="创建者ID" type="BIGINT"/>
@@ -836,9 +836,9 @@
             <column name="city" type="VARCHAR(100)" remarks="所在城市"/>
             <column name="biz_status" type="VARCHAR(20)" defaultValue="ACTIVE" remarks="状态：正常/已归档/已解散"/>
             
-            <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
-            <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
-            <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
+            <column name="text1" type="TEXT" remarks="扩展文本1"/>
+            <column name="text2" type="TEXT" remarks="扩展文本2"/>
+            <column name="text3" type="TEXT" remarks="扩展文本3"/>
             <column name="json_data" type="jsonb" remarks="扩展JSON"/>
 
             <column name="create_id" remarks="创建者ID" type="BIGINT"/>
@@ -1032,9 +1032,9 @@
             <column name="is_urgent" type="BOOLEAN" defaultValueBoolean="false" remarks="是否紧急"/>
             <column name="publish_time" type="TIMESTAMPTZ" remarks="发布时间"/>
             
-            <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
-            <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
-            <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
+            <column name="text1" type="TEXT" remarks="扩展文本1"/>
+            <column name="text2" type="TEXT" remarks="扩展文本2"/>
+            <column name="text3" type="TEXT" remarks="扩展文本3"/>
             <column name="json_data" type="jsonb" remarks="扩展JSON"/>
 
             <column name="create_id" remarks="创建者ID" type="BIGINT"/>
@@ -1120,9 +1120,9 @@
             <column name="appointment_status" type="VARCHAR(20)" remarks="可约状态：可约/已约/不约"/>
             <column name="extra_profile" type="jsonb" remarks="额外画像信息(JSON)，如家庭成员/挑战列表等"/>
             
-            <column name="text1" type="VARCHAR(255)" remarks="扩展文本1"/>
-            <column name="text2" type="VARCHAR(255)" remarks="扩展文本2"/>
-            <column name="text3" type="VARCHAR(255)" remarks="扩展文本3"/>
+            <column name="text1" type="TEXT" remarks="扩展文本1"/>
+            <column name="text2" type="TEXT" remarks="扩展文本2"/>
+            <column name="text3" type="TEXT" remarks="扩展文本3"/>
             <column name="json_data" type="jsonb" remarks="扩展JSON"/>
 
             <column name="create_id" remarks="创建者ID" type="BIGINT"/>

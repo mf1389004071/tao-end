@@ -98,6 +98,7 @@
         <loadData tableName="sys_dict_type" file="../../db/data/sys_dict_type.csv" separator="," encoding="UTF-8" relativeToChangelogFile="true"/>
     </changeSet>
     <changeSet author="Administrator (generated)" id="1764223194862-30">
+        <validCheckSum>9:d5722262d6ac815fbedc35638e2645e5</validCheckSum>
         <createTable remarks="文件信息表" tableName="sys_file_info">
             <column autoIncrement="true" name="file_id" remarks="文件主键" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"/>
@@ -113,9 +114,7 @@
             </column>
             <column name="file_type" remarks="文件类型/后缀" type="VARCHAR(50)"/>
             <column name="file_size" remarks="文件大小（字节）" type="BIGINT"/>
-            <column name="md5" remarks="文件MD5" type="VARCHAR(64)">
-                <constraints unique="true"/>
-            </column>
+            <column name="md5" remarks="文件MD5" type="VARCHAR(64)" />
             <column defaultValue="0" name="status" remarks="状态（0正常 1停用）" type="CHAR(1)"/>
             <column name="create_id" type="BIGINT" remarks="创建者ID"/>
             <column name="update_id" type="BIGINT" remarks="更新者ID"/>

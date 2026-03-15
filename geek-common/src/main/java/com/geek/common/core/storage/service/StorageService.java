@@ -50,23 +50,22 @@ public class StorageService {
      * @throws Exception 比如读写文件出错时
      *
      */
+    /**
+     * 每次上传均写入存储，不做 MD5 防重：允许相同内容多份存储，存储路径由调用方保证唯一。
+     */
     public String upload(String filePath, MultipartFile file) throws Exception {
         FileUtils.assertAllowed(file, allowedExtension);
         if (file.getSize() > MAX_FILE_SIZE) {
             throw new IllegalArgumentException("文件过大");
         }
+        String md5 = null;
         if (this.fastUpload) {
-            String md5 = Md5Utils.getMd5(file);
-            String pathForMd5 = CacheUtils.get(CacheConstants.FILE_MD5_PATH_KEY, md5, String.class);
-            if (StringUtils.isNotEmpty(pathForMd5)) {
-                filePath = pathForMd5;
-            } else {
-                this.storageBucket.put(filePath, file);
-                CacheUtils.put(CacheConstants.FILE_MD5_PATH_KEY, md5, filePath);
-                CacheUtils.put(CacheConstants.FILE_PATH_MD5_KEY, filePath, md5);
-            }
-        } else {
-            this.storageBucket.put(filePath, file);
+            md5 = Md5Utils.getMd5(file);
+        }
+        this.storageBucket.put(filePath, file);
+        if (this.fastUpload && StringUtils.isNotEmpty(md5)) {
+            CacheUtils.put(CacheConstants.FILE_MD5_PATH_KEY, md5, filePath);
+            CacheUtils.put(CacheConstants.FILE_PATH_MD5_KEY, filePath, md5);
         }
         return filePath;
     }
