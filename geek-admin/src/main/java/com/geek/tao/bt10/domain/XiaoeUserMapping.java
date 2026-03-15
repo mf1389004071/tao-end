@@ -54,13 +54,12 @@ public class XiaoeUserMapping extends BaseEntity
     @Excel(name = "建立映射时间")
     private Instant mappedTime;
 
-    /** 最后更新时间 */
-    @Schema(title = "最后更新时间")
-    @Excel(name = "最后更新时间")
-    private Instant lastUpdateTime;
-
     /** 状态（0正常 1停用） */
     @Schema(title = "状态（0正常 1停用）")
     @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
     private String status;
+
+    /** 删除标志（0代表存在 1代表删除） */
+    @Schema(title = "删除标志（0代表存在 1代表删除）")
+    private Integer delFlag;
 }

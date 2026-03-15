@@ -282,6 +282,9 @@
             <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
             <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
 
+            <column name="delete_id" remarks="删除人ID" type="BIGINT"/>
+            <column name="delete_time" remarks="删除时间" type="TIMESTAMPTZ"/>
+
             <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
             <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
             <column name="remark" remarks="备注" type="TEXT"/>
@@ -454,6 +457,9 @@
             <column name="update_id" remarks="更新者ID" type="BIGINT"/>
             <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
             <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="delete_id" remarks="删除人ID" type="BIGINT"/>
+            <column name="delete_time" remarks="删除时间" type="TIMESTAMPTZ"/>
 
             <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
             <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>
@@ -722,6 +728,9 @@
             <column name="update_id" remarks="更新者ID" type="BIGINT"/>
             <column name="update_by" remarks="更新者" type="VARCHAR(64)" defaultValue=""/>
             <column name="update_time" remarks="更新时间" type="TIMESTAMPTZ"/>
+
+            <column name="delete_id" remarks="删除人ID" type="BIGINT"/>
+            <column name="delete_time" remarks="删除时间" type="TIMESTAMPTZ"/>
 
             <column name="status" remarks="状态（0正常 1停用）" type="CHAR(1)" defaultValue="0"/>
             <column name="del_flag" remarks="删除标志（0代表存在 1代表删除）" type="SMALLINT" defaultValue="0"/>

@@ -48,11 +48,6 @@ public class KnowledgeCategory extends BaseEntity
     @Excel(name = "排序")
     private Integer orderNum;
 
-    /** 状态（0正常 1停用） */
-    @Schema(title = "状态（0正常 1停用）")
-    @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
-    private String status;
-
     /** 图标 */
     @Schema(title = "图标")
     @Excel(name = "图标")
@@ -67,18 +62,6 @@ public class KnowledgeCategory extends BaseEntity
     @Schema(title = "可见权限等级1-5")
     @Excel(name = "可见权限等级1-5")
     private Integer permissionLevel;
-
-    /** 删除人ID */
-    @Schema(title = "删除人ID")
-    private Long deleteId;
-
-    /** 删除时间 */
-    @Schema(title = "删除时间")
-    private Instant deleteTime;
-
-    /** 删除标志（0代表存在 1代表删除） */
-    @Schema(title = "删除标志（0代表存在 1代表删除）")
-    private Integer delFlag;
 
     /** 扩展文本1 */
     @Schema(title = "扩展文本1")
@@ -99,4 +82,21 @@ public class KnowledgeCategory extends BaseEntity
     @Schema(title = "扩展JSON")
     @Excel(name = "扩展JSON")
     private String jsonData;
+
+    /** 删除人ID */
+    @Schema(title = "删除人ID")
+    private Long deleteId;
+
+    /** 删除时间 */
+    @Schema(title = "删除时间")
+    private Instant deleteTime;
+
+    /** 状态（0正常 1停用） */
+    @Schema(title = "状态（0正常 1停用）")
+    @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
+    private String status;
+
+    /** 删除标志（0代表存在 1代表删除） */
+    @Schema(title = "删除标志（0代表存在 1代表删除）")
+    private Integer delFlag;
 }

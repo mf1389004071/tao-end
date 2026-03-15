@@ -55,6 +55,15 @@ public class SysConfig extends BaseEntity {
     @Size(min = 0, max = 500, message = "参数键值长度不能超过500个字符")
     private String configType;
 
+    /** 配置状态（0正常 1停用） */
+    @Schema(title = "配置状态（0正常 1停用）")
+    @Excel(name = "配置状态", readConverterExp = "0=正常,1=停用")
+    private String status;
+
+    /** 删除标志（0代表存在 1代表删除） */
+    @Schema(title = "删除标志（0代表存在 1代表删除）")
+    private Integer delFlag;
+
     /** 配置分类 */
     @Schema(title = "配置分类")
     @Excel(name = "配置分类")
@@ -63,15 +72,10 @@ public class SysConfig extends BaseEntity {
     /** 是否对前端开放 */
     @Schema(title = "是否对前端开放")
     @Excel(name = "是否对前端开放")
-    private String isPublic;
+    private Boolean isPublic;
 
     /** 值类型：字符串/数字/布尔/JSON.config_type */
     @Schema(title = "值类型：字符串/数字/布尔/JSON.config_type")
     @Excel(name = "值类型：字符串/数字/布尔/JSON.config_type")
     private String valueType;
-
-    /** 状态（0正常 1停用） */
-    @Schema(title = "状态（0正常 1停用）")
-    @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
-    private String status;
 }

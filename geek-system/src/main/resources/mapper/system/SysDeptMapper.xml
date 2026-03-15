@@ -4,22 +4,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.geek.system.mapper.SysDeptMapper">
 
-	<resultMap type="SysDept" id="SysDeptResult">
-		<id property="deptId" column="dept_id" />
-		<result property="parentId" column="parent_id" />
-		<result property="ancestors" column="ancestors" />
-		<result property="deptName" column="dept_name" />
-		<result property="orderNum" column="order_num" />
-		<result property="leader" column="leader" />
-		<result property="phone" column="phone" />
-		<result property="email" column="email" />
-		<result property="status" column="status" />
-		<result property="delFlag" column="del_flag" />
-		<result property="parentName" column="parent_name" />
-		<result property="createBy" column="create_by" />
-		<result property="createTime" column="create_time" />
-		<result property="updateBy" column="update_by" />
-		<result property="updateTime" column="update_time" />
-	</resultMap>
-
+    <resultMap type="SysDept" id="SysDeptResult">
+        <id property="deptId" column="dept_id" />
+        <result property="parentId" column="parent_id" />
+        <result property="ancestors" column="ancestors" />
+        <result property="deptName" column="dept_name" />
+        <result property="orderNum" column="order_num" />
+        <result property="leader" column="leader" />
+        <result property="phone" column="phone" />
+        <result property="email" column="email" />
+        <result property="status" column="status" />
+        <result property="delFlag" column="del_flag" />
+        <result property="parentName" column="parent_name" />
+        <result property="createId" column="create_id" />
+        <result property="updateId" column="update_id" />
+        <result property="createBy" column="create_by" />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy" column="update_by" />
+        <result property="updateTime" column="update_time" />
+        <result property="remark" column="remark" />
+        <result property="deptCode" column="dept_code" />
+        <result property="deleteTime" column="delete_time" />
+        <result property="deleteId" column="delete_id" />
+        <result property="text1" column="text1" />
+        <result property="text2" column="text2" />
+        <result property="text3" column="text3" />
+        <result property="jsonData" column="json_data" />
+    </resultMap>
 </mapper> 

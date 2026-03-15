@@ -20,7 +20,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="changedTime" column="changed_time" />
         <result property="metadata" column="metadata" />
         <result property="remark" column="remark" />
-        <result property="status" column="status" />
     </resultMap>
 
 </mapper>

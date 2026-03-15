@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<resultMap type="SysUserRole" id="SysUserRoleResult">
 		<result property="userId"     column="user_id"      />
 		<result property="roleId"     column="role_id"      />
+        <result property="createTime" column="create_time" />
 	</resultMap>
 
 	<delete id="deleteUserRoleByUserId" parameterType="Long">

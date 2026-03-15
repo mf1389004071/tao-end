@@ -22,8 +22,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class SysDictData extends BaseEntity {
-    private static final long serialVersionUID = 1L;
-
+    
     /** 字典编码 */
     @Id
     @Schema(title = "字典编码")
@@ -74,4 +73,8 @@ public class SysDictData extends BaseEntity {
     @Schema(title = "状态", description = "0=正常,1=停用")
     @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
     private String status;
+
+    /** 删除标志（0代表存在 1代表删除） */
+    @Schema(title = "删除标志（0代表存在 1代表删除）")
+    private Integer delFlag;
 }

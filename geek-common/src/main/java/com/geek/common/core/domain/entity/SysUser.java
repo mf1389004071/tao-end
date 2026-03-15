@@ -61,6 +61,11 @@ public class SysUser extends BaseEntity {
     @Size(min = 0, max = 30, message = "用户昵称长度不能超过30个字符")
     private String nickName;
 
+    /** 用户类型（00系统用户） */
+    @Schema(title = "用户类型（00系统用户）")
+    @Excel(name = "用户类型", readConverterExp = "0=0系统用户")
+    private String userType;
+
     /** 用户邮箱 */
     @Schema(title = "用户邮箱")
     @Excel(name = "用户邮箱")

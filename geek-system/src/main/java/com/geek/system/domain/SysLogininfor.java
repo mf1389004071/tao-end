@@ -35,14 +35,9 @@ public class SysLogininfor {
     @Excel(name = "用户账号")
     private String userName;
 
-    /** 登录状态 0成功 1失败 */
-    @Schema(title = "登录状态")
-    @Excel(name = "登录状态", readConverterExp = "0=成功,1=失败")
-    private String status;
-
     /** 登录IP地址 */
-    @Schema(title = "登录地址")
-    @Excel(name = "登录地址")
+    @Schema(title = "登录IP地址")
+    @Excel(name = "登录IP地址")
     private String ipaddr;
 
     /** 登录地点 */
@@ -59,6 +54,11 @@ public class SysLogininfor {
     @Schema(title = "操作系统")
     @Excel(name = "操作系统")
     private String os;
+
+    /** 登录状态（0成功 1失败） */
+    @Schema(title = "登录状态（0成功 1失败）")
+    @Excel(name = "登录状态", readConverterExp = "0=成功,1=失败")
+    private String status;
 
     /** 提示消息 */
     @Schema(title = "提示消息")

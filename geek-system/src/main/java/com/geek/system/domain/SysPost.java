@@ -56,6 +56,10 @@ public class SysPost extends BaseEntity {
     @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
     private String status;
 
+    /** 删除标志（0代表存在 1代表删除） */
+    @Schema(title = "删除标志（0代表存在 1代表删除）")
+    private Integer delFlag;
+    
     /** 用户是否存在此岗位标识 默认不存在 */
     @Schema(title = "用户是否存在此岗位标识")
     @Column(ignore = true)

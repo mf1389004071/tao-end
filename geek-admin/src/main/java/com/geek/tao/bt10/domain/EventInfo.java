@@ -214,18 +214,6 @@ public class EventInfo extends BaseEntity
     @Excel(name = "负责人ID")
     private Long pmUserId;
 
-    /** 删除人ID */
-    @Schema(title = "删除人ID")
-    private Long deleteId;
-
-    /** 删除时间 */
-    @Schema(title = "删除时间")
-    private Instant deleteTime;
-
-    /** 删除标志（0代表存在 1代表删除） */
-    @Schema(title = "删除标志（0代表存在 1代表删除）")
-    private Integer delFlag;
-
     /** 扩展文本1 */
     @Schema(title = "扩展文本1")
     @Excel(name = "扩展文本1")
@@ -246,8 +234,20 @@ public class EventInfo extends BaseEntity
     @Excel(name = "扩展配置")
     private String jsonData;
 
+    /** 删除人ID */
+    @Schema(title = "删除人ID")
+    private Long deleteId;
+
+    /** 删除时间 */
+    @Schema(title = "删除时间")
+    private Instant deleteTime;
+
     /** 状态（0正常 1停用） */
     @Schema(title = "状态（0正常 1停用）")
     @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
     private String status;
+
+    /** 删除标志（0代表存在 1代表删除） */
+    @Schema(title = "删除标志（0代表存在 1代表删除）")
+    private Integer delFlag;
 }

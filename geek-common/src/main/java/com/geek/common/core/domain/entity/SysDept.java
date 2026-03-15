@@ -112,7 +112,7 @@ public class SysDept extends BaseEntity {
     /** 删除人ID(软删除) */
     @Schema(title = "删除人ID(软删除)")
     @Excel(name = "删除人ID(软删除)")
-    private String deleteId;
+    private Long deleteId;
 
     /** 扩展文本1 */
     @Schema(title = "扩展文本1")

@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<resultMap type="SysUserPost" id="SysUserPostResult">
 		<result property="userId"     column="user_id"      />
 		<result property="postId"     column="post_id"      />
+        <result property="createTime" column="create_time" />
 	</resultMap>
 
 	<delete id="deleteUserPostByUserId" parameterType="Long">

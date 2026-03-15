@@ -64,9 +64,6 @@ public class DataChangeLogsServiceImpl extends ServiceImpl<DataChangeLogsMapper,
         if (dataChangeLogs.getMetadata() != null && !dataChangeLogs.getMetadata().isEmpty()) {
             chain.eq(DataChangeLogs::getMetadata, dataChangeLogs.getMetadata());
         }
-        if (dataChangeLogs.getStatus() != null && !dataChangeLogs.getStatus().isEmpty()) {
-            chain.eq(DataChangeLogs::getStatus, dataChangeLogs.getStatus());
-        }
         return chain;
     }
 

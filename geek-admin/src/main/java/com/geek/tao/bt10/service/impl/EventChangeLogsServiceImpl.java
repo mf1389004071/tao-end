@@ -52,9 +52,6 @@ public class EventChangeLogsServiceImpl extends ServiceImpl<EventChangeLogsMappe
         if (eventChangeLogs.getMetadata() != null && !eventChangeLogs.getMetadata().isEmpty()) {
             chain.eq(EventChangeLogs::getMetadata, eventChangeLogs.getMetadata());
         }
-        if (eventChangeLogs.getStatus() != null && !eventChangeLogs.getStatus().isEmpty()) {
-            chain.eq(EventChangeLogs::getStatus, eventChangeLogs.getStatus());
-        }
         return chain;
     }
 

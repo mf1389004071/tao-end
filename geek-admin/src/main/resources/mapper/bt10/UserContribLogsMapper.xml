@@ -11,13 +11,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="amount" column="amount" />
         <result property="balanceBefore" column="balance_before" />
         <result property="balanceAfter" column="balance_after" />
-        <result property="remark" column="remark" />
         <result property="relatedType" column="related_type" />
         <result property="relatedId" column="related_id" />
         <result property="paymentNo" column="payment_no" />
-        <result property="delFlag" column="del_flag" />
+        <result property="createId" column="create_id" />
+        <result property="createBy" column="create_by" />
         <result property="createTime" column="create_time" />
+        <result property="updateId" column="update_id" />
+        <result property="updateBy" column="update_by" />
+        <result property="updateTime" column="update_time" />
         <result property="status" column="status" />
+        <result property="delFlag" column="del_flag" />
+        <result property="remark" column="remark" />
     </resultMap>
 
 </mapper>

@@ -92,9 +92,4 @@ public class DataChangeLogs extends BaseEntity
     @Schema(title = "扩展元数据")
     @Excel(name = "扩展元数据")
     private String metadata;
-
-    /** 状态（0正常 1停用） */
-    @Schema(title = "状态（0正常 1停用）")
-    @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
-    private String status;
 }

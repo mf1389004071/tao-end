@@ -9,6 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="deptId"        column="dept_id"         />
         <result property="userName"      column="user_name"       />
         <result property="nickName"      column="nick_name"       />
+        <result property="userType" column="user_type" />
         <result property="email"         column="email"           />
         <result property="phonenumber"   column="phonenumber"     />
         <result property="sex"           column="sex"             />
@@ -19,6 +20,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="loginIp"       column="login_ip"        />
         <result property="loginDate"     column="login_date"      />
         <result property="pwdUpdateDate" column="pwd_update_date" />
+        <result property="createId" column="create_id" />
+        <result property="updateId" column="update_id" />
         <result property="createBy"     column="create_by"        />
         <result property="createTime"   column="create_time"      />
         <result property="updateBy"     column="update_by"        />

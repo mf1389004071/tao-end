@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<resultMap type="SysRoleDept" id="SysRoleDeptResult">
 		<result property="roleId"     column="role_id"      />
 		<result property="deptId"     column="dept_id"      />
+        <result property="createTime" column="create_time" />
 	</resultMap>
 	
 </mapper> 

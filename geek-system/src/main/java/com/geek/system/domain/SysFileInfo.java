@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.time.LocalDate;
+import java.time.Instant;
 
 /**
  * 文件对象 sys_file_info
@@ -58,6 +58,11 @@ public class SysFileInfo extends BaseEntity {
     @Excel(name = "文件MD5")
     private String md5;
 
+    /** 状态（0正常 1停用） */
+    @Schema(title = "状态（0正常 1停用）")
+    @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
+    private String status;
+
     /** 删除标志（0代表存在 1代表删除） */
     @Schema(title = "删除标志（0代表存在 1代表删除）")
     private Integer delFlag;
@@ -65,7 +70,7 @@ public class SysFileInfo extends BaseEntity {
     /** 所属文件夹ID */
     @Schema(title = "所属文件夹ID")
     @Excel(name = "所属文件夹ID")
-    private String folderId;
+    private Long folderId;
 
     /** MIME类型 */
     @Schema(title = "MIME类型")
@@ -75,27 +80,26 @@ public class SysFileInfo extends BaseEntity {
     /** 图片宽度 */
     @Schema(title = "图片宽度")
     @Excel(name = "图片宽度")
-    private String width;
+    private Integer width;
 
     /** 图片高度 */
     @Schema(title = "图片高度")
     @Excel(name = "图片高度")
-    private String height;
+    private Integer height;
 
     /** 音视频时长(秒) */
     @Schema(title = "音视频时长(秒)")
     @Excel(name = "音视频时长(秒)")
-    private String duration;
+    private Integer duration;
 
     /** 删除人ID */
     @Schema(title = "删除人ID")
     @Excel(name = "删除人ID")
-    private String deleteId;
+    private Long deleteId;
 
     /** 删除时间(软删除) */
     @Schema(title = "删除时间(软删除)")
-    @Excel(name = "删除时间(软删除)")
-    private LocalDate deleteTime;
+    private Instant deleteTime;
 
     /** 扩展文本1 */
     @Schema(title = "扩展文本1")
@@ -116,9 +120,4 @@ public class SysFileInfo extends BaseEntity {
     @Schema(title = "扩展JSON")
     @Excel(name = "扩展JSON")
     private String jsonData;
-
-    /** 状态（0正常 1停用） */
-    @Schema(title = "状态（0正常 1停用）")
-    @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
-    private String status;
 }

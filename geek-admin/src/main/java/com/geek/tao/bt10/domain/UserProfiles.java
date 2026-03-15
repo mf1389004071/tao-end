@@ -87,7 +87,27 @@ public class UserProfiles extends BaseEntity
     /** 企业微信用户ID */
     @Schema(title = "企业微信用户ID")
     @Excel(name = "企业微信用户ID")
-    private String workUserid;
+    private String wxWorkUserid;
+
+    /** Facebook用户ID */
+    @Schema(title = "Facebook用户ID")
+    @Excel(name = "Facebook用户ID")
+    private String facebookUserid;
+
+    /** Google用户ID */
+    @Schema(title = "Google用户ID")
+    @Excel(name = "Google用户ID")
+    private String googleUserid;
+
+    /** Apple用户ID */
+    @Schema(title = "Apple用户ID")
+    @Excel(name = "Apple用户ID")
+    private String appleUserid;
+
+    /** Outlook用户ID */
+    @Schema(title = "Outlook用户ID")
+    @Excel(name = "Outlook用户ID")
+    private String outlookUserid;
 
     /** 小鹅通用户ID(同步) */
     @Schema(title = "小鹅通用户ID(同步)")
@@ -189,12 +209,12 @@ public class UserProfiles extends BaseEntity
     @Excel(name = "扩展JSON")
     private String jsonData;
 
-    /** 删除标志（0代表存在 1代表删除） */
-    @Schema(title = "删除标志（0代表存在 1代表删除）")
-    private Integer delFlag;
-
     /** 状态（0正常 1停用） */
     @Schema(title = "状态（0正常 1停用）")
     @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
     private String status;
+
+    /** 删除标志（0代表存在 1代表删除） */
+    @Schema(title = "删除标志（0代表存在 1代表删除）")
+    private Integer delFlag;
 }
