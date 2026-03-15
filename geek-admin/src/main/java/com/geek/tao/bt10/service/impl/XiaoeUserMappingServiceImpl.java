@@ -40,8 +40,8 @@ public class XiaoeUserMappingServiceImpl extends ServiceImpl<XiaoeUserMappingMap
         if (xiaoeUserMapping.getMappedTime() != null) {
             chain.eq(XiaoeUserMapping::getMappedTime, xiaoeUserMapping.getMappedTime());
         }
-        if (xiaoeUserMapping.getLastUpdateTime() != null) {
-            chain.eq(XiaoeUserMapping::getLastUpdateTime, xiaoeUserMapping.getLastUpdateTime());
+        if (xiaoeUserMapping.getUpdateTime() != null) {
+            chain.eq(XiaoeUserMapping::getUpdateTime, xiaoeUserMapping.getUpdateTime());
         }
         if (xiaoeUserMapping.getStatus() != null && !xiaoeUserMapping.getStatus().isEmpty()) {
             chain.eq(XiaoeUserMapping::getStatus, xiaoeUserMapping.getStatus());

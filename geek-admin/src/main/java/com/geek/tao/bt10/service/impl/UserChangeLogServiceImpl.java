@@ -52,9 +52,6 @@ public class UserChangeLogServiceImpl extends ServiceImpl<UserChangeLogMapper, U
         if (userChangeLog.getMetadata() != null && !userChangeLog.getMetadata().isEmpty()) {
             chain.eq(UserChangeLog::getMetadata, userChangeLog.getMetadata());
         }
-        if (userChangeLog.getStatus() != null && !userChangeLog.getStatus().isEmpty()) {
-            chain.eq(UserChangeLog::getStatus, userChangeLog.getStatus());
-        }
         return chain;
     }
 

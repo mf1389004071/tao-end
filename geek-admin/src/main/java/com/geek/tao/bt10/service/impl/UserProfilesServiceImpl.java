@@ -58,8 +58,8 @@ public class UserProfilesServiceImpl extends ServiceImpl<UserProfilesMapper, Use
         if (userProfiles.getMiniappOpenid() != null && !userProfiles.getMiniappOpenid().isEmpty()) {
             chain.eq(UserProfiles::getMiniappOpenid, userProfiles.getMiniappOpenid());
         }
-        if (userProfiles.getWorkUserid() != null && !userProfiles.getWorkUserid().isEmpty()) {
-            chain.eq(UserProfiles::getWorkUserid, userProfiles.getWorkUserid());
+        if (userProfiles.getWxWorkUserid() != null && !userProfiles.getWxWorkUserid().isEmpty()) {
+            chain.eq(UserProfiles::getWxWorkUserid, userProfiles.getWxWorkUserid());
         }
         if (userProfiles.getXiaoeUserId() != null && !userProfiles.getXiaoeUserId().isEmpty()) {
             chain.eq(UserProfiles::getXiaoeUserId, userProfiles.getXiaoeUserId());
