@@ -84,8 +84,6 @@ public class PointProductController extends BaseController {
     @Log(title = "积分商城商品", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody PointProduct pointProduct) {
-        pointProduct.setCreateBy(getUsername());
-        pointProduct.setCreateId(getUserId());
         return toAjax(pointProductService.save(pointProduct));
     }
 

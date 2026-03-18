@@ -84,8 +84,6 @@ public class EventChangeLogsController extends BaseController {
     @Log(title = "活动关键信息变更记录", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody EventChangeLogs eventChangeLogs) {
-        eventChangeLogs.setCreateBy(getUsername());
-        eventChangeLogs.setCreateId(getUserId());
         return toAjax(eventChangeLogsService.save(eventChangeLogs));
     }
 

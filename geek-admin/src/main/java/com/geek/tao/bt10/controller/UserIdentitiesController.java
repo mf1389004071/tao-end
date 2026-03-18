@@ -84,8 +84,6 @@ public class UserIdentitiesController extends BaseController {
     @Log(title = "用户身份关系表", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody UserIdentities userIdentities) {
-        userIdentities.setCreateBy(getUsername());
-        userIdentities.setCreateId(getUserId());
         return toAjax(userIdentitiesService.save(userIdentities));
     }
 

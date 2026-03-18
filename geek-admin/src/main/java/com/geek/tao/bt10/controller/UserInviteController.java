@@ -84,8 +84,6 @@ public class UserInviteController extends BaseController {
     @Log(title = "邀请关系与奖励记录", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody UserInvite userInvite) {
-        userInvite.setCreateBy(getUsername());
-        userInvite.setCreateId(getUserId());
         return toAjax(userInviteService.save(userInvite));
     }
 

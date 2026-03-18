@@ -84,8 +84,6 @@ public class KnowledgeCommentController extends BaseController {
     @Log(title = "知识内容评论与回复，支持楼中楼与置顶", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody KnowledgeComment knowledgeComment) {
-        knowledgeComment.setCreateBy(getUsername());
-        knowledgeComment.setCreateId(getUserId());
         return toAjax(knowledgeCommentService.save(knowledgeComment));
     }
 

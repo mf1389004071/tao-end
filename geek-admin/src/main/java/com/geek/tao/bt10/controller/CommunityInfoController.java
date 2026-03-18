@@ -84,8 +84,6 @@ public class CommunityInfoController extends BaseController {
     @Log(title = "合伙人创建的社群", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody CommunityInfo communityInfo) {
-        communityInfo.setCreateBy(getUsername());
-        communityInfo.setCreateId(getUserId());
         return toAjax(communityInfoService.save(communityInfo));
     }
 

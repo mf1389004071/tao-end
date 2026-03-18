@@ -84,8 +84,6 @@ public class UserProfilesController extends BaseController {
     @Log(title = "用户信息画像扩展表", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody UserProfiles userProfiles) {
-        userProfiles.setCreateBy(getUsername());
-        userProfiles.setCreateId(getUserId());
         return toAjax(userProfilesService.save(userProfiles));
     }
 

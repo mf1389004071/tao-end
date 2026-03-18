@@ -84,8 +84,6 @@ public class NotificationsController extends BaseController {
     @Log(title = "用户站内通知", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody Notifications notifications) {
-        notifications.setCreateBy(getUsername());
-        notifications.setCreateId(getUserId());
         return toAjax(notificationsService.save(notifications));
     }
 

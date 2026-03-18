@@ -84,8 +84,6 @@ public class XiaoeUserMappingController extends BaseController {
     @Log(title = "本平台用户与小鹅通用户ID映射", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody XiaoeUserMapping xiaoeUserMapping) {
-        xiaoeUserMapping.setCreateBy(getUsername());
-        xiaoeUserMapping.setCreateId(getUserId());
         return toAjax(xiaoeUserMappingService.save(xiaoeUserMapping));
     }
 

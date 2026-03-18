@@ -84,8 +84,6 @@ public class UserTagsController extends BaseController {
     @Log(title = "用户与多维标签关联表", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody UserTags userTags) {
-        userTags.setCreateBy(getUsername());
-        userTags.setCreateId(getUserId());
         return toAjax(userTagsService.save(userTags));
     }
 

@@ -27,6 +27,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -84,8 +85,6 @@ public class EventInfoController extends BaseController {
     @Log(title = "活动或线下课程主表", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody EventInfo eventInfo) {
-        eventInfo.setCreateBy(getUsername());
-        eventInfo.setCreateId(getUserId());
         return toAjax(eventInfoService.save(eventInfo));
     }
 
@@ -97,8 +96,6 @@ public class EventInfoController extends BaseController {
     @Log(title = "活动或线下课程主表", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@Validated @RequestBody EventInfo eventInfo) {
-        eventInfo.setUpdateBy(getUsername());
-        eventInfo.setUpdateId(getUserId());
         return toAjax(eventInfoService.updateById(eventInfo));
     }
 

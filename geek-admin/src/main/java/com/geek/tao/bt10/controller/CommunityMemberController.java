@@ -84,8 +84,6 @@ public class CommunityMemberController extends BaseController {
     @Log(title = "社群与用户的成员关系", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody CommunityMember communityMember) {
-        communityMember.setCreateBy(getUsername());
-        communityMember.setCreateId(getUserId());
         return toAjax(communityMemberService.save(communityMember));
     }
 

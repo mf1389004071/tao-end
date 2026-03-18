@@ -20,8 +20,8 @@ import com.mybatisflex.annotation.UpdateListener;
  */
 public class BaseEntityListener implements InsertListener, UpdateListener {
 
-    private static final ConcurrentHashMap<Class<?>, FillSlots> INSERT_CACHE = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<Class<?>, FillSlots> UPDATE_CACHE = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Class<?>, InsertFillSlots> INSERT_BOTH_CACHE = new ConcurrentHashMap<>();
 
     @Override
     public void onUpdate(Object entity) {
@@ -33,7 +33,8 @@ public class BaseEntityListener implements InsertListener, UpdateListener {
         String updateBy = anonymous ? null : SecurityUtils.getUsername();
         Long updateId = anonymous ? null : SecurityUtils.getUserId();
 
-        slots.fillIfEmpty(entity, DateUtils.getNowInstant(), updateBy, updateId);
+        // 更新场景：updateTime 必须刷新；updateBy/updateId 在非匿名时刷新
+        slots.fillOnUpdate(entity, DateUtils.getNowInstant(), updateBy, updateId);
     }
 
     @Override
@@ -41,12 +42,12 @@ public class BaseEntityListener implements InsertListener, UpdateListener {
         if (!(entity instanceof BaseEntity)) {
             return;
         }
-        FillSlots slots = INSERT_CACHE.computeIfAbsent(entity.getClass(), BaseEntityListener::resolveInsertSlots);
+        InsertFillSlots slots = INSERT_BOTH_CACHE.computeIfAbsent(entity.getClass(), BaseEntityListener::resolveInsertBothSlots);
         boolean anonymous = SecurityUtils.isAnonymous();
-        String createBy = anonymous ? null : SecurityUtils.getUsername();
-        Long createId = anonymous ? null : SecurityUtils.getUserId();
+        String userName = anonymous ? null : SecurityUtils.getUsername();
+        Long userId = anonymous ? null : SecurityUtils.getUserId();
 
-        slots.fillIfEmpty(entity, DateUtils.getNowInstant(), createBy, createId);
+        slots.fillIfEmpty(entity, DateUtils.getNowInstant(), userName, userId);
     }
 
     /** 插入用：createTime, createBy, createId */
@@ -55,6 +56,17 @@ public class BaseEntityListener implements InsertListener, UpdateListener {
         s.id = slot(clazz, "createId", Long.class);
         s.by = slot(clazz, "createBy", String.class);
         s.time = slot(clazz, "createTime", Instant.class);
+        return s;
+    }
+
+    /**
+     * 插入用（扩展）：createTime/createBy/createId + updateTime/updateBy/updateId
+     * 仅当字段为空时填充，不覆盖调用方已设置的值。
+     */
+    private static InsertFillSlots resolveInsertBothSlots(Class<?> clazz) {
+        InsertFillSlots s = new InsertFillSlots();
+        s.create = resolveInsertSlots(clazz);
+        s.update = resolveUpdateSlots(clazz);
         return s;
     }
 
@@ -138,6 +150,23 @@ public class BaseEntityListener implements InsertListener, UpdateListener {
                 // 类型不兼容等跳过
             }
         }
+
+        void fillAlways(Object entity, Object value) {
+            if (value == null && (setterParam == long.class || setterParam == Long.class)) {
+                return;
+            }
+            try {
+                Object toSet = value;
+                if (setterParam == String.class && value instanceof Long) {
+                    toSet = String.valueOf(value);
+                } else if (value != null && setterParam != valueType && setterParam != String.class) {
+                    return;
+                }
+                setter.invoke(entity, toSet);
+            } catch (ReflectiveOperationException ignored) {
+                // 类型不兼容等跳过
+            }
+        }
     }
 
     /** 一组三个槽位：时间、人名字符串、人ID */
@@ -155,6 +184,33 @@ public class BaseEntityListener implements InsertListener, UpdateListener {
             }
             if (id != null) {
                 id.fillIfEmpty(entity, idValue);
+            }
+        }
+
+        void fillOnUpdate(Object entity, Instant now, String byValue, Long idValue) {
+            if (time != null) {
+                time.fillAlways(entity, now);
+            }
+            if (by != null && byValue != null) {
+                by.fillAlways(entity, byValue);
+            }
+            if (id != null && idValue != null) {
+                id.fillAlways(entity, idValue);
+            }
+        }
+    }
+
+    /** 插入时同时填充 create* 与 update* */
+    private static final class InsertFillSlots {
+        FillSlots create;
+        FillSlots update;
+
+        void fillIfEmpty(Object entity, Instant now, String byValue, Long idValue) {
+            if (create != null) {
+                create.fillIfEmpty(entity, now, byValue, idValue);
+            }
+            if (update != null) {
+                update.fillIfEmpty(entity, now, byValue, idValue);
             }
         }
     }

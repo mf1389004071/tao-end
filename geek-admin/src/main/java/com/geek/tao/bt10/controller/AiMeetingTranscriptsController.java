@@ -84,8 +84,6 @@ public class AiMeetingTranscriptsController extends BaseController {
     @Log(title = "音视频转写与AI摘要", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody AiMeetingTranscripts aiMeetingTranscripts) {
-        aiMeetingTranscripts.setCreateBy(getUsername());
-        aiMeetingTranscripts.setCreateId(getUserId());
         return toAjax(aiMeetingTranscriptsService.save(aiMeetingTranscripts));
     }
 

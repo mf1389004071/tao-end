@@ -84,8 +84,6 @@ public class EventJoinerRoleController extends BaseController {
     @Log(title = "报名记录与活动角色的分配关系", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody EventJoinerRole eventJoinerRole) {
-        eventJoinerRole.setCreateBy(getUsername());
-        eventJoinerRole.setCreateId(getUserId());
         return toAjax(eventJoinerRoleService.save(eventJoinerRole));
     }
 

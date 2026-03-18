@@ -84,8 +84,6 @@ public class PointRedemptionController extends BaseController {
     @Log(title = "用户积分兑换记录", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody PointRedemption pointRedemption) {
-        pointRedemption.setCreateBy(getUsername());
-        pointRedemption.setCreateId(getUserId());
         return toAjax(pointRedemptionService.save(pointRedemption));
     }
 

@@ -84,8 +84,6 @@ public class UserChangeLogController extends BaseController {
     @Log(title = "用户关键字段变更记录", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody UserChangeLog userChangeLog) {
-        userChangeLog.setCreateBy(getUsername());
-        userChangeLog.setCreateId(getUserId());
         return toAjax(userChangeLogService.save(userChangeLog));
     }
 

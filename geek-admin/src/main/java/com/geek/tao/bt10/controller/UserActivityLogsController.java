@@ -84,8 +84,6 @@ public class UserActivityLogsController extends BaseController {
     @Log(title = "用户行为轨迹日志", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody UserActivityLogs userActivityLogs) {
-        userActivityLogs.setCreateBy(getUsername());
-        userActivityLogs.setCreateId(getUserId());
         return toAjax(userActivityLogsService.save(userActivityLogs));
     }
 

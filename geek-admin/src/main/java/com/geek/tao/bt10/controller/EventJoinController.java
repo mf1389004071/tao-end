@@ -84,8 +84,6 @@ public class EventJoinController extends BaseController {
     @Log(title = "用户活动报名记录", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody EventJoin eventJoin) {
-        eventJoin.setCreateBy(getUsername());
-        eventJoin.setCreateId(getUserId());
         return toAjax(eventJoinService.save(eventJoin));
     }
 

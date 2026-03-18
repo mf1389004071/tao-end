@@ -84,8 +84,6 @@ public class EventCheckInController extends BaseController {
     @Log(title = "单次签到记录", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody EventCheckIn eventCheckIn) {
-        eventCheckIn.setCreateBy(getUsername());
-        eventCheckIn.setCreateId(getUserId());
         return toAjax(eventCheckInService.save(eventCheckIn));
     }
 

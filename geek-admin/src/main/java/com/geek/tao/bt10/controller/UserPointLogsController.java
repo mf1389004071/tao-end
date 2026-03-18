@@ -84,8 +84,6 @@ public class UserPointLogsController extends BaseController {
     @Log(title = "用户积分收支流水", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody UserPointLogs userPointLogs) {
-        userPointLogs.setCreateBy(getUsername());
-        userPointLogs.setCreateId(getUserId());
         return toAjax(userPointLogsService.save(userPointLogs));
     }
 

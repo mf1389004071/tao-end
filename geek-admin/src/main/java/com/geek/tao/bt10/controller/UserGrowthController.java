@@ -84,8 +84,6 @@ public class UserGrowthController extends BaseController {
     @Log(title = "用户成长阶段变更历史", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody UserGrowth userGrowth) {
-        userGrowth.setCreateBy(getUsername());
-        userGrowth.setCreateId(getUserId());
         return toAjax(userGrowthService.save(userGrowth));
     }
 

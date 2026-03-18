@@ -84,8 +84,6 @@ public class PaymentItemsController extends BaseController {
     @Log(title = "统一支付订单明细表", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody PaymentItems paymentItems) {
-        paymentItems.setCreateBy(getUsername());
-        paymentItems.setCreateId(getUserId());
         return toAjax(paymentItemsService.save(paymentItems));
     }
 

@@ -84,8 +84,6 @@ public class XiaoeOrdersController extends BaseController {
     @Log(title = "小鹅通订单同步表", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody XiaoeOrders xiaoeOrders) {
-        xiaoeOrders.setCreateBy(getUsername());
-        xiaoeOrders.setCreateId(getUserId());
         return toAjax(xiaoeOrdersService.save(xiaoeOrders));
     }
 

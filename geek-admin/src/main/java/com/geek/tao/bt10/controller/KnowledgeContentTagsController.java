@@ -84,8 +84,6 @@ public class KnowledgeContentTagsController extends BaseController {
     @Log(title = "知识内容与标签多对多关联", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody KnowledgeContentTags knowledgeContentTags) {
-        knowledgeContentTags.setCreateBy(getUsername());
-        knowledgeContentTags.setCreateId(getUserId());
         return toAjax(knowledgeContentTagsService.save(knowledgeContentTags));
     }
 

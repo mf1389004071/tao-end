@@ -84,8 +84,6 @@ public class KnowledgeCategoryController extends BaseController {
     @Log(title = "知识库分类", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody KnowledgeCategory knowledgeCategory) {
-        knowledgeCategory.setCreateBy(getUsername());
-        knowledgeCategory.setCreateId(getUserId());
         return toAjax(knowledgeCategoryService.save(knowledgeCategory));
     }
 

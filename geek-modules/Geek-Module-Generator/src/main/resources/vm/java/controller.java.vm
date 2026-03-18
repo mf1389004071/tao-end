@@ -90,8 +90,6 @@ public class ${ClassName}Controller extends BaseController {
     @Log(title = "${functionName}", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody ${ClassName} ${className}) {
-        ${className}.setCreateBy(getUsername());
-        ${className}.setCreateId(getUserId());
         return toAjax(${className}Service.save(${className}));
     }
 

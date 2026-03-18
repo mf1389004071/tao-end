@@ -285,6 +285,8 @@ public class EventInfoServiceImpl extends ServiceImpl<EventInfoMapper, EventInfo
         if (eventInfo.getStatus() != null && !eventInfo.getStatus().isEmpty()) {
             qw.and(EventInfo::getStatus).eq(eventInfo.getStatus());
         }
+        // 默认按更新时间倒序（近期热门/列表页要求）
+        qw.orderBy(EventInfo::getUpdateTime, false);
         return qw;
     }
 

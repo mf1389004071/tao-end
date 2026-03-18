@@ -84,8 +84,6 @@ public class AiVectorsController extends BaseController {
     @Log(title = "AI向量", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody AiVectors aiVectors) {
-        aiVectors.setCreateBy(getUsername());
-        aiVectors.setCreateId(getUserId());
         return toAjax(aiVectorsService.save(aiVectors));
     }
 

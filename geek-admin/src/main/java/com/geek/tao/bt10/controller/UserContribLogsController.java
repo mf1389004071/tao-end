@@ -84,8 +84,6 @@ public class UserContribLogsController extends BaseController {
     @Log(title = "用户贡献点收支流水", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody UserContribLogs userContribLogs) {
-        userContribLogs.setCreateBy(getUsername());
-        userContribLogs.setCreateId(getUserId());
         return toAjax(userContribLogsService.save(userContribLogs));
     }
 

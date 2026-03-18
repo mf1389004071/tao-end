@@ -84,8 +84,6 @@ public class KnowledgeActionController extends BaseController {
     @Log(title = "用户对知识内容的行为记录", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody KnowledgeAction knowledgeAction) {
-        knowledgeAction.setCreateBy(getUsername());
-        knowledgeAction.setCreateId(getUserId());
         return toAjax(knowledgeActionService.save(knowledgeAction));
     }
 

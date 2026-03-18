@@ -84,8 +84,6 @@ public class DataChangeLogsController extends BaseController {
     @Log(title = "通用业务数据变更审计", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody DataChangeLogs dataChangeLogs) {
-        dataChangeLogs.setCreateBy(getUsername());
-        dataChangeLogs.setCreateId(getUserId());
         return toAjax(dataChangeLogsService.save(dataChangeLogs));
     }
 

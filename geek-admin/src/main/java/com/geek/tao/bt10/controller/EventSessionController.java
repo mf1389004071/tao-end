@@ -84,8 +84,6 @@ public class EventSessionController extends BaseController {
     @Log(title = "周期活动的单场次", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody EventSession eventSession) {
-        eventSession.setCreateBy(getUsername());
-        eventSession.setCreateId(getUserId());
         return toAjax(eventSessionService.save(eventSession));
     }
 

@@ -84,8 +84,6 @@ public class EventRoleController extends BaseController {
     @Log(title = "活动所需角色", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody EventRole eventRole) {
-        eventRole.setCreateBy(getUsername());
-        eventRole.setCreateId(getUserId());
         return toAjax(eventRoleService.save(eventRole));
     }
 

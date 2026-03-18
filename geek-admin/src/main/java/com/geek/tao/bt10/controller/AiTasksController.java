@@ -84,8 +84,6 @@ public class AiTasksController extends BaseController {
     @Log(title = "AI异步任务", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody AiTasks aiTasks) {
-        aiTasks.setCreateBy(getUsername());
-        aiTasks.setCreateId(getUserId());
         return toAjax(aiTasksService.save(aiTasks));
     }
 

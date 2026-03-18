@@ -84,8 +84,6 @@ public class EventInfoTagsController extends BaseController {
     @Log(title = "活动与标签多对多关联", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody EventInfoTags eventInfoTags) {
-        eventInfoTags.setCreateBy(getUsername());
-        eventInfoTags.setCreateId(getUserId());
         return toAjax(eventInfoTagsService.save(eventInfoTags));
     }
 

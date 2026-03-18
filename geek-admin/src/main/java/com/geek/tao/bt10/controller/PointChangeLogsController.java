@@ -84,8 +84,6 @@ public class PointChangeLogsController extends BaseController {
     @Log(title = "积分变动审计", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody PointChangeLogs pointChangeLogs) {
-        pointChangeLogs.setCreateBy(getUsername());
-        pointChangeLogs.setCreateId(getUserId());
         return toAjax(pointChangeLogsService.save(pointChangeLogs));
     }
 

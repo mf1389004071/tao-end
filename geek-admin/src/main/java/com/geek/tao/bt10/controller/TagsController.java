@@ -84,8 +84,6 @@ public class TagsController extends BaseController {
     @Log(title = "通用标签定义表", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody Tags tags) {
-        tags.setCreateBy(getUsername());
-        tags.setCreateId(getUserId());
         return toAjax(tagsService.save(tags));
     }
 
