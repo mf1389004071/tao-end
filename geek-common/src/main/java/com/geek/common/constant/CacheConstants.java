@@ -42,6 +42,12 @@ public class CacheConstants {
     /** 文件路径 redis key */
     public static final String FILE_PATH_MD5_KEY = "file_path_md5";
 
+    /** bt10 枚举缓存 cache key（EventType、TagType 等） */
+    public static final String BT10_ENUM_KEY = "bt10_enum";
+
+    /** bt10 业务状态缓存 cache key（Status.Event 等） */
+    public static final String BT10_STATUS_KEY = "bt10_status";
+
     private CacheConstants() {
     }
 }

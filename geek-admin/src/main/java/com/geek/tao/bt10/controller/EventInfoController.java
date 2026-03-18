@@ -112,4 +112,26 @@ public class EventInfoController extends BaseController {
     public AjaxResult remove(@PathVariable("ids") List<Long> ids) {
         return toAjax(eventInfoService.removeByIds(ids));
     }
+
+    /**
+     * 更新活动或线下课程主表业务状态：DRAFT -> PUBLISHED
+     */
+    @Operation(summary = "获取活动或线下课程主表详细信息")
+    @PreAuthorize("@ss.hasPermi('bt10:eventinfo:edit')")
+    @Log(title = "活动或线下课程主表", businessType = BusinessType.UPDATE)
+    @GetMapping("/{ids}/published")
+    public AjaxResult updateBizStatusPublished(@PathVariable("ids") List<Long> ids) {
+        //TODO 
+        List<EventInfo> eventInfos = eventInfoService.listByIds(ids);
+        if(eventInfos==null || ids.size() != eventInfos.size()){
+            return error("出现无效的活动ID列表");
+        }
+        long eventInfosSize = eventInfos.stream().filter(m -> "DRAFT".equals(m.getBizStatus())).toList().size();
+        if(ids.size() != eventInfosSize){
+            return error("出现无效的活动状态列表");
+        }
+        eventInfos.forEach(m -> {m.setBizStatus("PUBLISHED");});
+        return toAjax(eventInfoService.updateBatch(eventInfos));
+    }
+
 }

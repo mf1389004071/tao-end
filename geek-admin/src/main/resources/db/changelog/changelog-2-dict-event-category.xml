@@ -5,13 +5,14 @@
 
     <!-- 活动分类：字典类型 + 字典数据（近期热门、精选、进阶课、成长课），重启生效 -->
     <changeSet author="tao-business" id="dict-event-category-type">
+        <validCheckSum>9:a4d742b886b4f987d64ebc2ceaa44021</validCheckSum>
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(1) FROM sys_dict_type WHERE dict_type = '活动分类'</sqlCheck>
         </preConditions>
         <insert tableName="sys_dict_type">
             <column name="dict_id" valueNumeric="200"/>
             <column name="dict_name" value="活动分类"/>
-            <column name="dict_type" value="活动分类"/>
+            <column name="dict_type" value="event_category"/>
             <column name="status" value="0"/>
             <column name="create_by" value="admin"/>
             <column name="create_time" valueComputed="CURRENT_TIMESTAMP"/>
@@ -19,6 +20,7 @@
         </insert>
     </changeSet>
     <changeSet author="tao-business" id="dict-event-category-data">
+        <validCheckSum>9:028c341fa8a80c8ad64b57c1c868b726</validCheckSum>
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(1) FROM sys_dict_data WHERE dict_type = '活动分类'</sqlCheck>
         </preConditions>
@@ -26,8 +28,9 @@
             <column name="dict_code" valueNumeric="200"/>
             <column name="dict_sort" valueNumeric="1"/>
             <column name="dict_label" value="近期热门"/>
-            <column name="dict_value" value="近期热门"/>
-            <column name="dict_type" value="活动分类"/>
+            <column name="dict_value" value="ec_hot_last"/>
+            <column name="dict_type" value="event_category"/>
+            <column name="list_class" value="default"/>
             <column name="is_default" value="Y"/>
             <column name="status" value="0"/>
             <column name="create_by" value="admin"/>
@@ -37,8 +40,9 @@
             <column name="dict_code" valueNumeric="201"/>
             <column name="dict_sort" valueNumeric="2"/>
             <column name="dict_label" value="精选"/>
-            <column name="dict_value" value="精选"/>
-            <column name="dict_type" value="活动分类"/>
+            <column name="dict_value" value="ec_star"/>
+            <column name="dict_type" value="event_category"/>
+            <column name="list_class" value="default"/>
             <column name="is_default" value="N"/>
             <column name="status" value="0"/>
             <column name="create_by" value="admin"/>
@@ -48,8 +52,9 @@
             <column name="dict_code" valueNumeric="202"/>
             <column name="dict_sort" valueNumeric="3"/>
             <column name="dict_label" value="进阶课"/>
-            <column name="dict_value" value="进阶课"/>
-            <column name="dict_type" value="活动分类"/>
+            <column name="dict_value" value="ec_lever2"/>
+            <column name="dict_type" value="event_category"/>
+            <column name="list_class" value="default"/>
             <column name="is_default" value="N"/>
             <column name="status" value="0"/>
             <column name="create_by" value="admin"/>
@@ -59,8 +64,9 @@
             <column name="dict_code" valueNumeric="203"/>
             <column name="dict_sort" valueNumeric="4"/>
             <column name="dict_label" value="成长课"/>
-            <column name="dict_value" value="成长课"/>
-            <column name="dict_type" value="活动分类"/>
+            <column name="dict_value" value="ec_upup"/>
+            <column name="dict_type" value="event_category"/>
+            <column name="list_class" value="default"/>
             <column name="is_default" value="N"/>
             <column name="status" value="0"/>
             <column name="create_by" value="admin"/>
