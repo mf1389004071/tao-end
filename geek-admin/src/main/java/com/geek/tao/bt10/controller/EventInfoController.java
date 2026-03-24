@@ -1,5 +1,7 @@
 package com.geek.tao.bt10.controller;
 
+import com.geek.tao.bt10.common.Status;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -111,23 +113,63 @@ public class EventInfoController extends BaseController {
     }
 
     /**
-     * 更新活动或线下课程主表业务状态：DRAFT -> PUBLISHED
+     * 更新活动或线下课程主表业务状态：
+     * DRAFT -> PUBLISHED
+     * PUBLISHED -> ENDED 或 CANCELLED
      */
-    @Operation(summary = "获取活动或线下课程主表详细信息")
+    @Operation(summary = "更新活动或线下课程主表业务状态")
     @PreAuthorize("@ss.hasPermi('bt10:eventinfo:edit')")
     @Log(title = "活动或线下课程主表", businessType = BusinessType.UPDATE)
-    @GetMapping("/{ids}/published")
-    public AjaxResult updateBizStatusPublished(@PathVariable("ids") List<Long> ids) {
-        //TODO 
+    @GetMapping("/{ids}/go/{bizStatus}")
+    public AjaxResult updateBizStatus(@PathVariable("ids") List<Long> ids, @PathVariable("bizStatus") String bizStatus) {
+        Status.Event bs = Status.Event.valueOf(bizStatus);
+        if(ObjectUtils.isEmpty(bs)){
+            logger.error("无效的业务状态: {}", bizStatus);
+            return error("无效的业务状态");
+        }
         List<EventInfo> eventInfos = eventInfoService.listByIds(ids);
         if(eventInfos==null || ids.size() != eventInfos.size()){
-            return error("出现无效的活动ID列表");
+            logger.error("无效的活动ID列表: {}", ids);
+            return error("无效的活动ID列表");
         }
-        long eventInfosSize = eventInfos.stream().filter(m -> "DRAFT".equals(m.getBizStatus())).toList().size();
-        if(ids.size() != eventInfosSize){
-            return error("出现无效的活动状态列表");
+        switch (bs){
+            case DRAFT -> {
+                //无需处理
+            }
+            case PUBLISHED -> {
+                List<Long> idsNaN = eventInfos.stream()
+                        .filter(m -> !Status.Event.DRAFT.getCode().equals(m.getBizStatus()))
+                        .map(EventInfo::getId).toList();
+                if(ObjectUtils.isNotEmpty(idsNaN)){
+                    logger.error("无效的活动业务状态({}->{})列表: {}", Status.Event.DRAFT, Status.Event.PUBLISHED, idsNaN);
+                    return error("无效的活动业务状态列表");
+                }
+                eventInfos.forEach(m -> m.setBizStatus(Status.Event.PUBLISHED.getCode()));
+            }
+            case ENDED -> {
+                List<Long> idsNaN = eventInfos.stream()
+                        .filter(m -> !Status.Event.PUBLISHED.getCode().equals(m.getBizStatus()))
+                        .map(EventInfo::getId).toList();
+                if(ObjectUtils.isNotEmpty(idsNaN)){
+                    logger.error("无效的活动业务状态({}->{})列表: {}", Status.Event.PUBLISHED, Status.Event.ENDED, idsNaN);
+                    return error("无效的活动业务状态列表");
+                }
+                eventInfos.forEach(m -> m.setBizStatus(Status.Event.ENDED.getCode()));
+            }
+            case CANCELLED -> {
+                List<Long> idsNaN = eventInfos.stream()
+                        .filter(m -> !Status.Event.PUBLISHED.getCode().equals(m.getBizStatus()))
+                        .map(EventInfo::getId).toList();
+                if(ObjectUtils.isNotEmpty(idsNaN)){
+                    logger.error("无效的活动业务状态({}->{})列表: {}", Status.Event.PUBLISHED, Status.Event.CANCELLED, idsNaN);
+                    return error("无效的活动业务状态列表");
+                }
+                eventInfos.forEach(m -> m.setBizStatus(Status.Event.CANCELLED.getCode()));
+            }
+            default -> {
+                return error("无效的活动业务状态");
+            }
         }
-        eventInfos.forEach(m -> {m.setBizStatus("PUBLISHED");});
         return toAjax(eventInfoService.updateBatch(eventInfos));
     }
 

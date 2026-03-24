@@ -54,13 +54,13 @@ public class Status {
         return result;
     }
 
+    /**
+     * 活动状态
+     */
     @Getter
-    enum Event {
+    public enum Event {
         DRAFT("DRAFT", "草稿")
         , PUBLISHED("PUBLISHED", "已发布")
-        , REGISTRATION("REGISTRATION", "报名中")
-        , FULL("FULL", "已满")
-        , ONGOING("ONGOING", "进行中")
         , ENDED("ENDED", "已结束")
         , CANCELLED("CANCELLED", "已取消")
         ;
@@ -69,6 +69,69 @@ public class Status {
         private final String desc;
 
         Event(String code, String desc) {
+            this.code = code;
+            this.desc = desc;
+        }
+    }
+
+    /**
+     * 活动参与状态：已报名/已确认/已取消/已签到/缺席
+     */
+    @Getter
+    public enum EventJoin {
+        REGISTERED("REGISTERED", "已报名")
+        , CONFIRMED("CONFIRMED", "已确认")
+        , CANCELLED("CANCELLED", "已取消")
+        , CHECKED_IN("CHECKED_IN", "已签到")
+        , ABSENT("ABSENT", "缺席")
+        ;
+
+        private final String code;
+        private final String desc;
+
+        EventJoin(String code, String desc) {
+            this.code = code;
+            this.desc = desc;
+        }
+    }
+
+    /**
+     * 订单支付状态：待支付/已支付/已全额退款/已部分退款/支付失败/已取消
+     */
+    @Getter
+    public enum Payment {
+        PENDING("PENDING", "待支付")
+        , PAID("PAID", "已支付")
+        , FULL_REFUNDED("FULL_REFUNDED", "已全额退款")
+        , PARTIAL_REFUNDED("PARTIAL_REFUNDED", "已部分退款")
+        , FAILED("FAILED", "支付失败")
+        , CANCELLED("CANCELLED", "已取消")
+        ;
+
+        private final String code;
+        private final String desc;
+
+        Payment(String code, String desc) {
+            this.code = code;
+            this.desc = desc;
+        }
+    }
+
+    /**
+     * 转化状态：无/有意向/跟进中/已转化
+     */
+    @Getter
+    public enum Conversion {
+        NONE("NONE", "无")
+        , INTENT("INTENT", "有意向")
+        , FOLLOWING("FOLLOWING", "跟进中")
+        , CONVERTED("CONVERTED", "已转化")
+        ;
+
+        private final String code;
+        private final String desc;
+
+        Conversion(String code, String desc) {
             this.code = code;
             this.desc = desc;
         }
