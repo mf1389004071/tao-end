@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- C端演示数据：与表结构解耦，单独维护 -->
+    <changeSet author="tao-business" id="business-048-cust-demo-seed" dbms="postgresql">
+        <sql><![CDATA[
+            -- notices：首页公告、通知详情
+            INSERT INTO notices (id, title, content, type, is_urgent, publish_time, create_id, create_by, create_time, status, del_flag, remark)
+            SELECT 900001, '紧急通知：五一期间「把自己产品化」线下站席位变动',
+                   '受场地容量与嘉宾排期调整影响，深圳站将新增5个共创席位，并同步开放线上连线位。请已报名同学在活动前48小时确认出行安排。',
+                   'system', true, NOW() - INTERVAL '1 day', 1, 'admin', NOW() - INTERVAL '1 day', '0', 0, 'C端演示数据'
+            WHERE NOT EXISTS (SELECT 1 FROM notices WHERE id = 900001);
+
+            INSERT INTO notices (id, title, content, type, is_urgent, publish_time, create_id, create_by, create_time, status, del_flag, remark)
+            SELECT 900002, '系统升级公告：知识库检索能力优化上线',
+                   '知识库新增语义检索与标签聚合能力，可按话题快速定位课程、工具与案例内容。',
+                   'system', false, NOW() - INTERVAL '3 day', 1, 'admin', NOW() - INTERVAL '3 day', '0', 0, 'C端演示数据'
+            WHERE NOT EXISTS (SELECT 1 FROM notices WHERE id = 900002);
+
+            -- notifications：消息中心
+            INSERT INTO notifications (
+                id, user_id, title, content, notification_type, related_type, related_id, is_read, read_time,
+                create_id, create_by, create_time, update_id, update_by, update_time, status, del_flag, remark
+            )
+            SELECT
+                901001, 1, '积分商城正式上线', '现在可以使用贡献值兑换权益啦！',
+                'system', 'NOTICE', 900002, false, NULL,
+                1, 'admin', NOW() - INTERVAL '2 hour', 1, 'admin', NOW() - INTERVAL '2 hour', '0', 0, 'C端演示数据'
+            WHERE NOT EXISTS (SELECT 1 FROM notifications WHERE id = 901001);
+
+            INSERT INTO notifications (
+                id, user_id, title, content, notification_type, related_type, related_id, is_read, read_time,
+                create_id, create_by, create_time, update_id, update_by, update_time, status, del_flag, remark
+            )
+            SELECT
+                901002, 1, '王老师回复了你的评论', '你关于“蛋壳理论”的实修观点已被精选，继续保持。',
+                'interaction', 'KNOWLEDGE_CONTENT', 920003, true, NOW() - INTERVAL '1 day',
+                1, 'admin', NOW() - INTERVAL '1 day', 1, 'admin', NOW() - INTERVAL '1 day', '0', 0, 'C端演示数据'
+            WHERE NOT EXISTS (SELECT 1 FROM notifications WHERE id = 901002);
+
+            -- event_info：首页热门、活动列表、活动详情
+            INSERT INTO event_info (
+                id, title, join_type, category, start_time, end_time, join_deadline, max_participants,
+                registered_count, checked_in_count, location, address, city, cover_image_url, list_image_url,
+                detail_image_url, poster_image_url, biz_status, is_public, base_points_reward, event_price,
+                event_type, target_audience, learning_objectives, curriculum, event_tags, organizer, contact, pm_user_id,
+                text1, create_id, create_by, create_time, status, del_flag, remark
+            )
+            SELECT
+                910001, '把自己产品化 · 深圳站', 'OFFLINE', 'WORKSHOP',
+                NOW() + INTERVAL '7 day', NOW() + INTERVAL '7 day 6 hour', NOW() + INTERVAL '5 day', 120,
+                86, 0, '深圳 · 南山科兴科学园', '深圳市南山区科苑路15号', '深圳',
+                'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=1200',
+                'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200',
+                'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200,https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1200',
+                'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200',
+                'PUBLISHED', true, 30, 2999.0000,
+                'OFFLINE_COURSE', '成长型创始人、IP主理人、转型教练',
+                '产品化思维重构,商业定位拆解,一对一方案诊断,共创落地清单',
+                '["产品化思维底层逻辑","个人商业画布拆解","流量与信任转换路径","案例共创与行动清单"]'::jsonb,
+                'PRODUCTIZE,OFFLINE,COCREATION', '十倍好成长运营中心', 'assistant@better10.com', 1,
+                '<p>本场为沉浸式线下课程，聚焦“从经验输出到产品化交付”的完整路径。</p><p>你将带走可复用的定位模板、课程包装模板与成交话术框架。</p>',
+                1, 'admin', NOW() - INTERVAL '2 day', '0', 0, 'C端演示数据'
+            WHERE NOT EXISTS (SELECT 1 FROM event_info WHERE id = 910001);
+
+            INSERT INTO event_info (
+                id, title, join_type, category, start_time, end_time, join_deadline, max_participants,
+                registered_count, checked_in_count, location, address, city, cover_image_url, list_image_url,
+                detail_image_url, poster_image_url, biz_status, is_public, base_points_reward, event_price,
+                event_type, target_audience, learning_objectives, curriculum, event_tags, organizer, contact, pm_user_id,
+                text1, create_id, create_by, create_time, status, del_flag, remark
+            )
+            SELECT
+                910002, '实修工作坊 · 上海站', 'OFFLINE', 'WORKSHOP',
+                NOW() + INTERVAL '14 day', NOW() + INTERVAL '14 day 5 hour', NOW() + INTERVAL '12 day', 80,
+                42, 0, '上海 · 徐汇滨江', '上海市徐汇区龙腾大道188号', '上海',
+                'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=1200',
+                'https://images.unsplash.com/photo-1511578314322-379afb476865?w=1200',
+                'https://images.unsplash.com/photo-1511578314322-379afb476865?w=1200',
+                'https://images.unsplash.com/photo-1464375117522-1311d6a5b81f?w=1200',
+                'PUBLISHED', true, 20, 1999.0000,
+                'OFFLINE_COURSE', '教培讲师、咨询顾问、内容创业者',
+                '认知重构,案例复盘,小组共创',
+                '["认知重构工作坊","案例拆解与演练","导师答疑与复盘"]'::jsonb,
+                'GROWTH,WORKSHOP,PRACTICE', '十倍好成长运营中心', 'service@better10.com', 1,
+                '<p>上海站强调“小班深度互动”，适合希望快速形成可执行方案的同学。</p>',
+                1, 'admin', NOW() - INTERVAL '4 day', '0', 0, 'C端演示数据'
+            WHERE NOT EXISTS (SELECT 1 FROM event_info WHERE id = 910002);
+
+            -- knowledge_content：成长/搜索/详情页
+            INSERT INTO knowledge_content (
+                id, title, subtitle, content, content_type, author_id, tags, biz_status, publish_time,
+                view_count, like_count, comment_count, share_count, collect_count, ai_summary, promotional_text, text2, text3,
+                create_id, create_by, create_time, status, del_flag, remark
+            )
+            SELECT
+                920001, '蛋壳理论：从内打破是生命', '探讨个体成长的内生动力',
+                '从“蛋壳”隐喻出发，解释外部刺激与内部觉察的关系，给出可执行的日更训练方法。',
+                'WIKI', 1, '蛋壳理论,自我成长,方法论', 'PUBLISHED', NOW() - INTERVAL '10 day',
+                1280, 36, 9, 14, 21, '从内在驱动力构建稳定成长系统。', '高密度实修框架，帮助你建立长期行动惯性。',
+                'https://example.com/bt10/wiki/egg-shell-v3.pdf', '实操手册 V3.2',
+                1, 'admin', NOW() - INTERVAL '10 day', '0', 0, 'C端演示数据'
+            WHERE NOT EXISTS (SELECT 1 FROM knowledge_content WHERE id = 920001);
+
+            INSERT INTO knowledge_content (
+                id, title, subtitle, content, content_type, author_id, tags, biz_status, publish_time,
+                view_count, like_count, comment_count, share_count, collect_count, ai_summary, promotional_text,
+                create_id, create_by, create_time, status, del_flag, remark
+            )
+            SELECT
+                920002, '七圣境：顶级高手的人生推演沙盘', '通过七个维度重构你的认知系统',
+                '围绕“心智、关系、价值、节奏”四个核心维度，拆解高手跃迁路径与关键动作。',
+                'WIKI', 1, '七圣境,认知跃迁,系统思考', 'PUBLISHED', NOW() - INTERVAL '8 day',
+                986, 41, 6, 11, 18, '用阶段化模型帮助你识别当前瓶颈并设计下一跳。', '从模糊努力到结构化成长。',
+                1, 'admin', NOW() - INTERVAL '8 day', '0', 0, 'C端演示数据'
+            WHERE NOT EXISTS (SELECT 1 FROM knowledge_content WHERE id = 920002);
+
+            INSERT INTO knowledge_content (
+                id, title, subtitle, content, content_type, author_id, tags, biz_status, publish_time,
+                view_count, like_count, comment_count, share_count, collect_count, ai_summary, promotional_text,
+                create_id, create_by, create_time, status, del_flag, remark
+            )
+            SELECT
+                920003, '关于蛋壳理论的3点实修笔记', '从洞察到行动的落地复盘',
+                '基于30天实践记录，复盘“觉察-拆解-替换”三步法，给出可复制的日常训练清单。',
+                'ARTICLE', 1, '蛋壳理论,实修心得,行动清单', 'PUBLISHED', NOW() - INTERVAL '6 day',
+                1522, 58, 15, 20, 33, '围绕真实实践场景给出可执行建议。', '实操向内容，适合直接照做。',
+                1, 'admin', NOW() - INTERVAL '6 day', '0', 0, 'C端演示数据'
+            WHERE NOT EXISTS (SELECT 1 FROM knowledge_content WHERE id = 920003);
+
+            INSERT INTO knowledge_content (
+                id, title, subtitle, content, content_type, author_id, tags, biz_status, publish_time,
+                view_count, like_count, comment_count, share_count, collect_count, ai_summary, promotional_text, text1, text2, text3,
+                create_id, create_by, create_time, status, del_flag, remark
+            )
+            SELECT
+                920004, '七圣境扫描工具箱', '用于自检当前能量场状态',
+                '通过身体、情绪、认知、关系、事业、财富、精神七个维度进行生命力自查。',
+                'TOOL', 1, '七圣境,工具箱,实修', 'PUBLISHED', NOW() - INTERVAL '5 day',
+                640, 19, 2, 5, 9, '把抽象成长问题转成可量化的维度自评。', '适合每周复盘使用。',
+                '静心5分钟；按1-10分对各维度评分；连接各点形成雷达图；分析短板原因',
+                'https://example.com/bt10/tools/seven-realm-workbook.pdf', '下载七圣境工作坊PDF',
+                1, 'admin', NOW() - INTERVAL '5 day', '0', 0, 'C端演示数据'
+            WHERE NOT EXISTS (SELECT 1 FROM knowledge_content WHERE id = 920004);
+
+            -- user_profiles：个人中心/用户画像数据
+            INSERT INTO user_profiles (
+                user_id, real_name, points, total_points, contribution_points, total_contribution_points,
+                growth_stage, join_date, last_active_at, inviter_id, invitation_code, biz_role,
+                talent_summary, business_positioning, create_id, create_by, create_time, status, del_flag, remark
+            )
+            SELECT
+                1, '系统演示用户', 1280, 3680, 520.00, 1520.00,
+                'MASTER', CURRENT_DATE - 180, NOW() - INTERVAL '2 hour', NULL, 'BT10DEMO', 'MEMBER',
+                '擅长结构化表达、课程设计与社群共创。', '帮助知识型创作者完成产品化升级，形成可复用交付系统。',
+                1, 'admin', NOW() - INTERVAL '30 day', '0', 0, 'C端演示数据'
+            WHERE NOT EXISTS (SELECT 1 FROM user_profiles WHERE user_id = 1);
+
+            -- user_invite：邀请页面
+            INSERT INTO user_invite (
+                id, user_id, inviter_id, invite_code, invite_time, reward_status, reward_claimed, reward_points, reward_contrib,
+                create_id, create_by, create_time, status, del_flag, remark
+            )
+            SELECT
+                930001, 1, NULL, 'BT10DEMO', NOW() - INTERVAL '20 day', 'ACCEPTED', true, 100, 0.0000,
+                1, 'admin', NOW() - INTERVAL '20 day', '0', 0, 'C端演示数据'
+            WHERE NOT EXISTS (SELECT 1 FROM user_invite WHERE id = 930001);
+
+            INSERT INTO user_invite (
+                id, user_id, inviter_id, invite_code, invite_time, reward_status, reward_claimed, reward_points, reward_contrib,
+                create_id, create_by, create_time, status, del_flag, remark
+            )
+            SELECT
+                930002, 1, NULL, 'BT10DEMO', NOW() - INTERVAL '11 day', 'ACCEPTED', true, 100, 0.0000,
+                1, 'admin', NOW() - INTERVAL '11 day', '0', 0, 'C端演示数据'
+            WHERE NOT EXISTS (SELECT 1 FROM user_invite WHERE id = 930002);
+
+            -- user_point_logs：积分明细页
+            INSERT INTO user_point_logs (
+                id, user_id, action_type, points, balance_before, balance_after, related_type, related_id, expired_time,
+                create_id, create_by, create_time, status, del_flag, remark
+            )
+            SELECT
+                940001, 1, 'PUBLISH_CONTENT', 10, 1270, 1280, 'KNOWLEDGE_CONTENT', 920003, NOW() + INTERVAL '365 day',
+                1, 'admin', NOW() - INTERVAL '1 day', '0', 0, 'C端演示数据'
+            WHERE NOT EXISTS (SELECT 1 FROM user_point_logs WHERE id = 940001);
+
+            INSERT INTO user_point_logs (
+                id, user_id, action_type, points, balance_before, balance_after, related_type, related_id, expired_time,
+                create_id, create_by, create_time, status, del_flag, remark
+            )
+            SELECT
+                940002, 1, 'INVITE_USER', 50, 1220, 1270, 'USER_INVITE', 930001, NOW() + INTERVAL '365 day',
+                1, 'admin', NOW() - INTERVAL '3 day', '0', 0, 'C端演示数据'
+            WHERE NOT EXISTS (SELECT 1 FROM user_point_logs WHERE id = 940002);
+
+            INSERT INTO user_point_logs (
+                id, user_id, action_type, points, balance_before, balance_after, related_type, related_id, expired_time,
+                create_id, create_by, create_time, status, del_flag, remark
+            )
+            SELECT
+                940003, 1, 'REDEEM_PRODUCT', -200, 1420, 1220, 'POINT_PRODUCT', NULL, NULL,
+                1, 'admin', NOW() - INTERVAL '6 day', '0', 0, 'C端演示数据'
+            WHERE NOT EXISTS (SELECT 1 FROM user_point_logs WHERE id = 940003);
+        ]]></sql>
+    </changeSet>
+
+</databaseChangeLog>
