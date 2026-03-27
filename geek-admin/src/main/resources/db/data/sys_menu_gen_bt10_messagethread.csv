@@ -1,0 +1,7 @@
+menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
+12390,私信会话,3,1,messagethread,bt10/messagethread/index,,,1,0,C,0,0,bt10:messagethread:list,#,admin,2025-01-01 00:00:00,,,私信会话菜单
+12391,私信会话查询,12390,1,#,,,,1,0,F,0,0,bt10:messagethread:query,#,admin,2025-01-01 00:00:00,,,""
+12392,私信会话新增,12390,2,#,,,,1,0,F,0,0,bt10:messagethread:add,#,admin,2025-01-01 00:00:00,,,""
+12393,私信会话修改,12390,3,#,,,,1,0,F,0,0,bt10:messagethread:edit,#,admin,2025-01-01 00:00:00,,,""
+12394,私信会话删除,12390,4,#,,,,1,0,F,0,0,bt10:messagethread:remove,#,admin,2025-01-01 00:00:00,,,""
+12395,私信会话导出,12390,5,#,,,,1,0,F,0,0,bt10:messagethread:export,#,admin,2025-01-01 00:00:00,,,""

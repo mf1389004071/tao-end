@@ -1,0 +1,7 @@
+menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
+12400,私信消息,3,1,privatemessage,bt10/privatemessage/index,,,1,0,C,0,0,bt10:privatemessage:list,#,admin,2025-01-01 00:00:00,,,私信消息菜单
+12401,私信消息查询,12400,1,#,,,,1,0,F,0,0,bt10:privatemessage:query,#,admin,2025-01-01 00:00:00,,,""
+12402,私信消息新增,12400,2,#,,,,1,0,F,0,0,bt10:privatemessage:add,#,admin,2025-01-01 00:00:00,,,""
+12403,私信消息修改,12400,3,#,,,,1,0,F,0,0,bt10:privatemessage:edit,#,admin,2025-01-01 00:00:00,,,""
+12404,私信消息删除,12400,4,#,,,,1,0,F,0,0,bt10:privatemessage:remove,#,admin,2025-01-01 00:00:00,,,""
+12405,私信消息导出,12400,5,#,,,,1,0,F,0,0,bt10:privatemessage:export,#,admin,2025-01-01 00:00:00,,,""

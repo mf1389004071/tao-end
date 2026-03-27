@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet author="tao-business" id="business-049-knowledge-category-seed" dbms="postgresql">
+        <sql><![CDATA[
+            -- 固定三类：话题 / 工具 / 金句（slug 稳定，供前端与关联）
+            INSERT INTO knowledge_category (name, slug, parent_id, order_num, status, del_flag, create_time)
+            SELECT '话题', 'kb-topic', NULL, 1, '0', 0, NOW()
+            WHERE NOT EXISTS (SELECT 1 FROM knowledge_category WHERE slug = 'kb-topic');
+
+            INSERT INTO knowledge_category (name, slug, parent_id, order_num, status, del_flag, create_time)
+            SELECT '工具', 'kb-tool', NULL, 2, '0', 0, NOW()
+            WHERE NOT EXISTS (SELECT 1 FROM knowledge_category WHERE slug = 'kb-tool');
+
+            INSERT INTO knowledge_category (name, slug, parent_id, order_num, status, del_flag, create_time)
+            SELECT '金句', 'kb-quote', NULL, 3, '0', 0, NOW()
+            WHERE NOT EXISTS (SELECT 1 FROM knowledge_category WHERE slug = 'kb-quote');
+
+            UPDATE knowledge_content kc SET category_id = (SELECT id FROM knowledge_category WHERE slug = 'kb-topic' LIMIT 1)
+            WHERE kc.content_type IN ('WIKI', 'ARTICLE') AND (kc.category_id IS NULL OR kc.category_id = 0);
+
+            UPDATE knowledge_content kc SET category_id = (SELECT id FROM knowledge_category WHERE slug = 'kb-tool' LIMIT 1)
+            WHERE kc.content_type = 'TOOL' AND (kc.category_id IS NULL OR kc.category_id = 0);
+
+            UPDATE knowledge_content kc SET category_id = (SELECT id FROM knowledge_category WHERE slug = 'kb-quote' LIMIT 1)
+            WHERE kc.content_type = 'QUOTE' AND (kc.category_id IS NULL OR kc.category_id = 0);
+
+            INSERT INTO knowledge_content (
+                id, title, subtitle, content, content_type, category_id, author_id, tags, biz_status, publish_time,
+                view_count, like_count, comment_count, share_count, collect_count, ai_summary, promotional_text,
+                create_id, create_by, create_time, status, del_flag, remark
+            )
+            SELECT
+                920005, '利他是最高级的学习', '来自十倍好实践社群',
+                '当你把价值交付给世界，世界会回馈你成长的加速度。',
+                'QUOTE', (SELECT id FROM knowledge_category WHERE slug = 'kb-quote' LIMIT 1), 1, '利他,学习,金句', 'PUBLISHED', NOW() - INTERVAL '2 day',
+                320, 12, 1, 0, 4, '短句可收藏、可转发，用于每日提醒。', '共鸣金句',
+                1, 'admin', NOW() - INTERVAL '2 day', '0', 0, 'C端演示数据'
+            WHERE NOT EXISTS (SELECT 1 FROM knowledge_content WHERE id = 920005);
+        ]]></sql>
+    </changeSet>
+
+</databaseChangeLog>

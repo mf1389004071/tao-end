@@ -1,0 +1,7 @@
+menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
+12410,用户社交行为,3,1,usersocialaction,bt10/usersocialaction/index,,,1,0,C,0,0,bt10:usersocialaction:list,#,admin,2025-01-01 00:00:00,,,用户社交行为菜单
+12411,用户社交行为查询,12410,1,#,,,,1,0,F,0,0,bt10:usersocialaction:query,#,admin,2025-01-01 00:00:00,,,""
+12412,用户社交行为新增,12410,2,#,,,,1,0,F,0,0,bt10:usersocialaction:add,#,admin,2025-01-01 00:00:00,,,""
+12413,用户社交行为修改,12410,3,#,,,,1,0,F,0,0,bt10:usersocialaction:edit,#,admin,2025-01-01 00:00:00,,,""
+12414,用户社交行为删除,12410,4,#,,,,1,0,F,0,0,bt10:usersocialaction:remove,#,admin,2025-01-01 00:00:00,,,""
+12415,用户社交行为导出,12410,5,#,,,,1,0,F,0,0,bt10:usersocialaction:export,#,admin,2025-01-01 00:00:00,,,""
