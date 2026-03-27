@@ -2,11 +2,15 @@
 oauth:
   wx:
     miniapp:
+      # TODO(微信小程序快捷登录): 填你的微信小程序 AppID
       appId: appId
+      # TODO(微信小程序快捷登录): 填你的微信小程序 AppSecret
       appSecret: appSecret
       url: https://api.weixin.qq.com/sns/jscode2session
     pub:
+      # TODO(公众号网页授权/登录): 如需启用请填公众号 AppID（当前仓库 pub 登录实现仍需调整，见文档说明）
       appId: appId
+      # TODO(公众号网页授权/登录): 如需启用请填公众号 AppSecret
       appSecret: appSecret
       url: https://api.weixin.qq.com/sns/oauth2/access_token
 
@@ -37,6 +41,17 @@ justauth:
       clientId: Iv1.1be0cdcd71aca63b
       clientSecret: 0d59d28b43152bc8906011624db37b0fed88d154
       redirectUri: http://127.0.0.1:8080/system/auth/social-login/github
+    # TODO(PC 微信扫码登录 - 优先): 有开放平台网站应用能力时配置 wechat_open（前端会优先尝试）
+    # wechat_open:
+    #   clientId: 你的开放平台 AppID
+    #   clientSecret: 你的开放平台 AppSecret
+    #   redirectUri: https://你的域名/system/auth/social-login/wechat_open
+    #
+    # TODO(PC 微信扫码登录 - 降级): 无开放平台时配置公众号网页授权 wechat_mp（前端 wechat_open 失败后会尝试）
+    # wechat_mp:
+    #   clientId: 你的公众号 AppID
+    #   clientSecret: 你的公众号 AppSecret
+    #   redirectUri: https://你的域名/system/auth/social-login/wechat_mp
 
 
 spring:
