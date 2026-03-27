@@ -217,4 +217,16 @@ public class UserProfiles extends BaseEntity
     /** 删除标志（0代表存在 1代表删除） */
     @Schema(title = "删除标志（0代表存在 1代表删除）")
     private Integer delFlag;
+
+    /** 主页被点赞次数 */
+    @Schema(title = "主页被点赞次数")
+    private Long profileReceivedLikeCount;
+
+    /** 主页被收藏次数 */
+    @Schema(title = "主页被收藏次数")
+    private Long profileReceivedCollectCount;
+
+    /** 主页被分享次数 */
+    @Schema(title = "主页被分享次数")
+    private Long profileReceivedShareCount;
 }
