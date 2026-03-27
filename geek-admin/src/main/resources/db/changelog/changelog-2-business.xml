@@ -1433,4 +1433,105 @@
         </createIndex>
     </changeSet>
 
+    <!-- 48. 私信会话（1v1） -->
+    <changeSet author="tao-business" id="business-048-message_thread">
+        <createTable remarks="站内私信会话，两用户唯一一条" tableName="message_thread">
+            <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
+            <column name="user_a_id" type="BIGINT" remarks="参与者A（较小 user_id）"><constraints nullable="false"/></column>
+            <column name="user_b_id" type="BIGINT" remarks="参与者B（较大 user_id）"><constraints nullable="false"/></column>
+            <column name="last_message_id" type="BIGINT" remarks="最后一条消息ID"/>
+            <column name="last_message_time" type="TIMESTAMPTZ" remarks="最后消息时间"/>
+            <column name="last_message_preview" type="TEXT" remarks="最后消息预览"/>
+            <column name="a_unread_count" type="INT" defaultValueNumeric="0" remarks="A 未读数"/>
+            <column name="b_unread_count" type="INT" defaultValueNumeric="0" remarks="B 未读数"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="create_by" type="VARCHAR(64)" defaultValue="" remarks="创建者"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
+            <column name="update_by" type="VARCHAR(64)" defaultValue="" remarks="更新者"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
+            <column name="status" type="CHAR(1)" defaultValue="0" remarks="状态"/>
+            <column name="del_flag" type="SMALLINT" defaultValueNumeric="0" remarks="删除标志"/>
+            <column name="remark" type="TEXT" remarks="备注"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="message_thread" baseColumnNames="user_a_id"
+                                 constraintName="fk_message_thread_user_a" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
+        <addForeignKeyConstraint baseTableName="message_thread" baseColumnNames="user_b_id"
+                                 constraintName="fk_message_thread_user_b" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
+        <createIndex indexName="uk_message_thread_ab" tableName="message_thread" unique="true">
+            <column name="user_a_id"/>
+            <column name="user_b_id"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- 49. 私信消息 -->
+    <changeSet author="tao-business" id="business-049-private_message">
+        <createTable remarks="站内私信消息" tableName="private_message">
+            <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
+            <column name="thread_id" type="BIGINT" remarks="会话ID"><constraints nullable="false"/></column>
+            <column name="sender_id" type="BIGINT" remarks="发送者"><constraints nullable="false"/></column>
+            <column name="receiver_id" type="BIGINT" remarks="接收者"><constraints nullable="false"/></column>
+            <column name="message_type" type="VARCHAR(20)" defaultValue="TEXT" remarks="消息类型"/>
+            <column name="content" type="TEXT" remarks="正文"/>
+            <column name="sent_time" type="TIMESTAMPTZ" remarks="发送时间"/>
+            <column name="read_time" type="TIMESTAMPTZ" remarks="已读时间"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="create_by" type="VARCHAR(64)" defaultValue="" remarks="创建者"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
+            <column name="update_by" type="VARCHAR(64)" defaultValue="" remarks="更新者"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
+            <column name="status" type="CHAR(1)" defaultValue="0" remarks="状态"/>
+            <column name="del_flag" type="SMALLINT" defaultValueNumeric="0" remarks="删除标志"/>
+            <column name="remark" type="TEXT" remarks="备注"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="private_message" baseColumnNames="thread_id"
+                                 constraintName="fk_private_message_thread" referencedTableName="message_thread" referencedColumnNames="id" onDelete="CASCADE"/>
+        <addForeignKeyConstraint baseTableName="private_message" baseColumnNames="sender_id"
+                                 constraintName="fk_private_message_sender" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
+        <addForeignKeyConstraint baseTableName="private_message" baseColumnNames="receiver_id"
+                                 constraintName="fk_private_message_receiver" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
+        <createIndex indexName="idx_private_message_thread_time" tableName="private_message">
+            <column name="thread_id"/>
+            <column name="sent_time"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- 50. 用户主页社交动作（点赞/收藏/分享登记） -->
+    <changeSet author="tao-business" id="business-050-user_social_action">
+        <createTable remarks="用户对另一用户主页的社交动作" tableName="user_social_action">
+            <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
+            <column name="target_user_id" type="BIGINT" remarks="被操作的用户"><constraints nullable="false"/></column>
+            <column name="actor_user_id" type="BIGINT" remarks="操作者"><constraints nullable="false"/></column>
+            <column name="action_type" type="VARCHAR(20)" remarks="LIKE/COLLECT/SHARE"><constraints nullable="false"/></column>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="create_by" type="VARCHAR(64)" defaultValue="" remarks="创建者"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
+            <column name="update_by" type="VARCHAR(64)" defaultValue="" remarks="更新者"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
+            <column name="status" type="CHAR(1)" defaultValue="0" remarks="状态"/>
+            <column name="del_flag" type="SMALLINT" defaultValueNumeric="0" remarks="删除标志"/>
+            <column name="remark" type="TEXT" remarks="备注"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="user_social_action" baseColumnNames="target_user_id"
+                                 constraintName="fk_user_social_action_target" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
+        <addForeignKeyConstraint baseTableName="user_social_action" baseColumnNames="actor_user_id"
+                                 constraintName="fk_user_social_action_actor" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
+        <createIndex indexName="uk_user_social_action_triple" tableName="user_social_action" unique="true">
+            <column name="target_user_id"/>
+            <column name="actor_user_id"/>
+            <column name="action_type"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- 51. 用户画像：主页被赞/藏/分享累计 -->
+    <changeSet author="tao-business" id="business-051-user_profiles_social_counts">
+        <addColumn tableName="user_profiles">
+            <column name="profile_received_like_count" type="BIGINT" defaultValueNumeric="0" remarks="主页被点赞次数"/>
+            <column name="profile_received_collect_count" type="BIGINT" defaultValueNumeric="0" remarks="主页被收藏次数"/>
+            <column name="profile_received_share_count" type="BIGINT" defaultValueNumeric="0" remarks="主页被分享次数"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>
