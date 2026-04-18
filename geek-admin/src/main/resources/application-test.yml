@@ -1,0 +1,12 @@
+# 测试环境：java -jar xxx.jar --spring.profiles.active=test
+# 部署前修改默认 JDBC 或通过环境变量 GEEK_DB_* 注入
+# 模块 profile 由 application.yml 中 spring.profiles.group.test 展开（Boot 3 禁止在 application-test.yml 内写 spring.profiles.include）
+spring:
+  datasource:
+    dynamic:
+      datasource:
+        MASTER:
+          url: ${GEEK_DB_URL:jdbc:postgresql://127.0.0.1:5432/bt10_test}
+          username: ${GEEK_DB_USERNAME:postgres}
+          password: ${GEEK_DB_PASSWORD:Bt10@1234}
+          driver-class-name: org.postgresql.Driver

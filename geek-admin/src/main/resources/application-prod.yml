@@ -1,0 +1,25 @@
+# 生产环境：java -jar xxx.jar --spring.profiles.active=prod --server.port=6013
+# 强烈建议通过环境变量注入 GEEK_DB_URL / GEEK_DB_USERNAME / GEEK_DB_PASSWORD，勿在仓库写真实口令
+# 模块 profile 由 application.yml 中 spring.profiles.group.prod 展开（Boot 3 禁止在 application-prod.yml 内写 spring.profiles.include）
+spring:
+  datasource:
+    dynamic:
+      datasource:
+        MASTER:
+          url: ${GEEK_DB_URL:jdbc:postgresql://127.0.0.1:5432/bt10}
+          username: ${GEEK_DB_USERNAME:postgres}
+          password: ${GEEK_DB_PASSWORD:Bt10@1234}
+          driver-class-name: org.postgresql.Driver
+
+logging:
+  level:
+    "com.geek.**.mapper": INFO
+
+swagger:
+  enabled: false
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

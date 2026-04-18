@@ -32,18 +32,8 @@ spring:
   datasource:
     dynamic:
       primary: MASTER
-      datasource:
-        MASTER:
-            # 与 tao-end/docker 中 bt10-db 一致：库 bt10，端口 5432
-            url: jdbc:postgresql://127.0.0.1:5432/bt10
-            username: postgres
-            password: Bt10@1234
-            driver-class-name: org.postgresql.Driver
-        # SLAVE (MySQL 示例，多数据源时启用):
-        #     url: jdbc:mysql://127.0.0.1/ry?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true
-        #     username: root
-        #     password: 123456
-        #     driver-class-name: com.mysql.cj.jdbc.Driver
+      # dynamic.datasource.MASTER 在各环境 application-{dev,test,prod}.yml 中配置
+      # SLAVE (MySQL 示例，多数据源时启用): 在对应 profile 的 yml 中增加 SLAVE 节点即可
 
     druid:
       # 初始连接数

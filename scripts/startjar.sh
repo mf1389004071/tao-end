@@ -1,0 +1,1 @@
+/www/server/java/jdk-21.0.2/bin/java -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=64187 -Djava.rmi.server.hostname=127.0.0.1 -Dcom.sun.management.jmxremote.local.only=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -jar  -Xmx1024M -Xms256M /www/wwwroot/bt10/end/geek-admin.jar --spring.profiles.active=prod

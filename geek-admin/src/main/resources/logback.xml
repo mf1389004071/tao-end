@@ -78,15 +78,12 @@
 	<!-- Spring日志级别控制  -->
 	<logger name="org.springframework" level="warn" />
 
+	<!-- 单一 root：避免重复 root 导致控制台/文件只生效其一，便于宝塔等采集 stdout，同时保留文件日志 -->
 	<root level="info">
 		<appender-ref ref="console" />
+		<appender-ref ref="file_info" />
+		<appender-ref ref="file_error" />
 	</root>
-	
-	<!--系统操作日志-->
-    <root level="info">
-        <appender-ref ref="file_info" />
-        <appender-ref ref="file_error" />
-    </root>
 	
 	<!--系统用户操作日志-->
     <logger name="sys-user" level="info">

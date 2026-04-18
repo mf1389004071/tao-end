@@ -82,7 +82,31 @@ spring:
     # 国际化资源文件路径
     basename: i18n/messages
   profiles:
-    active: data,auth,pay,plugins,model,apidoc
+    # 运行环境：dev / test / prod（打包后通过 --spring.profiles.active=prod 切换）
+    # 各环境会自动包含模块 profile：data,auth,pay,plugins,model,apidoc
+    active: dev
+    group:
+      dev:
+        - data
+        - auth
+        - pay
+        - plugins
+        - model
+        - apidoc
+      test:
+        - data
+        - auth
+        - pay
+        - plugins
+        - model
+        - apidoc
+      prod:
+        - data
+        - auth
+        - pay
+        - plugins
+        - model
+        - apidoc
   # 文件上传
   servlet:
     multipart:
