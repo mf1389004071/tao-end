@@ -245,7 +245,9 @@ resolve_choice() {
     echo "$c"
     return
   fi
-  print_menu
+  # 菜单必须写到 stderr：main 里 choice="$(resolve_choice ...)" 会吞掉 stdout，
+  # 否则菜单被捕获进变量，终端上只剩 read -p（stderr）的提示。
+  print_menu >&2
   read -r -p "请输入选项 (1-7): " c || true
   echo "$c"
 }
