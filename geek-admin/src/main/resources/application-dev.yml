@@ -5,8 +5,8 @@ spring:
     dynamic:
       datasource:
         MASTER:
-          url: ${GEEK_DB_URL:jdbc:postgresql://39.102.57.167:5432/bt10}
-          # url: ${GEEK_DB_URL:jdbc:postgresql://127.0.0.1:5432/bt10}
+#          url: ${GEEK_DB_URL:jdbc:postgresql://39.102.57.167:5432/bt10}
+          url: ${GEEK_DB_URL:jdbc:postgresql://127.0.0.1:5432/bt10}
           username: ${GEEK_DB_USERNAME:postgres}
           password: ${GEEK_DB_PASSWORD:Bt10@1234}
           driver-class-name: org.postgresql.Driver
