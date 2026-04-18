@@ -165,14 +165,14 @@ do_maven_install() {
   else
     info "Maven：tao-end 全模块 clean install（运行测试）"
   fi
-  (cd "$TAO_END" && mvn clean install -q "${SKIP_TESTS_ARGS[@]}")
+  (cd "$TAO_END" && mvn clean install "${SKIP_TESTS_ARGS[@]}")
 }
 
 # --- 2 打包 fat jar ---
 do_maven_package_jar() {
   ensure_mvn
   info "Maven：仅构建 geek-admin 及依赖（-pl geek-admin -am），生成可执行 jar"
-  (cd "$TAO_END" && mvn -pl geek-admin -am clean package -q "${SKIP_TESTS_ARGS[@]}") || return 1
+  (cd "$TAO_END" && mvn -pl geek-admin -am clean package "${SKIP_TESTS_ARGS[@]}") || return 1
   local jar="$GEEK_ADMIN_TARGET/$JAR_NAME"
   [[ -f "$jar" ]] || die "未找到可执行 jar：$jar（请检查 geek-admin 是否成功 repackage）"
   info "可执行 jar：$jar"
