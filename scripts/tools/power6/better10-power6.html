@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>「10倍好」系统六大能力测评</title>
+    <style>
+        :root {
+            /* --- 旗舰级配色体系 --- */
+            --brand-primary: #3B82F6;
+            --brand-dark: #1D4ED8;
+            --brand-glow: rgba(59, 130, 246, 0.5);
+            
+            /* 语义色 */
+            --success: #10B981;
+            --error: #EF4444;
+            --warning: #F59E0B;
+            
+            /* 文本色 */
+            --text-main: #0F172A;
+            --text-sub: #475569;
+            --text-mute: #94A3B8;
+            
+            /* 玻璃拟态参数 */
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+            
+            /* 动效 */
+            --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-main);
+            line-height: 1.5;
+            height: 100vh;
+            overflow: hidden;
+            font-size: 15px; 
+            background: radial-gradient(circle at 50% 0%, #eff6ff, #f8fafc);
+        }
+
+        /* 极光背景层 */
+        .aurora-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
+            animation: pulseBg 8s ease-in-out infinite alternate;
+        }
+        @keyframes pulseBg { 0% { opacity: 0.6; } 100% { opacity: 1; } }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        /* --- 1. 图片区 --- */
+        .image-header-wrapper {
+            position: relative;
+            z-index: 100;
+            flex-shrink: 0;
+            background: #fff;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 4px 20px -5px rgba(0,0,0,0.05);
+        }
+
+        .image-panel {
+            position: relative;
+            max-height: 35vh; 
+            overflow-y: auto;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+        .image-panel::-webkit-scrollbar { display: none; }
+
+        .image-scroller {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            background: #F8FAFC;
+        }
+
+        .image-scroller img {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            display: block;
+            mix-blend-mode: multiply;
+        }
+
+        /* 悬浮提示 */
+        .panel-hint {
+            position: absolute;
+            bottom: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 102;
+            pointer-events: none;
+        }
+        
+        .panel-hint-inner {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(8px);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        /* --- 2. 交互区 --- */
+        .interaction-panel {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 24px 12px 40px; 
+            scroll-behavior: smooth;
+        }
+
+        .content-wrapper {
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        /* --- 玻璃卡片 --- */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: var(--glass-shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* 引导区域 */
+        .guide-card {
+            position: relative;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+        .guide-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .avatar {
+            font-size: 24px;
+            margin-right: 12px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+        .guide-info h1 {
+            font-size: 1.1rem;
+            margin: 0;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+        .role-tag {
+            font-size: 0.75rem;
+            color: var(--text-sub);
+            display: block;
+            margin-top: 2px;
+        }
+        .guide-tips {
+            font-size: 0.9rem;
+            color: var(--text-main);
+            background: rgba(255,255,255,0.6);
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px dashed rgba(0,0,0,0.1);
+            line-height: 1.5;
+        }
+        .highlight { color: var(--brand-primary); font-weight: 700; }
+
+        /* 表单 */
+        .form-group { margin-bottom: 20px; }
+        .form-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+        .badge-pill {
+            font-size: 0.7rem;
+            background: #E2E8F0;
+            color: var(--text-sub);
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+
+        .input-wrapper { position: relative; }
+        input[type="text"] {
+            width: 100%;
+            padding: 14px 14px 14px 44px;
+            border: 2px solid transparent;
+            border-radius: 14px;
+            background: #F1F5F9;
+            font-size: 1rem;
+            /* 移除了 monospace，方便输入中文等 */
+            color: var(--text-main);
+            transition: all 0.3s;
+        }
+        .input-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.1rem;
+            color: #94A3B8;
+            pointer-events: none;
+            transition: all 0.3s;
+        }
+        input:focus {
+            background: #fff;
+            border-color: var(--brand-primary);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+        input:focus + .input-icon { color: var(--brand-primary); }
+        input.error {
+            background: #FEF2F2;
+            border-color: var(--error);
+        }
+        input.error + .input-icon { color: var(--error); }
+
+        /* 按钮 */
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 20px -4px rgba(37, 99, 235, 0.4);
+            transition: transform 0.1s;
+        }
+        .submit-btn:active { transform: scale(0.97); }
+
+        /* --- 结果区域 --- */
+        #resultSection { display: none; margin-top: 32px; }
+
+        .radar-container {
+            background: #fff;
+            border-radius: 24px;
+            padding: 10px 0; 
+            margin-bottom: 24px;
+            box-shadow: var(--glass-shadow);
+            position: relative;
+            overflow: hidden;
+            display: flex; 
+            justify-content: center;
+        }
+        
+        canvas {
+            max-width: 100%; 
+            height: auto !important;
+            display: block;
+        }
+
+        /* 结果网格：双列 */
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .res-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.02);
+            position: relative;
+            transition: all 0.2s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+        .res-card:active { transform: scale(0.98); background: #FAFAFA; }
+
+        /* 彩色顶条 */
+        .res-card::after {
+            content: ''; position: absolute; top: 0; left: 16px; right: 16px; height: 3px;
+            background: currentColor; border-radius: 0 0 4px 4px; opacity: 0.5;
+        }
+        .res-M { color: #38BDF8; } .res-Z { color: #818CF8; }
+        .res-X { color: #F472B6; } .res-S { color: #34D399; }
+        .res-K { color: #FBBF24; } .res-Q { color: #A78BFA; }
+
+        .res-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .res-title { font-size: 1rem; font-weight: 800; color: var(--text-main); display: flex; align-items: baseline; gap: 4px; }
+        .res-title small { font-size: 0.8rem; font-weight: 400; color: var(--text-mute); }
+        .res-score { font-size: 1.3rem; font-weight: 900; font-family: "SF Pro Display", sans-serif; line-height: 1; }
+        
+        /* 建议部分 (限制行数) */
+        .res-advice {
+            font-size: 0.8rem;
+            color: var(--text-sub);
+            line-height: 1.4;
+            background: rgba(241, 245, 249, 0.5);
+            padding: 8px;
+            border-radius: 8px;
+            margin-bottom: 4px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-height: 3.4em; 
+        }
+        
+        .res-card.expanded .res-advice {
+            -webkit-line-clamp: unset;
+            background: #F1F5F9; 
+        }
+
+        .res-toggle {
+            font-size: 0.7rem;
+            color: var(--text-mute);
+            text-align: center;
+            margin-top: auto; 
+            padding-top: 4px;
+        }
+        .res-toggle::after { content: '查看详情 ▾'; }
+        .res-card.expanded .res-toggle::after { content: '收起 ▴'; }
+
+        /* 详情部分 */
+        .res-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            opacity: 0.5;
+        }
+        .res-card.expanded .res-details {
+            max-height: 600px;
+            opacity: 1;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed #E2E8F0;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            padding: 4px 0;
+            border-bottom: 1px solid #F1F5F9;
+        }
+        .detail-item:last-child { border-bottom: none; }
+        .val-pos { color: var(--success); font-weight: 700; }
+        .val-neg { color: var(--error); font-weight: 700; }
+
+        /* 历史记录 */
+        #historySection { margin-top: 40px; }
+        .history-header { display: flex; justify-content: space-between; margin-bottom: 16px; align-items: center; }
+        .history-list { list-style: none; padding: 0; margin: 0; }
+        .history-item {
+            background: #fff; padding: 12px 16px; border-radius: 12px; margin-bottom: 8px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05); font-size: 0.85rem;
+        }
+        
+        /* 弹窗 */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 999;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; visibility: hidden; transition: all 0.2s;
+        }
+        .modal-overlay.show { opacity: 1; visibility: visible; }
+        .modal-box {
+            background: #fff; width: 80%; max-width: 300px;
+            border-radius: 20px; padding: 24px; text-align: center;
+            transform: scale(0.9); transition: all 0.2s;
+        }
+        .modal-overlay.show .modal-box { transform: scale(1); }
+        .modal-btn-row { display: flex; gap: 10px; margin-top: 20px; }
+        .m-btn { flex: 1; padding: 10px; border-radius: 10px; border: none; font-weight: 700; }
+        .m-cancel { background: #F1F5F9; color: #333; }
+        .m-confirm { background: #EF4444; color: #fff; }
+
+        /* --- 桌面端调整 (重点) --- */
+        @media (min-width: 769px) {
+            .app-container { flex-direction: row; }
+            
+            /* 图片区占比 60% */
+            .image-header-wrapper { 
+                width: 60%; 
+                height: 100vh; 
+                border-right: 1px solid #E2E8F0; 
+                display: flex;
+                align-items: center; /* 垂直居中 */
+                justify-content: center;
+                background: #F8FAFC;
+            }
+            
+            .image-panel { 
+                max-height: 100%; 
+                height: 100%; 
+                width: 100%;
+                border-radius: 0; 
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .image-scroller {
+                height: 100%;
+                width: 100%;
+                align-items: center;
+            }
+            
+            .image-scroller img {
+                /* 放宽限制，让图片撑满 60% 区域 */
+                max-width: 95%; 
+                max-height: 95vh;
+                width: auto;
+            }
+
+            /* 右侧交互区占比 40% */
+            .interaction-panel { 
+                width: 40%; 
+                padding: 28px 40px; /* 边距减少 */
+            }
+            
+            /* 保持双列，适应窄屏 */
+            .result-grid { grid-template-columns: 1fr 1fr; }
+            .panel-hint { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora-bg"></div>
+
+    <div class="app-container">
+        <!-- 左/上：图片区 -->
+        <div class="image-header-wrapper">
+            <aside class="image-panel">
+                <div class="image-scroller">
+                    <picture>
+                        <!-- PC端 (>=769px) 显示原图 -->
+                        <source media="(min-width: 769px)" srcset="better10-power6-pc.jpg">
+                        <!-- 移动端 (<769px) 显示新图 better10-power6-h5.jpg -->
+                        <img src="better10-power6-h5.jpg" alt="卡牌参考图">
+                    </picture>
+                </div>
+            </aside>
+            <div class="panel-hint">
+                <div class="panel-hint-inner">👇 按住图片可上下滑动查看完整内容</div>
+            </div>
+        </div>
+
+        <!-- 右/下：交互区 -->
+        <main class="interaction-panel">
+            <div class="content-wrapper">
+                
+                <div class="guide-card">
+                    <div class="guide-header">
+                        <div class="avatar">🧙‍♂️</div>
+                        <div>
+                            <h1>六大能力测评引导</h1>
+                            <span class="role-tag">10倍好 1v1 流程教练</span>
+                        </div>
+                    </div>
+                    <div class="guide-tips">
+                        <span class="highlight">调整呼吸</span>，凝视卡牌，凭直觉选出符合当下的场景编号。<br>
+                        (例如: 1, 5, 12, 24；支持 , . / 。、| 空格 分隔数字)
+                    </div>
+                </div>
+
+                <form id="testForm" class="glass-card" style="margin-top: 20px;">
+                    <div class="form-group">
+                        <div class="form-label">
+                            <span>1. 非常符合 (4个)</span>
+                            <span class="badge-pill">权重 5分</span>
+                        </div>
+                        <div class="input-wrapper">
+                            <!-- 移除 inputmode="numeric" 以允许自由输入 -->
+                            <input type="text" id="very" placeholder="输入4个编号" 
+                                   oninput="handleInput(this)" onblur="checkErrorsOnBlur(this)">
+                            <i class="input-icon">✨</i>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-label">
+                            <span>2. 比较符合 (4个)</span>
+                            <span class="badge-pill">权重 3分</span>
+                        </div>
+                        <div class="input-wrapper">
+                            <!-- 移除 inputmode="numeric" 以允许自由输入 -->
+                            <input type="text" id="compare" placeholder="输入4个编号" 
+                                   oninput="handleInput(this)" onblur="checkErrorsOnBlur(this)">
+                            <i class="input-icon">🤔</i>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-label">
+                            <span>3. 偶尔符合 (4个)</span>
+                            <span class="badge-pill">权重 1分</span>
+                        </div>
+                        <div class="input-wrapper">
+                            <!-- 移除 inputmode="numeric" 以允许自由输入 -->
+                            <input type="text" id="occasional" placeholder="输入4个编号" 
+                                   oninput="handleInput(this)" onblur="checkErrorsOnBlur(this)">
+                            <i class="input-icon">🤏</i>
+                        </div>
+                    </div>
+
+                    <button type="button" class="submit-btn" onclick="handleCalculateClick()">⚡ 生成能力画像</button>
+                    <div id="toastMsg" style="position:fixed; top:20px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.8); color:#fff; padding:8px 16px; border-radius:20px; font-size:0.85rem; opacity:0; transition:opacity 0.3s; pointer-events:none; z-index:9999;"></div>
+                </form>
+
+                <div id="resultSection">
+                    <div class="radar-container">
+                        <!-- Canvas max-width 100% 确保不撑破 -->
+                        <canvas id="radarCanvas" width="900" height="960"></canvas> 
+                    </div>
+
+                    <div class="result-grid" id="cardsContainer"></div>
+                </div>
+
+                <div id="historySection" style="display:none;">
+                    <div class="history-header">
+                        <span style="font-weight:700; color:var(--text-sub);">📜 历史记录</span>
+                        <span style="color:var(--error); font-size:0.8rem; cursor:pointer;" onclick="showClearConfirm()">清空</span>
+                    </div>
+                    <ul class="history-list" id="historyList"></ul>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- 弹窗 -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal-box">
+            <div style="font-weight:700; font-size:1.1rem; margin-bottom:8px;">清空确认</div>
+            <div style="color:var(--text-sub); font-size:0.9rem; margin-bottom:20px;">确定要删除所有历史记录吗？</div>
+            <div class="modal-btn-row">
+                <button class="m-btn m-cancel" onclick="closeModal()">取消</button>
+                <button class="m-btn m-confirm" onclick="executeClearHistory()">删除</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const grid = [
+            {num:1, sign:'+', letter:'M', desc:'自律性强'}, {num:2, sign:'+', letter:'Q', desc:'情绪稳定'},
+            {num:3, sign:'+', letter:'Z', desc:'才思敏捷'}, {num:4, sign:'+', letter:'K', desc:'迎难而上'},
+            {num:5, sign:'+', letter:'S', desc:'顺其自然'}, {num:6, sign:'+', letter:'K', desc:'内心强大'},
+            {num:7, sign:'-', letter:'M', desc:'缺乏目标'}, {num:8, sign:'-', letter:'X', desc:'缺乏自信'},
+            {num:9, sign:'+', letter:'Z', desc:'注意细节'}, {num:10, sign:'+', letter:'Q', desc:'沉着冷静'},
+            {num:11, sign:'-', letter:'S', desc:'固执刻板'}, {num:12, sign:'-', letter:'X', desc:'心浮气躁'},
+            {num:13, sign:'-', letter:'M', desc:'缺乏自律'}, {num:14, sign:'-', letter:'Q', desc:'易被激怒'},
+            {num:15, sign:'-', letter:'Z', desc:'容易分心'}, {num:16, sign:'-', letter:'K', desc:'畏难逃避'},
+            {num:17, sign:'-', letter:'S', desc:'争强好胜'}, {num:18, sign:'-', letter:'K', desc:'容易受伤'},
+            {num:19, sign:'+', letter:'M', desc:'目标力强'}, {num:20, sign:'+', letter:'X', desc:'自信心强'},
+            {num:21, sign:'-', letter:'Z', desc:'粗心大意'}, {num:22, sign:'-', letter:'Q', desc:'焦虑紧张'},
+            {num:23, sign:'+', letter:'S', desc:'灵活变通'}, {num:24, sign:'+', letter:'X', desc:'不骄不躁'}
+        ];
+
+        const labelMap = { 'M': '目标力', 'Z': '专注力', 'X': '自信力', 'S': '适应力', 'K': '抗挫力', 'Q': '情绪力' };
+        const dimensions = ['M', 'Z', 'X', 'S', 'K', 'Q'];
+        const STORAGE_KEY = 'better10_history_v3';
+
+        window.onload = loadHistory;
+
+        function handleInput(input) {
+            input.classList.remove('error');
+            // 允许自由输入，仅移除 error class
+        }
+
+        function checkErrorsOnBlur(input) {
+            // 失焦不做强制修改
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toastMsg');
+            toast.textContent = msg;
+            toast.style.opacity = '1';
+            setTimeout(() => toast.style.opacity = '0', 2000);
+        }
+
+        // 使用正则智能提取所有数字
+        function parseAndCleanToArr(str) {
+            if (!str) return [];
+            // 匹配所有连续的数字
+            const matches = str.match(/\d+/g);
+            if (!matches) return [];
+            return matches.map(Number).filter(n => n > 0 && n <= 24);
+        }
+
+        function validateGlobal() {
+            const inputs = ['very', 'compare', 'occasional'].map(id => document.getElementById(id));
+            let hasError = false;
+            const allNumbers = [];
+
+            inputs.forEach(input => {
+                const nums = parseAndCleanToArr(input.value);
+                if (nums.length !== 4) {
+                    input.classList.add('error');
+                    hasError = true;
+                }
+                nums.forEach(n => allNumbers.push(n));
+            });
+
+            if (hasError) {
+                showToast('⚠️ 每个框必须填入 4 个有效数字');
+                return false;
+            }
+
+            const seen = new Set();
+            const duplicates = allNumbers.filter(n => seen.size === seen.add(n).size);
+            
+            if (duplicates.length > 0) {
+                showToast(`⚠️ 重复: ${[...new Set(duplicates)].join(', ')}`);
+                inputs.forEach(input => input.classList.add('error'));
+                return false;
+            }
+            return true;
+        }
+
+        function handleCalculateClick() {
+            runAnalysis(true);
+        }
+
+        function restoreRecord(item) {
+            document.getElementById('very').value = item.inputs.very.join(', ');
+            document.getElementById('compare').value = item.inputs.compare.join(', ');
+            document.getElementById('occasional').value = item.inputs.occasional.join(', ');
+            runAnalysis(false);
+            showToast('已加载历史记录');
+        }
+
+        function runAnalysis(saveFlag) {
+            if (!validateGlobal()) return;
+
+            const inputs = ['very', 'compare', 'occasional'].map(id => document.getElementById(id));
+            const rawInputs = {
+                very: parseAndCleanToArr(inputs[0].value),
+                compare: parseAndCleanToArr(inputs[1].value),
+                occasional: parseAndCleanToArr(inputs[2].value)
+            };
+
+            const totals = {M:0, Z:0, X:0, S:0, K:0, Q:0};
+            const details = {M:[], Z:[], X:[], S:[], K:[], Q:[]};
+            
+            const calc = (nums, weight) => {
+                nums.forEach(n => {
+                    const item = grid.find(g => g.num === n);
+                    if (item) {
+                        const val = (item.sign === '+' ? 1 : -1) * weight;
+                        totals[item.letter] += val;
+                        details[item.letter].push({...item, val});
+                    }
+                });
+            };
+
+            calc(rawInputs.very, 5);
+            calc(rawInputs.compare, 3);
+            calc(rawInputs.occasional, 1);
+
+            renderResults(totals, details);
+            renderRadar(totals);
+            
+            const resultSection = document.getElementById('resultSection');
+            resultSection.style.display = 'block';
+            setTimeout(() => {
+                resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+
+            if (saveFlag) saveToHistory(totals, rawInputs);
+        }
+
+        function renderResults(totals, details) {
+            const container = document.getElementById('cardsContainer');
+            container.innerHTML = '';
+
+            dimensions.forEach((key, index) => {
+                const score = totals[key];
+                const scoreColor = score > 0 ? 'var(--success)' : (score < 0 ? 'var(--error)' : '#999');
+                const sign = score > 0 ? '+' : '';
+                
+                let advice = '';
+                if (key === 'M') advice = score < 0 ? '想法多缺路径，需找导师或定OKR。' : '目标感强，继续保持并带领他人。';
+                else if (key === 'Z') advice = score < 0 ? '易分心，建议断舍离，死磕一件事。' : '专注在线，注意细节转化产出。';
+                else if (key === 'X') advice = score < 0 ? '缺结果自信低，先达成小目标。' : '自信满满，利用气场攻克难关。';
+                else if (key === 'S') advice = score < 0 ? '适应难，暂守舒适区，稳住基本盘。' : '适应强，如水灵活，适合探索新机。';
+                else if (key === 'K') advice = score > 0 ? '韧性强，正经历挑战，注意身心平衡。' : '易受伤，寻找支持系统，别独自硬扛。';
+                else if (key === 'Q') advice = score < 0 ? '情绪波动大，需转化为动力。' : '情绪平稳，理性决策是核心优势。';
+
+                // 竖排列表
+                const detailHtml = details[key].map(d => 
+                    `<div class="detail-item">
+                        <span>#${d.num} ${d.desc}</span>
+                        <span class="${d.val>0?'val-pos':'val-neg'}">${d.val>0?'+':''}${d.val}</span>
+                     </div>`
+                ).join('');
+
+                const div = document.createElement('div');
+                div.className = `res-card res-${key}`;
+                div.onclick = function() { this.classList.toggle('expanded'); };
+                div.innerHTML = `
+                    <div class="res-header">
+                        <div class="res-title">${labelMap[key]} <small>${key}</small></div>
+                        <div class="res-score" style="color:${scoreColor}">${sign}${score}</div>
+                    </div>
+                    <div class="res-advice">${advice}</div>
+                    
+                    <div class="res-toggle"></div>
+                    <div class="res-details">
+                        ${detailHtml}
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function renderRadar(totals) {
+            const canvas = document.getElementById('radarCanvas');
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width, h = canvas.height;
+            const cx = w/2, cy = h/2;
+            const maxScore = 20, minScore = -20;
+            // 缩小半径，确保手机端两侧不被截断 (原来 0.32 -> 0.28)
+            const radiusMax = w * 0.28; 
+            const radiusZero = w * 0.16;
+            const step = (radiusMax - radiusZero) / maxScore;
+
+            ctx.clearRect(0,0,w,h);
+
+            const getPoint = (i, val) => {
+                const angle = (Math.PI/3)*i - Math.PI/2;
+                const clamped = Math.max(minScore, Math.min(maxScore, val));
+                const r = radiusZero + clamped * step;
+                return {x: cx + r*Math.cos(angle), y: cy + r*Math.sin(angle)};
+            };
+
+            // Grid
+            [ -20, -10, 0, 10, 20 ].forEach(level => {
+                ctx.beginPath();
+                for(let i=0; i<6; i++) {
+                    const p = getPoint(i, level);
+                    i===0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y);
+                }
+                ctx.closePath();
+                if(level === 0) {
+                    ctx.strokeStyle = '#EF4444'; ctx.lineWidth = 4; ctx.setLineDash([12, 12]);
+                } else {
+                    ctx.strokeStyle = '#E2E8F0'; ctx.lineWidth = 2; ctx.setLineDash([]);
+                }
+                ctx.stroke();
+            });
+
+            // Axes
+            ctx.beginPath();
+            for(let i=0; i<6; i++) {
+                const p1 = getPoint(i, -25);
+                const p2 = getPoint(i, 25);
+                ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y);
+            }
+            ctx.strokeStyle = '#F1F5F9'; ctx.stroke();
+
+            // Text
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            dimensions.forEach((k, i) => {
+                const angle = (Math.PI/3)*i - Math.PI/2;
+                // 距离稍微拉近一点点，因为半径缩小了
+                const labelDist = radiusMax + 100;
+                
+                const lx = cx + labelDist * Math.cos(angle);
+                const ly = cy + labelDist * Math.sin(angle);
+                
+                ctx.font = 'bold 36px -apple-system, sans-serif';
+                ctx.fillStyle = '#1E293B';
+                ctx.fillText(labelMap[k], lx, ly - 40);
+
+                ctx.font = '800 64px "SF Pro Display", sans-serif';
+                const s = totals[k];
+                ctx.fillStyle = s >=0 ? '#10B981' : '#EF4444';
+                ctx.fillText((s>0?'+':'')+s, lx, ly + 35);
+            });
+
+            // Data
+            ctx.beginPath();
+            dimensions.forEach((k, i) => {
+                const p = getPoint(i, totals[k]);
+                i===0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y);
+            });
+            ctx.closePath();
+            
+            const grad = ctx.createRadialGradient(cx, cy, radiusZero/2, cx, cy, radiusMax);
+            grad.addColorStop(0, 'rgba(59, 130, 246, 0.2)');
+            grad.addColorStop(1, 'rgba(37, 99, 235, 0.6)');
+            ctx.fillStyle = grad; ctx.fill();
+            
+            ctx.strokeStyle = '#2563EB'; ctx.lineWidth = 8; ctx.stroke();
+
+            // Dots
+            dimensions.forEach((k, i) => {
+                const p = getPoint(i, totals[k]);
+                ctx.beginPath(); ctx.arc(p.x, p.y, 12, 0, Math.PI*2);
+                ctx.fillStyle = '#fff'; ctx.fill();
+                ctx.strokeStyle = totals[k]>=0 ? '#10B981' : '#EF4444'; ctx.lineWidth = 5; ctx.stroke();
+            });
+        }
+
+        function saveToHistory(totals, rawInputs) {
+            const now = new Date();
+            const record = {
+                id: now.getTime(),
+                timestamp: now.getTime(),
+                inputs: rawInputs,
+                totals: totals
+            };
+            let history = getHistory();
+            history.unshift(record);
+            const limit = now.getTime() - (180 * 24 * 3600 * 1000);
+            history = history.filter(h => h.timestamp > limit).slice(0, 50);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+            loadHistory();
+        }
+
+        function getHistory() {
+            try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; }
+        }
+
+        function loadHistory() {
+            const history = getHistory();
+            const section = document.getElementById('historySection');
+            const list = document.getElementById('historyList');
+            
+            if (history.length === 0) {
+                section.style.display = 'none';
+                return;
+            }
+            section.style.display = 'block';
+            list.innerHTML = '';
+            
+            history.forEach(item => {
+                const d = new Date(item.timestamp);
+                const timeStr = `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`;
+                
+                const prevHtml = dimensions.map(k => {
+                    const s = item.totals[k];
+                    return `<span style="margin-right:8px; color:${s<0?'var(--error)':'var(--text-sub)'}">${k}:${s>0?'+':''}${s}</span>`;
+                }).join('');
+
+                const li = document.createElement('li');
+                li.className = 'history-item';
+                li.onclick = () => restoreRecord(item);
+                li.innerHTML = `
+                    <div style="flex:1">
+                        <div style="font-weight:700; color:var(--text-main);">${timeStr}</div>
+                        <div style="font-size:0.75rem; color:var(--text-mute); margin-top:2px;">${prevHtml}</div>
+                    </div>
+                    <div style="color:#CBD5E1">👉</div>
+                `;
+                list.appendChild(li);
+            });
+        }
+
+        function showClearConfirm() {
+            document.getElementById('confirmModal').classList.add('show');
+        }
+        function closeModal() {
+            document.getElementById('confirmModal').classList.remove('show');
+        }
+        function executeClearHistory() {
+            localStorage.removeItem(STORAGE_KEY);
+            loadHistory();
+            closeModal();
+            showToast('🗑️ 历史记录已清空');
+        }
+    </script>
+</body>
+</html>

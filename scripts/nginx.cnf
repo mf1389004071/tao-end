@@ -43,6 +43,8 @@ server
     #REWRITE-END
 
 
+
+    # 10倍好-后端服务
     location /prod-api/ {
         proxy_pass http://localhost:8080/;
         proxy_http_version 1.1;
@@ -57,6 +59,19 @@ server
         # 故障转移设置
         proxy_next_upstream error timeout http_502 http_503 http_504;
     }
+    
+    # 10倍好-六大能力测评工具
+    location = /p6 {
+        return 301 /p6/;
+    }
+    
+    location ^~ /p6/ {
+        alias /www/wwwroot/bt10/tools/power6/;
+        index better10-power6.html;
+        try_files $uri $uri/ =404;
+    }
+
+
 
     #禁止访问的文件或目录
     location ~ ^/(\.user.ini|\.htaccess|\.git|\.env|\.svn|\.project|LICENSE|README.md)
