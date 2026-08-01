@@ -1728,4 +1728,97 @@
         </createIndex>
     </changeSet>
 
+    <!-- 56. xeknow：小鹅通超级会员（多等级会员放同表） -->
+    <changeSet author="tao-business" id="business-056-xiaoe_svip_members">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="xiaoe_svip_members"/></not>
+        </preConditions>
+        <createTable remarks="小鹅通超级会员成员同步表：多等级共用一张表，json_data 存原始行" tableName="xiaoe_svip_members">
+            <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
+            <column name="member_rec_id" type="BIGINT" remarks="小鹅通会员记录ID"><constraints nullable="false" unique="true"/></column>
+            <column name="app_id" type="VARCHAR(64)" remarks="小鹅通 app_id"/>
+            <column name="svip_id" type="VARCHAR(128)" remarks="超级会员等级ID"><constraints nullable="false"/></column>
+            <column name="svip_title" type="VARCHAR(255)" remarks="等级名称"/>
+            <column name="svip_sub_title" type="VARCHAR(255)" remarks="等级副标题"/>
+            <column name="svip_level" type="INT" remarks="等级序号"/>
+            <column name="svip_state" type="INT" remarks="等级状态"/>
+            <column name="svip_page_url" type="TEXT" remarks="等级 H5 页"/>
+            <column name="spec_id" type="VARCHAR(64)" remarks="规格ID"/>
+            <column name="spec_price" type="NUMERIC(24,4)" remarks="规格售价(元)"/>
+            <column name="spec_period" type="INT" remarks="规格周期值"/>
+            <column name="spec_unit" type="INT" remarks="规格周期单位"/>
+            <column name="user_id" type="VARCHAR(255)" remarks="小鹅通用户ID"><constraints nullable="false"/></column>
+            <column name="union_id" type="VARCHAR(255)" remarks="微信 union_id"/>
+            <column name="identity_type" type="INT" remarks="身份类型"/>
+            <column name="start_time" type="DATE" remarks="会员开始日"/>
+            <column name="end_time" type="DATE" remarks="会员到期日"/>
+            <column name="is_forever" type="SMALLINT" remarks="是否长期有效"/>
+            <column name="member_state" type="INT" remarks="会员卡状态"/>
+            <column name="expiration_days" type="INT" remarks="剩余有效天数"/>
+            <column name="nick_name" type="VARCHAR(255)" remarks="昵称"/>
+            <column name="real_name" type="VARCHAR(255)" remarks="真实姓名"/>
+            <column name="wx_avatar" type="TEXT" remarks="头像"/>
+            <column name="phone_number" type="VARCHAR(64)" remarks="手机号(可能掩码)"/>
+            <column name="collection_phone" type="VARCHAR(64)" remarks="采集手机号"/>
+            <column name="is_seal" type="SMALLINT" remarks="是否封禁"/>
+            <column name="birth" type="VARCHAR(32)" remarks="生日"/>
+            <column name="age" type="INT" remarks="年龄"/>
+            <column name="wx_gender" type="INT" remarks="性别"/>
+            <column name="industry" type="VARCHAR(255)" remarks="行业"/>
+            <column name="company" type="VARCHAR(255)" remarks="公司"/>
+            <column name="job" type="VARCHAR(255)" remarks="职位"/>
+            <column name="area" type="VARCHAR(255)" remarks="地区"/>
+            <column name="address" type="TEXT" remarks="地址"/>
+            <column name="user_from" type="VARCHAR(64)" remarks="来源"/>
+            <column name="belong_promoter" type="VARCHAR(255)" remarks="归属推广员"/>
+            <column name="is_wework_customer" type="SMALLINT" remarks="是否企微客户"/>
+            <column name="buy_times" type="INT" remarks="购买次数"/>
+            <column name="pay_money" type="NUMERIC(24,4)" remarks="累计实付(元)"/>
+            <column name="first_pay_time" type="TIMESTAMPTZ" remarks="首次支付时间"/>
+            <column name="lastest_pay_time" type="TIMESTAMPTZ" remarks="最近支付时间"/>
+            <column name="latest_visited_at" type="TIMESTAMPTZ" remarks="最近访问"/>
+            <column name="user_created_at" type="TIMESTAMPTZ" remarks="用户注册时间"/>
+            <column name="user_tags" type="jsonb" remarks="用户标签"/>
+            <column name="corp_tags" type="jsonb" remarks="企微标签"/>
+            <column name="follow_users" type="jsonb" remarks="跟进人"/>
+            <column name="sync_status" type="VARCHAR(20)" defaultValue="SYNCED" remarks="同步状态"/>
+            <column name="last_sync_time" type="TIMESTAMPTZ" remarks="最近同步时间"/>
+            <column name="json_data" type="jsonb" remarks="会员行原始 JSON（含等级快照）"/>
+
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="create_by" type="VARCHAR(64)" defaultValue="" remarks="创建者"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
+            <column name="update_by" type="VARCHAR(64)" defaultValue="" remarks="更新者"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
+            <column name="status" type="CHAR(1)" defaultValue="0" remarks="状态"/>
+            <column name="del_flag" type="SMALLINT" defaultValueNumeric="0" remarks="删除标志"/>
+            <column name="remark" type="TEXT" remarks="备注"/>
+        </createTable>
+        <createIndex indexName="idx_xiaoe_svip_members_svip_id" tableName="xiaoe_svip_members">
+            <column name="svip_id"/>
+        </createIndex>
+        <createIndex indexName="idx_xiaoe_svip_members_user_id" tableName="xiaoe_svip_members">
+            <column name="user_id"/>
+        </createIndex>
+        <createIndex indexName="idx_xiaoe_svip_members_svip_user" tableName="xiaoe_svip_members">
+            <column name="svip_id"/>
+            <column name="user_id"/>
+        </createIndex>
+        <createIndex indexName="idx_xiaoe_svip_members_svip_level" tableName="xiaoe_svip_members">
+            <column name="svip_level"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- 57. xeknow：用户映射区分账户绑定号 / 最近采集号 -->
+    <changeSet author="tao-business" id="business-057-xiaoe_user_mapping_collection_phone">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="xiaoe_user_mapping" columnName="collection_phone"/></not>
+        </preConditions>
+        <addColumn tableName="xiaoe_user_mapping">
+            <column name="collection_phone" type="VARCHAR(32)" remarks="最近采集手机号（明文）"/>
+        </addColumn>
+        <setColumnRemarks tableName="xiaoe_user_mapping" columnName="phone" remarks="账户绑定手机号（明文；无绑定时可回退采集号）"/>
+    </changeSet>
+
 </databaseChangeLog>

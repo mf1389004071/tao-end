@@ -3,6 +3,7 @@ package com.geek.tao.bt10.service.impl;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -28,12 +29,14 @@ import com.geek.system.service.ISysUserService;
 import com.geek.tao.bt10.domain.XiaoeContents;
 import com.geek.tao.bt10.domain.XiaoeOrders;
 import com.geek.tao.bt10.domain.XiaoeProducts;
+import com.geek.tao.bt10.domain.XiaoeSvipMembers;
 import com.geek.tao.bt10.domain.XiaoeUserMapping;
 import com.geek.tao.bt10.domain.XeknowReportEncryptedReq;
 import com.geek.tao.bt10.mapper.XiaoeUserMappingMapper;
 import com.geek.tao.bt10.service.IXiaoeContentsService;
 import com.geek.tao.bt10.service.IXiaoeOrdersService;
 import com.geek.tao.bt10.service.IXiaoeProductsService;
+import com.geek.tao.bt10.service.IXiaoeSvipMembersService;
 import com.geek.tao.bt10.service.IXiaoeUserMappingService;
 import com.geek.tao.bt10.service.IXeknowAdminService;
 import com.geek.tao.bt10.xeknow.XeknowCryptoHelper;
@@ -53,8 +56,10 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
     private static final String SOURCE_USER = "user_list";
     private static final String SOURCE_PRODUCT = "product_list";
     private static final String SOURCE_CONTENT = "content_list";
+    private static final String SOURCE_SVIP = "svip_list";
     private static final DateTimeFormatter XE_TIME =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter XE_DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Autowired
     private XeknowCryptoHelper cryptoHelper;
@@ -70,6 +75,8 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
     private IXiaoeProductsService xiaoeProductsService;
     @Autowired
     private IXiaoeContentsService xiaoeContentsService;
+    @Autowired
+    private IXiaoeSvipMembersService xiaoeSvipMembersService;
     @Autowired
     private XiaoeUserMappingMapper xiaoeUserMappingMapper;
     @Autowired
@@ -115,6 +122,10 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
             int[] r = upsertContents(root);
             inserted = r[0];
             updated = r[1];
+        } else if (SOURCE_SVIP.equals(source)) {
+            int[] r = upsertSvipMembers(root);
+            inserted = r[0];
+            updated = r[1];
         } else {
             throw new ServiceException("不支持的 source: " + source);
         }
@@ -133,6 +144,10 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
         if (SOURCE_CONTENT.equals(source)) {
             data.put("resourceType", root.path("resource_type").asInt(0));
             data.put("contentKind", text(root, "content_kind"));
+        }
+        if (SOURCE_SVIP.equals(source)) {
+            data.put("svipId", text(root, "svip_id"));
+            data.put("svipTitle", text(root, "svip_title"));
         }
         return data;
     }
@@ -403,6 +418,192 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
         };
     }
 
+    private int[] upsertSvipMembers(JsonNode envelope) {
+        JsonNode list = envelope.path("payload").path("data").path("list");
+        if (!list.isArray()) {
+            throw new ServiceException("svip member list 缺失");
+        }
+        JsonNode meta = envelope.path("svip_meta");
+        if (meta.isMissingNode() || meta.isNull()) {
+            meta = envelope.path("payload").path("svip_meta");
+        }
+        JsonNode phones = envelope.path("payload").path("phones");
+        JsonNode phonesBound = envelope.path("payload").path("phones_bound");
+        JsonNode phonesCollect = envelope.path("payload").path("phones_collect");
+        int inserted = 0;
+        int updated = 0;
+        for (JsonNode item : list) {
+            Long memberRecId = longOrNull(item.get("id"));
+            String userId = text(item, "user_id");
+            if (memberRecId == null || !StringUtils.hasText(userId)) {
+                continue;
+            }
+            XiaoeSvipMembers existing = xiaoeSvipMembersService.queryChain()
+                    .eq(XiaoeSvipMembers::getMemberRecId, memberRecId)
+                    .one();
+            XiaoeSvipMembers row = existing != null ? existing : new XiaoeSvipMembers();
+            fillSvipMemberRow(row, item, envelope, meta, phones, phonesBound, phonesCollect);
+            if (existing == null) {
+                xiaoeSvipMembersService.save(row);
+                inserted++;
+            } else {
+                xiaoeSvipMembersService.updateById(row);
+                updated++;
+            }
+        }
+        return new int[] { inserted, updated };
+    }
+
+    private void fillSvipMemberRow(XiaoeSvipMembers row, JsonNode item, JsonNode envelope, JsonNode meta,
+                                   JsonNode phones, JsonNode phonesBound, JsonNode phonesCollect) {
+        row.setMemberRecId(longOrNull(item.get("id")));
+        row.setAppId(firstText(item, "app_id", envelope, "app_id", meta, "app_id"));
+        String svipId = firstText(item, "svip_id", envelope, "svip_id", meta, "svip_id");
+        row.setSvipId(svipId);
+        row.setSvipTitle(firstText(envelope, "svip_title", meta, "title", envelope, "svip_title"));
+        if (!StringUtils.hasText(row.getSvipTitle())) {
+            row.setSvipTitle(text(meta, "title"));
+        }
+        row.setSvipSubTitle(firstText(envelope, "svip_sub_title", meta, "sub_title"));
+        Integer level = intOrNull(envelope.get("svip_level"));
+        if (level == null) {
+            level = intOrNull(meta.get("svip_level"));
+        }
+        row.setSvipLevel(level);
+        Integer svipState = intOrNull(envelope.get("svip_state"));
+        if (svipState == null) {
+            svipState = intOrNull(meta.get("state"));
+        }
+        row.setSvipState(svipState);
+        row.setSvipPageUrl(firstText(envelope, "svip_page_url", meta, "page_url"));
+
+        String specId = text(item, "sepc_id");
+        if (!StringUtils.hasText(specId)) {
+            specId = text(item, "spec_id");
+        }
+        if (!StringUtils.hasText(specId) && meta != null) {
+            JsonNode specs = meta.get("spec");
+            if (specs != null && specs.isArray() && specs.size() > 0) {
+                specId = text(specs.get(0), "spec_id");
+                if (!StringUtils.hasText(specId)) {
+                    specId = asState(specs.get(0).get("spec_id"));
+                }
+            }
+        }
+        row.setSpecId(specId);
+        BigDecimal specPrice = centsToYuan(envelope.get("spec_price_cents"));
+        if (specPrice == null) {
+            specPrice = centsToYuan(meta.path("spec0_price"));
+        }
+        if (specPrice == null && meta != null && meta.has("price")) {
+            specPrice = centsToYuan(meta.get("price"));
+        }
+        // 油猴可直接传元
+        if (specPrice == null) {
+            JsonNode yuan = envelope.get("spec_price");
+            if (yuan != null && yuan.isNumber()) {
+                specPrice = BigDecimal.valueOf(yuan.asDouble()).setScale(4, RoundingMode.HALF_UP);
+            }
+        }
+        row.setSpecPrice(specPrice);
+        row.setSpecPeriod(intOrNull(envelope.get("spec_period")));
+        row.setSpecUnit(intOrNull(envelope.get("spec_unit")));
+
+        row.setUserId(text(item, "user_id"));
+        row.setUnionId(text(item, "union_id"));
+        row.setIdentityType(intOrNull(item.get("identity_type")));
+        row.setStartTime(parseLocalDate(item.get("start_time")));
+        row.setEndTime(parseLocalDate(item.get("end_time")));
+        row.setIsForever(intOrNull(item.get("is_forever")));
+        row.setMemberState(intOrNull(item.get("state")));
+        row.setExpirationDays(intOrNull(item.get("expiration_days")));
+        row.setNickName(text(item, "nick_name"));
+        row.setRealName(text(item, "real_name"));
+        row.setWxAvatar(text(item, "wx_avatar"));
+        applySvipPhoneFields(row, text(item, "user_id"), item, phones, phonesBound, phonesCollect);
+        row.setIsSeal(intOrNull(item.get("is_seal")));
+        row.setBirth(text(item, "birth"));
+        row.setAge(intOrNull(item.get("age")));
+        row.setWxGender(intOrNull(item.get("wx_gender")));
+        row.setIndustry(text(item, "industry"));
+        row.setCompany(text(item, "company"));
+        row.setJob(text(item, "job"));
+        row.setArea(text(item, "area"));
+        row.setAddress(text(item, "address"));
+        row.setUserFrom(text(item, "user_from"));
+        row.setBelongPromoter(text(item, "belong_promoter"));
+        row.setIsWeworkCustomer(intOrNull(item.get("is_wework_customer")));
+        row.setBuyTimes(intOrNull(item.get("buy_times")));
+        row.setPayMoney(centsToYuan(item.get("pay_money")));
+        row.setFirstPayTime(parseFlexibleTime(item.get("first_pay_time")));
+        row.setLastestPayTime(parseFlexibleTime(item.get("lastest_pay_time")));
+        row.setLatestVisitedAt(parseFlexibleTime(item.get("latest_visited_at")));
+        row.setUserCreatedAt(parseFlexibleTime(item.get("user_created_at")));
+        row.setUserTags(toJson(item.get("user_tags")));
+        row.setCorpTags(toJson(item.get("corp_tags")));
+        row.setFollowUsers(toJson(item.get("follow_users")));
+
+        ObjectNode snap = objectMapper.createObjectNode();
+        snap.set("member", item);
+        if (meta != null && !meta.isMissingNode() && !meta.isNull()) {
+            snap.set("svip_meta", meta);
+        }
+        row.setJsonData(toJson(snap));
+        row.setSyncStatus("SYNCED");
+        row.setLastSyncTime(Instant.now());
+        row.setDelFlag(0);
+        if (!StringUtils.hasText(row.getStatus())) {
+            row.setStatus("0");
+        }
+    }
+
+    private static String firstText(JsonNode a, String af, JsonNode b, String bf) {
+        String v = text(a, af);
+        return StringUtils.hasText(v) ? v : text(b, bf);
+    }
+
+    private static String firstText(JsonNode a, String af, JsonNode b, String bf, JsonNode c, String cf) {
+        String v = firstText(a, af, b, bf);
+        return StringUtils.hasText(v) ? v : text(c, cf);
+    }
+
+    private static LocalDate parseLocalDate(JsonNode node) {
+        if (node == null || node.isNull() || node.isMissingNode()) {
+            return null;
+        }
+        String raw = node.asText();
+        if (!StringUtils.hasText(raw)) {
+            return null;
+        }
+        String s = raw.trim();
+        try {
+            if (s.length() >= 10) {
+                return LocalDate.parse(s.substring(0, 10), XE_DATE);
+            }
+            return LocalDate.parse(s, XE_DATE);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private static Long longOrNull(JsonNode node) {
+        if (node == null || node.isNull() || node.isMissingNode()) {
+            return null;
+        }
+        if (node.isNumber()) {
+            return node.asLong();
+        }
+        String s = node.asText();
+        if (!StringUtils.hasText(s)) {
+            return null;
+        }
+        try {
+            return Long.parseLong(s.trim());
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     private int[] upsertOrders(JsonNode envelope) {
         JsonNode orderList = envelope.path("payload").path("data").path("order_list");
         if (!orderList.isArray()) {
@@ -486,6 +687,8 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
     private int[] upsertUsers(JsonNode envelope) {
         JsonNode list = envelope.path("payload").path("data").path("list");
         JsonNode phones = envelope.path("payload").path("phones");
+        JsonNode phonesBound = envelope.path("payload").path("phones_bound");
+        JsonNode phonesCollect = envelope.path("payload").path("phones_collect");
         if (!list.isArray()) {
             throw new ServiceException("user list 缺失");
         }
@@ -500,11 +703,17 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
             if (!StringUtils.hasText(xeId)) {
                 continue;
             }
-            String phone = null;
-            if (phones != null && phones.has(xeId) && !phones.get(xeId).isNull()) {
-                phone = phones.get(xeId).asText(null);
+            String bound = phoneFromMap(phonesBound, xeId);
+            String collect = phoneFromMap(phonesCollect, xeId);
+            // 兼容旧脚本只上报 phones
+            String preferred = phoneFromMap(phones, xeId);
+            if (!isValidPhone(bound) && isValidPhone(preferred)) {
+                bound = preferred;
             }
-            phone = normalizePhone(phone);
+            if (!isValidPhone(collect) && isValidPhone(preferred) && !preferred.equals(bound)) {
+                collect = preferred;
+            }
+            String phone = isValidPhone(bound) ? bound : (isValidPhone(collect) ? collect : null);
 
             String nick = text(item, "user_name");
             if (!StringUtils.hasText(nick)) {
@@ -517,6 +726,12 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
                 snap.put("phone", phone);
             } else {
                 snap.putNull("phone");
+            }
+            if (isValidPhone(bound)) {
+                snap.put("phone_bound", bound);
+            }
+            if (isValidPhone(collect)) {
+                snap.put("phone_collect", collect);
             }
             if (StringUtils.hasText(capturedAt)) {
                 snap.put("captured_at", capturedAt);
@@ -539,13 +754,13 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
                 row.setMappedTime(Instant.now());
                 row.setDelFlag(0);
                 row.setStatus("0");
-                applyPhoneOnWrite(row, phone, true, retryAt);
+                applyPhoneOnWrite(row, phone, collect, true, retryAt);
                 xiaoeUserMappingService.save(row);
                 inserted++;
             } else {
                 existing.setNickName(nick);
                 existing.setJsonData(jsonData);
-                applyPhoneOnWrite(existing, phone, false, retryAt);
+                applyPhoneOnWrite(existing, phone, collect, false, retryAt);
                 xiaoeUserMappingService.updateById(existing);
                 // updateById 默认忽略 null：有效号时必须显式清空 phone_next_query_at；
                 // 缺号时显式把 phone 置 null（避免库里残留 ""）
@@ -569,15 +784,21 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
     }
 
     /**
-     * 有效号：写入并清空延期；空串/非法号视为缺号（存 null），不覆盖已有有效号，仍缺号则 +N 天
+     * phone：主号（绑定优先，否则采集）；collectionPhone：最近采集明文。
+     * 空串/非法号不覆盖已有有效号，仍缺号则 +N 天。
      */
-    private void applyPhoneOnWrite(XiaoeUserMapping row, String phone, boolean isNew, Instant retryAt) {
+    private void applyPhoneOnWrite(XiaoeUserMapping row, String phone, String collectionPhone,
+                                   boolean isNew, Instant retryAt) {
+        if (isValidPhone(collectionPhone)) {
+            row.setCollectionPhone(collectionPhone);
+        } else if (!isValidPhone(row.getCollectionPhone())) {
+            row.setCollectionPhone(null);
+        }
         if (isValidPhone(phone)) {
             row.setPhone(phone);
             row.setPhoneNextQueryAt(null);
             return;
         }
-        // 上报无有效号：保留历史有效号
         if (isValidPhone(row.getPhone())) {
             return;
         }
@@ -586,6 +807,50 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
         if (isNew) {
             log.debug("xeknow new user missing phone, nextQueryAt={}", retryAt);
         }
+    }
+
+    /** 超会列表常带掩码：仅明文写入；有 map 明文优先；无明文不清掉已有有效号 */
+    private void applySvipPhoneFields(XiaoeSvipMembers row, String userId, JsonNode item,
+                                      JsonNode phones, JsonNode phonesBound, JsonNode phonesCollect) {
+        String bound = firstValidPhone(
+                phoneFromMap(phonesBound, userId),
+                phoneFromMap(phones, userId),
+                normalizePhone(text(item, "phone_number")));
+        String collect = firstValidPhone(
+                phoneFromMap(phonesCollect, userId),
+                normalizePhone(text(item, "collection_phone")));
+        if (isValidPhone(bound)) {
+            row.setPhoneNumber(bound);
+        } else if (!isValidPhone(row.getPhoneNumber())) {
+            row.setPhoneNumber(null);
+        }
+        if (isValidPhone(collect)) {
+            row.setCollectionPhone(collect);
+        } else if (!isValidPhone(row.getCollectionPhone())) {
+            row.setCollectionPhone(null);
+        }
+    }
+
+    private static String phoneFromMap(JsonNode map, String userId) {
+        if (map == null || map.isMissingNode() || map.isNull() || !StringUtils.hasText(userId)) {
+            return null;
+        }
+        if (!map.has(userId) || map.get(userId).isNull()) {
+            return null;
+        }
+        return normalizePhone(map.get(userId).asText(null));
+    }
+
+    private static String firstValidPhone(String... candidates) {
+        if (candidates == null) {
+            return null;
+        }
+        for (String c : candidates) {
+            if (isValidPhone(c)) {
+                return c.trim();
+            }
+        }
+        return null;
     }
 
     private void maybeWriteSysUserPhone(XiaoeUserMapping mapping, String phone) {

@@ -54,10 +54,15 @@ public class XiaoeUserMapping extends BaseEntity
     @Excel(name = "建立映射时间")
     private Instant mappedTime;
 
-    /** 采集手机号，空表示缺号 */
-    @Schema(title = "采集手机号")
+    /** 账户绑定手机号（明文）；无绑定时可回退采集号 */
+    @Schema(title = "账户绑定手机号")
     @Excel(name = "手机号")
     private String phone;
+
+    /** 最近采集手机号（明文） */
+    @Schema(title = "最近采集手机号")
+    @Excel(name = "采集手机号")
+    private String collectionPhone;
 
     /** 缺号下次可被 umissing 下发的时间 */
     @Schema(title = "缺号下次可查时间")
