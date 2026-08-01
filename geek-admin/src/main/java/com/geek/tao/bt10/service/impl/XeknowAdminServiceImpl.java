@@ -25,11 +25,15 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.geek.common.core.domain.entity.SysUser;
 import com.geek.common.exception.ServiceException;
 import com.geek.system.service.ISysUserService;
+import com.geek.tao.bt10.domain.XiaoeContents;
 import com.geek.tao.bt10.domain.XiaoeOrders;
+import com.geek.tao.bt10.domain.XiaoeProducts;
 import com.geek.tao.bt10.domain.XiaoeUserMapping;
 import com.geek.tao.bt10.domain.XeknowReportEncryptedReq;
 import com.geek.tao.bt10.mapper.XiaoeUserMappingMapper;
+import com.geek.tao.bt10.service.IXiaoeContentsService;
 import com.geek.tao.bt10.service.IXiaoeOrdersService;
+import com.geek.tao.bt10.service.IXiaoeProductsService;
 import com.geek.tao.bt10.service.IXiaoeUserMappingService;
 import com.geek.tao.bt10.service.IXeknowAdminService;
 import com.geek.tao.bt10.xeknow.XeknowCryptoHelper;
@@ -38,7 +42,7 @@ import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.update.UpdateChain;
 
 /**
- * xeknow 采集上报：解密 → 订单/用户落库
+ * xeknow 采集上报：解密 → 订单/用户/产品落库
  */
 @Service
 public class XeknowAdminServiceImpl implements IXeknowAdminService {
@@ -47,6 +51,8 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
 
     private static final String SOURCE_ORDER = "order_list";
     private static final String SOURCE_USER = "user_list";
+    private static final String SOURCE_PRODUCT = "product_list";
+    private static final String SOURCE_CONTENT = "content_list";
     private static final DateTimeFormatter XE_TIME =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -60,6 +66,10 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
     private IXiaoeOrdersService xiaoeOrdersService;
     @Autowired
     private IXiaoeUserMappingService xiaoeUserMappingService;
+    @Autowired
+    private IXiaoeProductsService xiaoeProductsService;
+    @Autowired
+    private IXiaoeContentsService xiaoeContentsService;
     @Autowired
     private XiaoeUserMappingMapper xiaoeUserMappingMapper;
     @Autowired
@@ -97,6 +107,14 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
             int[] r = upsertUsers(root);
             inserted = r[0];
             updated = r[1];
+        } else if (SOURCE_PRODUCT.equals(source)) {
+            int[] r = upsertProducts(root);
+            inserted = r[0];
+            updated = r[1];
+        } else if (SOURCE_CONTENT.equals(source)) {
+            int[] r = upsertContents(root);
+            inserted = r[0];
+            updated = r[1];
         } else {
             throw new ServiceException("不支持的 source: " + source);
         }
@@ -108,6 +126,14 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
         data.put("inserted", inserted);
         data.put("updated", updated);
         data.put("batchId", text(root, "batch_id"));
+        if (SOURCE_PRODUCT.equals(source)) {
+            data.put("resourceType", root.path("resource_type").asInt(0));
+            data.put("productKind", text(root, "product_kind"));
+        }
+        if (SOURCE_CONTENT.equals(source)) {
+            data.put("resourceType", root.path("resource_type").asInt(0));
+            data.put("contentKind", text(root, "content_kind"));
+        }
         return data;
     }
 
@@ -153,6 +179,228 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
         // 兼容旧字段
         data.put("limit", size);
         return data;
+    }
+
+    private int[] upsertProducts(JsonNode envelope) {
+        JsonNode list = envelope.path("payload").path("data").path("list");
+        if (!list.isArray()) {
+            throw new ServiceException("product list 缺失");
+        }
+        String envelopeKind = text(envelope, "product_kind");
+        Integer envelopeRt = intOrNull(envelope.get("resource_type"));
+        String envelopeAppId = text(envelope, "app_id");
+        if (!StringUtils.hasText(envelopeAppId)) {
+            envelopeAppId = text(envelope.path("payload").path("data"), "app_id");
+        }
+
+        int inserted = 0;
+        int updated = 0;
+        for (JsonNode item : list) {
+            String resourceId = text(item, "resource_id");
+            if (!StringUtils.hasText(resourceId)) {
+                continue;
+            }
+            XiaoeProducts existing = xiaoeProductsService.queryChain()
+                    .eq(XiaoeProducts::getResourceId, resourceId)
+                    .one();
+            XiaoeProducts row = existing != null ? existing : new XiaoeProducts();
+            fillProductRow(row, item, envelopeKind, envelopeRt, envelopeAppId);
+            if (existing == null) {
+                xiaoeProductsService.save(row);
+                inserted++;
+            } else {
+                xiaoeProductsService.updateById(row);
+                updated++;
+            }
+        }
+        return new int[] { inserted, updated };
+    }
+
+    private void fillProductRow(XiaoeProducts row, JsonNode item, String envelopeKind,
+            Integer envelopeRt, String envelopeAppId) {
+        Integer resourceType = intOrNull(item.get("resource_type"));
+        if (resourceType == null) {
+            resourceType = envelopeRt;
+        }
+        row.setResourceId(text(item, "resource_id"));
+        row.setResourceType(resourceType);
+        row.setProductKind(resolveProductKind(envelopeKind, resourceType));
+        row.setAppId(StringUtils.hasText(envelopeAppId) ? envelopeAppId : text(item, "app_id"));
+        row.setTitle(text(item, "title"));
+        row.setSummary(text(item, "summary"));
+        row.setImgUrl(text(item, "img_url"));
+        row.setImgUrlCompressed(text(item, "img_url_compressed"));
+        row.setH5Url(text(item, "h5_url"));
+        row.setPrice(centsToYuan(item.get("price")));
+        row.setLinePrice(centsToYuan(item.get("line_price")));
+        row.setGoodsType(intOrNull(item.get("goods_type")));
+        row.setSellType(intOrNull(item.get("sell_type")));
+        row.setSaleStatus(intOrNull(item.get("sale_status")));
+        row.setAuditStatus(intOrNull(item.get("audit_status")));
+        row.setAuthType(intOrNull(item.get("auth_type")));
+        row.setProtectStatus(intOrNull(item.get("protect_status")));
+        row.setVersionId(text(item, "version_id"));
+        row.setPosition(intOrNull(item.get("position")));
+        row.setIsFree(intOrNull(item.get("is_free")));
+        row.setIsPublic(intOrNull(item.get("is_public")));
+        row.setIsPassword(intOrNull(item.get("is_password")));
+        row.setIsStopSell(intOrNull(item.get("is_stop_sell")));
+        row.setIsDisplay(intOrNull(item.get("is_display")));
+        row.setIsBan(intOrNull(item.get("is_ban")));
+        row.setIsForceUnshelve(intOrNull(item.get("is_force_unshelve")));
+        row.setIsJoinMarketAct(intOrNull(item.get("is_join_market_act")));
+        row.setIsTranscode(intOrNull(item.get("is_transcode")));
+        row.setSaleAt(parseFlexibleTime(item.get("sale_at")));
+        row.setCanSoldStart(parseFlexibleTime(item.get("can_sold_start")));
+        row.setCanSoldEnd(parseFlexibleTime(item.get("can_sold_end")));
+
+        JsonNode period = item.get("period");
+        if (period != null && period.isObject()) {
+            row.setPeriodType(intOrNull(period.get("period_type")));
+            row.setPeriodValue(text(period, "period_value"));
+            row.setPeriodJson(toJson(period));
+        } else {
+            row.setPeriodType(null);
+            row.setPeriodValue(null);
+            row.setPeriodJson(null);
+        }
+
+        row.setUserCount(intOrNull(item.get("user_count")));
+        row.setViewCount(intOrNull(item.get("view_count")));
+        row.setResourceCnt(intOrNull(item.get("resource_cnt")));
+        row.setInteractiveCnt(intOrNull(item.get("interactive_cnt")));
+        row.setSubCourseCnt(intOrNull(item.get("sub_course_cnt")));
+        row.setLastUpdatedAt(parseFlexibleTime(item.get("last_updated_at")));
+        row.setCurriculumTime(parseFlexibleTime(item.get("curriculum_time")));
+        row.setCurriculumEndTime(parseFlexibleTime(item.get("curriculum_end_time")));
+        row.setCreatedSource(intOrNull(item.get("created_source")));
+        row.setBelongUserInfo(toJson(item.get("belong_user_info")));
+        row.setCreatedByResourceInfo(toJson(item.get("created_by_resource_info")));
+        row.setJsonData(toJson(item));
+        row.setSyncStatus("SYNCED");
+        row.setLastSyncTime(Instant.now());
+        row.setDelFlag(0);
+        if (!StringUtils.hasText(row.getStatus())) {
+            row.setStatus("0");
+        }
+    }
+
+    private static String resolveProductKind(String envelopeKind, Integer resourceType) {
+        if (StringUtils.hasText(envelopeKind)) {
+            return envelopeKind.trim().toUpperCase();
+        }
+        if (resourceType == null) {
+            return null;
+        }
+        return switch (resourceType) {
+            case 50 -> "CAMP_PRO";
+            case 6 -> "COLUMN";
+            case 8 -> "BIG_COLUMN";
+            default -> "RT_" + resourceType;
+        };
+    }
+
+    private int[] upsertContents(JsonNode envelope) {
+        JsonNode list = envelope.path("payload").path("data").path("list");
+        if (!list.isArray()) {
+            throw new ServiceException("content list 缺失");
+        }
+        String envelopeKind = text(envelope, "content_kind");
+        Integer envelopeRt = intOrNull(envelope.get("resource_type"));
+        String envelopeAppId = text(envelope, "app_id");
+
+        int inserted = 0;
+        int updated = 0;
+        for (JsonNode item : list) {
+            String resourceId = text(item, "resource_id");
+            if (!StringUtils.hasText(resourceId)) {
+                continue;
+            }
+            XiaoeContents existing = xiaoeContentsService.queryChain()
+                    .eq(XiaoeContents::getResourceId, resourceId)
+                    .one();
+            XiaoeContents row = existing != null ? existing : new XiaoeContents();
+            fillContentRow(row, item, envelopeKind, envelopeRt, envelopeAppId);
+            if (existing == null) {
+                xiaoeContentsService.save(row);
+                inserted++;
+            } else {
+                xiaoeContentsService.updateById(row);
+                updated++;
+            }
+        }
+        return new int[] { inserted, updated };
+    }
+
+    private void fillContentRow(XiaoeContents row, JsonNode item, String envelopeKind,
+            Integer envelopeRt, String envelopeAppId) {
+        Integer resourceType = intOrNull(item.get("resource_type"));
+        if (resourceType == null) {
+            resourceType = envelopeRt;
+        }
+        row.setResourceId(text(item, "resource_id"));
+        row.setResourceType(resourceType);
+        row.setContentKind(resolveContentKind(envelopeKind, resourceType));
+        row.setAppId(StringUtils.hasText(envelopeAppId) ? envelopeAppId : text(item, "app_id"));
+        row.setTitle(text(item, "title"));
+        row.setImgUrl(text(item, "img_url"));
+        row.setImgUrlCompressed(text(item, "img_url_compressed"));
+        row.setH5Url(text(item, "h5_url"));
+        row.setPrice(centsToYuan(item.get("price")));
+        row.setLinePrice(centsToYuan(item.get("line_price")));
+        row.setGoodsType(intOrNull(item.get("goods_type")));
+        row.setSellType(intOrNull(item.get("sell_type")));
+        row.setSaleStatus(intOrNull(item.get("sale_status")));
+        row.setAuditStatus(intOrNull(item.get("audit_status")));
+        row.setAuthType(intOrNull(item.get("auth_type")));
+        row.setProtectStatus(intOrNull(item.get("protect_status")));
+        row.setVersionId(text(item, "version_id"));
+        row.setPosition(intOrNull(item.get("position")));
+        row.setViewCount(intOrNull(item.get("view_count")));
+        row.setIsFree(intOrNull(item.get("is_free")));
+        row.setIsPublic(intOrNull(item.get("is_public")));
+        row.setIsPassword(intOrNull(item.get("is_password")));
+        row.setIsStopSell(intOrNull(item.get("is_stop_sell")));
+        row.setIsDisplay(intOrNull(item.get("is_display")));
+        row.setIsBan(intOrNull(item.get("is_ban")));
+        row.setIsForceUnshelve(intOrNull(item.get("is_force_unshelve")));
+        row.setIsJoinMarketAct(intOrNull(item.get("is_join_market_act")));
+        row.setIsTranscode(intOrNull(item.get("is_transcode")));
+        row.setSaleAt(parseFlexibleTime(item.get("sale_at")));
+
+        JsonNode period = item.get("period");
+        if (period != null && period.isObject()) {
+            row.setPeriodType(intOrNull(period.get("period_type")));
+            row.setPeriodValue(text(period, "period_value"));
+            row.setPeriodJson(toJson(period));
+        } else {
+            row.setPeriodType(null);
+            row.setPeriodValue(null);
+            row.setPeriodJson(null);
+        }
+
+        row.setJsonData(toJson(item));
+        row.setSyncStatus("SYNCED");
+        row.setLastSyncTime(Instant.now());
+        row.setDelFlag(0);
+        if (!StringUtils.hasText(row.getStatus())) {
+            row.setStatus("0");
+        }
+    }
+
+    private static String resolveContentKind(String envelopeKind, Integer resourceType) {
+        if (StringUtils.hasText(envelopeKind)) {
+            return envelopeKind.trim().toUpperCase();
+        }
+        if (resourceType == null) {
+            return null;
+        }
+        return switch (resourceType) {
+            case 1 -> "TEXT";
+            case 2 -> "AUDIO";
+            case 3 -> "VIDEO";
+            default -> "RT_" + resourceType;
+        };
     }
 
     private int[] upsertOrders(JsonNode envelope) {
@@ -414,6 +662,53 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
             } catch (Exception ignored) {
                 return null;
             }
+        }
+    }
+
+    /** 支持秒级时间戳、毫秒时间戳、yyyy-MM-dd HH:mm:ss、ISO */
+    private static Instant parseFlexibleTime(JsonNode node) {
+        if (node == null || node.isNull() || node.isMissingNode()) {
+            return null;
+        }
+        if (node.isNumber()) {
+            long v = node.asLong();
+            if (v <= 0) {
+                return null;
+            }
+            // 10 位秒 / 13 位毫秒
+            return v < 1_000_000_000_000L
+                    ? Instant.ofEpochSecond(v)
+                    : Instant.ofEpochMilli(v);
+        }
+        String raw = node.asText();
+        if (!StringUtils.hasText(raw) || "0".equals(raw.trim())) {
+            return null;
+        }
+        String s = raw.trim();
+        if (s.matches("\\d{10,13}")) {
+            long v = Long.parseLong(s);
+            return v < 1_000_000_000_000L
+                    ? Instant.ofEpochSecond(v)
+                    : Instant.ofEpochMilli(v);
+        }
+        return parseXeTime(s);
+    }
+
+    private static Integer intOrNull(JsonNode node) {
+        if (node == null || node.isNull() || node.isMissingNode()) {
+            return null;
+        }
+        if (node.isNumber()) {
+            return node.asInt();
+        }
+        String s = node.asText();
+        if (!StringUtils.hasText(s)) {
+            return null;
+        }
+        try {
+            return Integer.parseInt(s.trim());
+        } catch (Exception e) {
+            return null;
         }
     }
 

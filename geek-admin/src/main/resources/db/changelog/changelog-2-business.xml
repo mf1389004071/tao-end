@@ -1581,4 +1581,151 @@
         </createIndex>
     </changeSet>
 
+    <!-- 54. xeknow：小鹅通产品/资源同步表（系列课/专栏/大专栏） -->
+    <changeSet author="tao-business" id="business-054-xiaoe_products">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="xiaoe_products"/></not>
+        </preConditions>
+        <createTable remarks="小鹅通产品资源同步表：系列课/专栏/大专栏列表，json_data 存原始行" tableName="xiaoe_products">
+            <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
+            <column name="resource_id" type="VARCHAR(255)" remarks="小鹅通资源ID"><constraints nullable="false" unique="true"/></column>
+            <column name="resource_type" type="INT" remarks="资源类型：50系列课/6专栏/8大专栏"><constraints nullable="false"/></column>
+            <column name="product_kind" type="VARCHAR(32)" remarks="CAMP_PRO/COLUMN/BIG_COLUMN"/>
+            <column name="app_id" type="VARCHAR(64)" remarks="小鹅通 app_id"/>
+            <column name="title" type="VARCHAR(512)" remarks="标题"/>
+            <column name="summary" type="TEXT" remarks="简介"/>
+            <column name="img_url" type="TEXT" remarks="封面图"/>
+            <column name="img_url_compressed" type="TEXT" remarks="压缩封面图"/>
+            <column name="h5_url" type="TEXT" remarks="H5购买/详情链接（专栏/大专栏常见）"/>
+            <column name="price" type="NUMERIC(24,4)" remarks="售价(元)"/>
+            <column name="line_price" type="NUMERIC(24,4)" remarks="划线价(元)"/>
+            <column name="goods_type" type="INT" remarks="售卖形态（非专栏类型）"/>
+            <column name="sell_type" type="INT" remarks="售卖类型"/>
+            <column name="sale_status" type="INT" remarks="上架状态"/>
+            <column name="audit_status" type="INT" remarks="审核状态"/>
+            <column name="auth_type" type="INT" remarks="授权类型"/>
+            <column name="protect_status" type="INT" remarks="保护状态"/>
+            <column name="version_id" type="VARCHAR(64)" remarks="版本ID"/>
+            <column name="position" type="INT" remarks="排序位置"/>
+            <column name="is_free" type="SMALLINT" remarks="是否免费"/>
+            <column name="is_public" type="SMALLINT" remarks="是否公开"/>
+            <column name="is_password" type="SMALLINT" remarks="是否加密"/>
+            <column name="is_stop_sell" type="SMALLINT" remarks="是否停售"/>
+            <column name="is_display" type="SMALLINT" remarks="是否展示"/>
+            <column name="is_ban" type="SMALLINT" remarks="是否封禁"/>
+            <column name="is_force_unshelve" type="SMALLINT" remarks="是否强制下架"/>
+            <column name="is_join_market_act" type="SMALLINT" remarks="是否参与营销活动"/>
+            <column name="is_transcode" type="SMALLINT" remarks="是否转码（专栏侧）"/>
+            <column name="sale_at" type="TIMESTAMPTZ" remarks="开售时间"/>
+            <column name="can_sold_start" type="TIMESTAMPTZ" remarks="可售开始"/>
+            <column name="can_sold_end" type="TIMESTAMPTZ" remarks="可售结束"/>
+            <column name="period_type" type="INT" remarks="有效期类型"/>
+            <column name="period_value" type="VARCHAR(128)" remarks="有效期值"/>
+            <column name="period_json" type="jsonb" remarks="period 原始对象"/>
+            <column name="user_count" type="INT" remarks="学员/用户数（系列课）"/>
+            <column name="view_count" type="INT" remarks="浏览数（专栏/大专栏）"/>
+            <column name="resource_cnt" type="INT" remarks="内容数"/>
+            <column name="interactive_cnt" type="INT" remarks="互动数"/>
+            <column name="sub_course_cnt" type="INT" remarks="子课程数"/>
+            <column name="last_updated_at" type="TIMESTAMPTZ" remarks="资源侧最近更新"/>
+            <column name="curriculum_time" type="TIMESTAMPTZ" remarks="课程开始"/>
+            <column name="curriculum_end_time" type="TIMESTAMPTZ" remarks="课程结束"/>
+            <column name="created_source" type="INT" remarks="创建来源"/>
+            <column name="belong_user_info" type="jsonb" remarks="归属人信息"/>
+            <column name="created_by_resource_info" type="jsonb" remarks="创建来源资源信息"/>
+            <column name="sync_status" type="VARCHAR(20)" defaultValue="SYNCED" remarks="同步状态"/>
+            <column name="last_sync_time" type="TIMESTAMPTZ" remarks="最近同步时间"/>
+            <column name="json_data" type="jsonb" remarks="列表项原始 JSON"/>
+
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="create_by" type="VARCHAR(64)" defaultValue="" remarks="创建者"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
+            <column name="update_by" type="VARCHAR(64)" defaultValue="" remarks="更新者"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
+            <column name="status" type="CHAR(1)" defaultValue="0" remarks="状态（0正常 1停用）"/>
+            <column name="del_flag" type="SMALLINT" defaultValueNumeric="0" remarks="删除标志"/>
+            <column name="remark" type="TEXT" remarks="备注"/>
+        </createTable>
+        <createIndex indexName="idx_xiaoe_products_resource_type" tableName="xiaoe_products">
+            <column name="resource_type"/>
+        </createIndex>
+        <createIndex indexName="idx_xiaoe_products_product_kind" tableName="xiaoe_products">
+            <column name="product_kind"/>
+        </createIndex>
+        <createIndex indexName="idx_xiaoe_products_sale_status" tableName="xiaoe_products">
+            <column name="sale_status"/>
+        </createIndex>
+        <createIndex indexName="idx_xiaoe_products_title" tableName="xiaoe_products">
+            <column name="title"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- 55. xeknow：小鹅通内容资源同步表（图文/音频/视频） -->
+    <changeSet author="tao-business" id="business-055-xiaoe_contents">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="xiaoe_contents"/></not>
+        </preConditions>
+        <createTable remarks="小鹅通内容资源同步表：图文/音频/视频列表，json_data 存原始行" tableName="xiaoe_contents">
+            <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
+            <column name="resource_id" type="VARCHAR(255)" remarks="小鹅通资源ID"><constraints nullable="false" unique="true"/></column>
+            <column name="resource_type" type="INT" remarks="资源类型：1图文/2音频/3视频"><constraints nullable="false"/></column>
+            <column name="content_kind" type="VARCHAR(32)" remarks="TEXT/AUDIO/VIDEO"/>
+            <column name="app_id" type="VARCHAR(64)" remarks="小鹅通 app_id"/>
+            <column name="title" type="VARCHAR(512)" remarks="标题"/>
+            <column name="img_url" type="TEXT" remarks="封面图"/>
+            <column name="img_url_compressed" type="TEXT" remarks="压缩封面图"/>
+            <column name="h5_url" type="TEXT" remarks="H5链接"/>
+            <column name="price" type="NUMERIC(24,4)" remarks="售价(元)"/>
+            <column name="line_price" type="NUMERIC(24,4)" remarks="划线价(元)"/>
+            <column name="goods_type" type="INT" remarks="售卖形态"/>
+            <column name="sell_type" type="INT" remarks="售卖类型"/>
+            <column name="sale_status" type="INT" remarks="上架状态"/>
+            <column name="audit_status" type="INT" remarks="审核状态"/>
+            <column name="auth_type" type="INT" remarks="授权类型"/>
+            <column name="protect_status" type="INT" remarks="保护状态"/>
+            <column name="version_id" type="VARCHAR(64)" remarks="版本ID"/>
+            <column name="position" type="INT" remarks="排序位置"/>
+            <column name="view_count" type="INT" remarks="浏览数"/>
+            <column name="is_free" type="SMALLINT" remarks="是否免费"/>
+            <column name="is_public" type="SMALLINT" remarks="是否公开"/>
+            <column name="is_password" type="SMALLINT" remarks="是否加密"/>
+            <column name="is_stop_sell" type="SMALLINT" remarks="是否停售"/>
+            <column name="is_display" type="SMALLINT" remarks="是否展示"/>
+            <column name="is_ban" type="SMALLINT" remarks="是否封禁"/>
+            <column name="is_force_unshelve" type="SMALLINT" remarks="是否强制下架"/>
+            <column name="is_join_market_act" type="SMALLINT" remarks="是否参与营销活动"/>
+            <column name="is_transcode" type="SMALLINT" remarks="是否转码"/>
+            <column name="sale_at" type="TIMESTAMPTZ" remarks="开售时间"/>
+            <column name="period_type" type="INT" remarks="有效期类型"/>
+            <column name="period_value" type="VARCHAR(128)" remarks="有效期值"/>
+            <column name="period_json" type="jsonb" remarks="period 原始对象"/>
+            <column name="sync_status" type="VARCHAR(20)" defaultValue="SYNCED" remarks="同步状态"/>
+            <column name="last_sync_time" type="TIMESTAMPTZ" remarks="最近同步时间"/>
+            <column name="json_data" type="jsonb" remarks="列表项原始 JSON"/>
+
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="create_by" type="VARCHAR(64)" defaultValue="" remarks="创建者"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
+            <column name="update_by" type="VARCHAR(64)" defaultValue="" remarks="更新者"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
+            <column name="status" type="CHAR(1)" defaultValue="0" remarks="状态"/>
+            <column name="del_flag" type="SMALLINT" defaultValueNumeric="0" remarks="删除标志"/>
+            <column name="remark" type="TEXT" remarks="备注"/>
+        </createTable>
+        <createIndex indexName="idx_xiaoe_contents_resource_type" tableName="xiaoe_contents">
+            <column name="resource_type"/>
+        </createIndex>
+        <createIndex indexName="idx_xiaoe_contents_content_kind" tableName="xiaoe_contents">
+            <column name="content_kind"/>
+        </createIndex>
+        <createIndex indexName="idx_xiaoe_contents_sale_status" tableName="xiaoe_contents">
+            <column name="sale_status"/>
+        </createIndex>
+        <createIndex indexName="idx_xiaoe_contents_title" tableName="xiaoe_contents">
+            <column name="title"/>
+        </createIndex>
+    </changeSet>
+
 </databaseChangeLog>
