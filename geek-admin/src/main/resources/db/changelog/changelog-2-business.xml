@@ -1534,4 +1534,20 @@
         </addColumn>
     </changeSet>
 
+    <!-- 52. xeknow 采集：扩展小鹅用户映射（手机号/缺号延期/原始快照） -->
+    <changeSet author="tao-business" id="business-052-xiaoe_user_mapping_xeknow">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="xiaoe_user_mapping" columnName="phone"/></not>
+        </preConditions>
+        <addColumn tableName="xiaoe_user_mapping">
+            <column name="phone" type="VARCHAR(32)" remarks="采集手机号，空表示缺号"/>
+            <column name="phone_next_query_at" type="TIMESTAMPTZ" remarks="缺号下次可被 umissing 下发的时间"/>
+            <column name="nick_name" type="VARCHAR(255)" remarks="小鹅昵称快照"/>
+            <column name="json_data" type="jsonb" remarks="该用户最新上报原始快照"/>
+        </addColumn>
+        <createIndex indexName="idx_xiaoe_user_mapping_phone_next_query_at" tableName="xiaoe_user_mapping">
+            <column name="phone_next_query_at"/>
+        </createIndex>
+    </changeSet>
+
 </databaseChangeLog>

@@ -54,6 +54,24 @@ public class XiaoeUserMapping extends BaseEntity
     @Excel(name = "建立映射时间")
     private Instant mappedTime;
 
+    /** 采集手机号，空表示缺号 */
+    @Schema(title = "采集手机号")
+    @Excel(name = "手机号")
+    private String phone;
+
+    /** 缺号下次可被 umissing 下发的时间 */
+    @Schema(title = "缺号下次可查时间")
+    private Instant phoneNextQueryAt;
+
+    /** 小鹅昵称快照 */
+    @Schema(title = "昵称")
+    @Excel(name = "昵称")
+    private String nickName;
+
+    /** 该用户最新上报原始快照 */
+    @Schema(title = "原始快照JSON")
+    private String jsonData;
+
     /** 状态（0正常 1停用） */
     @Schema(title = "状态（0正常 1停用）")
     @Excel(name = "状态", readConverterExp = "0=正常,1=停用")

@@ -22,3 +22,9 @@ geek:
         api-key: ${YUNWU_API_KEY:sk-49UYOyi60RpuiNz1rtttuFHepprI8Ecs9tA9s8VB4SfRU9ON}
         model: ${YUNWU_MODEL:gpt-4o-mini}
         timeout-seconds: 90
+  # xeknow 采集上报（私钥见 classpath:xeknow/private.pem；公钥在 xeknow/keys/public.pem）
+  xeknow:
+    kid: default
+    private-key-location: classpath:xeknow/private.pem
+    allow-plaintext: true
+    phone-retry-days: 3
