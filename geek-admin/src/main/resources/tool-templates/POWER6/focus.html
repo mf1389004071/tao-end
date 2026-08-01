@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>潜能解读 · 聚焦模板</title>
+  <style>
+    body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;margin:0;padding:16px;
+      background:linear-gradient(160deg,#eff6ff,#f8fafc);color:#1e293b}
+    .hero{background:#1d4ed8;color:#fff;border-radius:20px;padding:20px;margin-bottom:14px}
+    .hero h1{margin:0 0 6px;font-size:20px}
+    .pill{display:inline-block;background:rgba(255,255,255,.2);border-radius:999px;padding:4px 10px;font-size:12px}
+    .panel{background:rgba(255,255,255,.92);border-radius:16px;padding:16px;margin-bottom:12px}
+    .focus{font-size:22px;font-weight:900;color:#1d4ed8;margin:8px 0}
+    .ai{line-height:1.75;font-size:14px;white-space:pre-wrap}
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <div class="pill">模板 focus</div>
+    <h1>{{subjectName}}</h1>
+    <div>生成于 {{generatedAt}}</div>
+  </div>
+  <div class="panel">
+    <div>本轮最需关注</div>
+    <div class="focus">{{focusDimension}}</div>
+    <div>{{scoresHtml}}</div>
+  </div>
+  <div class="panel">
+    <h2 style="margin:0 0 8px;font-size:16px">教练解读</h2>
+    <div class="ai">{{aiNarrative}}</div>
+  </div>
+  <div class="panel">
+    <h2 style="margin:0 0 8px;font-size:16px">下一步</h2>
+    <div class="ai">{{aiActions}}</div>
+  </div>
+</body>
+</html>

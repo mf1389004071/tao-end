@@ -63,6 +63,18 @@ public class KnowledgeComment extends BaseEntity
     @Excel(name = "状态：已发布/隐藏")
     private String bizStatus;
 
+    /** 可见性：PUBLIC/PRIVATE */
+    @Schema(title = "可见性：PUBLIC/PRIVATE")
+    private String visibility;
+
+    /** 关联 knowledge_usage_record */
+    @Schema(title = "关联使用记录ID")
+    private Long usageRecordId;
+
+    /** 可选身份标记 */
+    @Schema(title = "身份编码")
+    private String identityCode;
+
     /** 删除人ID */
     @Schema(title = "删除人ID")
     private Long deleteId;

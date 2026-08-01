@@ -1,0 +1,7 @@
+menu_id,menu_name,parent_id,order_num,path,component,query,route_name,is_frame,is_cache,menu_type,visible,status,perms,icon,create_by,create_time,update_by,update_time,remark
+12980,业务产品,3,2,bizproduct,bt10/bizproduct/index,,,1,0,C,0,0,bt10:bizproduct:list,shopping,admin,2025-01-01 00:00:00,,,业务产品(现金/技能包)
+12981,业务产品查询,12980,1,#,,,,1,0,F,0,0,bt10:bizproduct:query,#,admin,2025-01-01 00:00:00,,,""
+12982,业务产品新增,12980,2,#,,,,1,0,F,0,0,bt10:bizproduct:add,#,admin,2025-01-01 00:00:00,,,""
+12983,业务产品修改,12980,3,#,,,,1,0,F,0,0,bt10:bizproduct:edit,#,admin,2025-01-01 00:00:00,,,""
+12984,业务产品删除,12980,4,#,,,,1,0,F,0,0,bt10:bizproduct:remove,#,admin,2025-01-01 00:00:00,,,""
+12985,业务产品导出,12980,5,#,,,,1,0,F,0,0,bt10:bizproduct:export,#,admin,2025-01-01 00:00:00,,,""

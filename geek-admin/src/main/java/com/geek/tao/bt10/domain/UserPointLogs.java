@@ -63,6 +63,10 @@ public class UserPointLogs extends BaseEntity
     @Excel(name = "关联业务主键")
     private Long relatedId;
 
+    /** 非空表示身份域流水，不累计 user_profiles.points */
+    @Schema(title = "身份编码")
+    private String identityCode;
+
     /** 该笔积分过期时间 */
     @Schema(title = "该笔积分过期时间")
     @Excel(name = "该笔积分过期时间")

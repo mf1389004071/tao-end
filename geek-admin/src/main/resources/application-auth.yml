@@ -8,10 +8,9 @@ oauth:
       appSecret: appSecret
       url: https://api.weixin.qq.com/sns/jscode2session
     pub:
-      # TODO(公众号网页授权/登录): 如需启用请填公众号 AppID（当前仓库 pub 登录实现仍需调整，见文档说明）
-      appId: appId
-      # TODO(公众号网页授权/登录): 如需启用请填公众号 AppSecret
-      appSecret: appSecret
+      # 服务号「10倍好书院」网页授权/登录（AppID/AppSecret）
+      appId: wx4474bc82db067ab9
+      appSecret: e4c68ebf26e6efa8457bfbdbc46cb92d
       url: https://api.weixin.qq.com/sns/oauth2/access_token
 
 tfa:

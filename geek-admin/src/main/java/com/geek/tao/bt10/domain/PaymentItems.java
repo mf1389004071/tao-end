@@ -93,6 +93,10 @@ public class PaymentItems extends BaseEntity
     @Excel(name = "关联业务ID")
     private Long relatedId;
 
+    /** 关联 biz_product.id */
+    @Schema(title = "产品ID")
+    private Long productId;
+
     /** 扩展JSON，如可转让规则等 */
     @Schema(title = "扩展JSON，如可转让规则等")
     @Excel(name = "扩展JSON，如可转让规则等")

@@ -76,6 +76,12 @@ public class XiaoeOrdersServiceImpl extends ServiceImpl<XiaoeOrdersMapper, Xiaoe
         if (xiaoeOrders.getProcessStatus() != null && !xiaoeOrders.getProcessStatus().isEmpty()) {
             chain.eq(XiaoeOrders::getProcessStatus, xiaoeOrders.getProcessStatus());
         }
+        if (xiaoeOrders.getClaimPhone() != null && !xiaoeOrders.getClaimPhone().isEmpty()) {
+            chain.eq(XiaoeOrders::getClaimPhone, xiaoeOrders.getClaimPhone());
+        }
+        if (xiaoeOrders.getProductId() != null) {
+            chain.eq(XiaoeOrders::getProductId, xiaoeOrders.getProductId());
+        }
         if (xiaoeOrders.getText1() != null && !xiaoeOrders.getText1().isEmpty()) {
             chain.eq(XiaoeOrders::getText1, xiaoeOrders.getText1());
         }

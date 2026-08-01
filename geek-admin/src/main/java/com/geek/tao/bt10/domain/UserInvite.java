@@ -69,6 +69,10 @@ public class UserInvite extends BaseEntity
     @Excel(name = "邀请奖励贡献点")
     private BigDecimal rewardContrib;
 
+    /** 邀请场景身份 */
+    @Schema(title = "邀请场景身份")
+    private String identityCode;
+
     /** 状态（0正常 1停用） */
     @Schema(title = "状态（0正常 1停用）")
     @Excel(name = "状态", readConverterExp = "0=正常,1=停用")

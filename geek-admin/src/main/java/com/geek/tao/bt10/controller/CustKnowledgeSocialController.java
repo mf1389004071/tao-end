@@ -9,10 +9,12 @@ import com.geek.common.utils.SecurityUtils;
 import com.geek.tao.bt10.domain.KnowledgeAction;
 import com.geek.tao.bt10.domain.KnowledgeComment;
 import com.geek.tao.bt10.domain.KnowledgeContent;
+import com.geek.tao.bt10.domain.KnowledgeUsageRecord;
 import com.geek.tao.bt10.domain.Notifications;
 import com.geek.tao.bt10.mapper.KnowledgeActionMapper;
 import com.geek.tao.bt10.mapper.KnowledgeCommentMapper;
 import com.geek.tao.bt10.mapper.KnowledgeContentMapper;
+import com.geek.tao.bt10.mapper.KnowledgeUsageRecordMapper;
 import com.geek.tao.bt10.mapper.NotificationsMapper;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
@@ -51,6 +53,8 @@ public class CustKnowledgeSocialController extends BaseController {
     private KnowledgeCommentMapper knowledgeCommentMapper;
     @Autowired
     private NotificationsMapper notificationsMapper;
+    @Autowired
+    private KnowledgeUsageRecordMapper knowledgeUsageRecordMapper;
 
     /** 按「内容+用户+动作」串行化点赞/收藏，避免并发重复累加 */
     private final ConcurrentHashMap<String, Object> actionLocks = new ConcurrentHashMap<>();
@@ -99,7 +103,8 @@ public class CustKnowledgeSocialController extends BaseController {
     private KnowledgeAction selectActionIncludingDeleted(Long contentId, Long uid, String actionType) {
         QueryWrapper qw = QueryWrapper.create()
             .from(KnowledgeAction.class)
-            .eq(KnowledgeAction::getContentId, contentId)
+            .eq(KnowledgeAction::getTargetType, "CONTENT")
+            .eq(KnowledgeAction::getTargetId, contentId)
             .eq(KnowledgeAction::getUserId, uid)
             .eq(KnowledgeAction::getActionType, actionType);
         return LogicDeleteManager.execWithoutLogicDelete(() -> knowledgeActionMapper.selectOneByQuery(qw));
@@ -145,6 +150,8 @@ public class CustKnowledgeSocialController extends BaseController {
             } else {
                 KnowledgeAction a = new KnowledgeAction();
                 a.setContentId(contentId);
+                a.setTargetType("CONTENT");
+                a.setTargetId(contentId);
                 a.setUserId(uid);
                 a.setActionType("SHARE");
                 knowledgeActionMapper.insert(a);
@@ -187,6 +194,8 @@ public class CustKnowledgeSocialController extends BaseController {
             } else {
                 KnowledgeAction a = new KnowledgeAction();
                 a.setContentId(contentId);
+                a.setTargetType("CONTENT");
+                a.setTargetId(contentId);
                 a.setUserId(uid);
                 a.setActionType("VIEW");
                 knowledgeActionMapper.insert(a);
@@ -238,6 +247,8 @@ public class CustKnowledgeSocialController extends BaseController {
                 if (exists == null) {
                     KnowledgeAction a = new KnowledgeAction();
                     a.setContentId(contentId);
+                    a.setTargetType("CONTENT");
+                    a.setTargetId(contentId);
                     a.setUserId(uid);
                     a.setActionType(actionType);
                     try {
@@ -325,6 +336,67 @@ public class CustKnowledgeSocialController extends BaseController {
         KnowledgeComment c = knowledgeCommentMapper.selectOneById(cid);
         if (c == null) return error("评论不存在");
         return success(c);
+    }
+
+    /**
+     * 分享打开：COMMENT + VIEW（不 bump 内容 view_count），返回测评结果供访客查看。
+     */
+    @PostMapping("/comment/view")
+    @Transactional
+    public AjaxResult viewCommentShare(@RequestBody Map<String, Object> body) {
+        Long uid = requireLoginUserId();
+        if (uid == null) return error("请先登录");
+
+        Object cidObj = body == null ? null : body.get("commentId");
+        Long commentId = parseLongOrNull(cidObj == null ? null : String.valueOf(cidObj));
+        if (commentId == null) return error("commentId 不能为空");
+
+        KnowledgeComment c = knowledgeCommentMapper.selectOneById(commentId);
+        if (c == null) return error("分享不存在");
+
+        // 幂等记 COMMENT VIEW，不增加内容热度
+        QueryWrapper qw = QueryWrapper.create()
+            .from(KnowledgeAction.class)
+            .eq(KnowledgeAction::getTargetType, "COMMENT")
+            .eq(KnowledgeAction::getTargetId, commentId)
+            .eq(KnowledgeAction::getUserId, uid)
+            .eq(KnowledgeAction::getActionType, "VIEW");
+        KnowledgeAction exists = LogicDeleteManager.execWithoutLogicDelete(
+            () -> knowledgeActionMapper.selectOneByQuery(qw));
+        if (exists == null) {
+            KnowledgeAction a = new KnowledgeAction();
+            a.setContentId(c.getContentId());
+            a.setTargetType("COMMENT");
+            a.setTargetId(commentId);
+            a.setUserId(uid);
+            a.setActionType("VIEW");
+            try {
+                knowledgeActionMapper.insert(a);
+            } catch (DuplicateKeyException ignore) {
+                // ignore
+            }
+        } else {
+            restoreActionIfSoftDeleted(exists);
+        }
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("commentId", String.valueOf(c.getId()));
+        data.put("contentId", c.getContentId() == null ? null : String.valueOf(c.getContentId()));
+        data.put("summary", c.getContent());
+        data.put("visibility", c.getVisibility());
+
+        if (c.getUsageRecordId() != null) {
+            KnowledgeUsageRecord usage = knowledgeUsageRecordMapper.selectOneById(c.getUsageRecordId());
+            if (usage != null) {
+                data.put("usageId", String.valueOf(usage.getId()));
+                data.put("subjectName", usage.getSubjectName());
+                data.put("toolCode", usage.getToolCode());
+                data.put("scoreSummary", usage.getScoreSummary());
+                data.put("resultBasic", usage.getResultBasic());
+                data.put("resultPro", usage.getResultPro());
+            }
+        }
+        return success(data);
     }
 
     @PostMapping("/comment/add")

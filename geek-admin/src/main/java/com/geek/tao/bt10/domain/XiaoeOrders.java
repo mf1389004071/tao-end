@@ -114,6 +114,14 @@ public class XiaoeOrders extends BaseEntity
     @Excel(name = "处理状态")
     private String processStatus;
 
+    /** 待兑/购买人手机号 */
+    @Schema(title = "待兑手机号")
+    private String claimPhone;
+
+    /** 关联 biz_product.id */
+    @Schema(title = "产品ID")
+    private Long productId;
+
     /** 扩展文本1 */
     @Schema(title = "扩展文本1")
     @Excel(name = "扩展文本1")

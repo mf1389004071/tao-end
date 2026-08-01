@@ -1,12 +1,24 @@
 # 开发环境（默认 spring.profiles.active=dev）
-# 可用环境变量覆盖：GEEK_DB_URL / GEEK_DB_USERNAME / GEEK_DB_PASSWORD
+# 可用环境变量覆盖：GEEK_DB_URL / GEEK_DB_USERNAME / GEEK_DB_PASSWORD / YUNWU_API_KEY
 spring:
   datasource:
     dynamic:
       datasource:
         MASTER:
 #          url: ${GEEK_DB_URL:jdbc:postgresql://39.102.57.167:5432/bt10}
-          url: ${GEEK_DB_URL:jdbc:postgresql://127.0.0.1:5432/bt10}
+          url: ${GEEK_DB_URL:jdbc:postgresql://127.0.0.1:5433/bt10}
           username: ${GEEK_DB_USERNAME:postgres}
           password: ${GEEK_DB_PASSWORD:Bt10@1234}
           driver-class-name: org.postgresql.Driver
+
+# OpenAI 兼容网关（yunwu.ai）；key 用环境变量，勿提交真实密钥
+geek:
+  ai:
+    enabled: true
+    default-provider: yunwu
+    providers:
+      yunwu:
+        base-url: ${YUNWU_BASE_URL:https://yunwu.ai/v1}
+        api-key: ${YUNWU_API_KEY:sk-49UYOyi60RpuiNz1rtttuFHepprI8Ecs9tA9s8VB4SfRU9ON}
+        model: ${YUNWU_MODEL:gpt-4o-mini}
+        timeout-seconds: 90

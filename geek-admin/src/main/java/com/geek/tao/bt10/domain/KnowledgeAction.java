@@ -32,6 +32,16 @@ public class KnowledgeAction extends BaseEntity
     @Excel(name = "知识内容ID")
     private Long contentId;
 
+    /** 目标类型：CONTENT/COMMENT */
+    @Schema(title = "目标类型：CONTENT/COMMENT")
+    @Excel(name = "目标类型")
+    private String targetType;
+
+    /** 目标ID（内容ID或评论ID） */
+    @Schema(title = "目标ID（内容ID或评论ID）")
+    @Excel(name = "目标ID")
+    private Long targetId;
+
     /** 类型：点赞/反对/收藏/分享等 */
     @Schema(title = "类型：点赞/反对/收藏/分享等")
     @Excel(name = "类型：点赞/反对/收藏/分享等")

@@ -1,0 +1,268 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- P6 / 知识工具：通用产品、使用记录、身份次数、action 双靶、邀请/流水 identity_code -->
+
+    <changeSet author="tao-business" id="power6-001-biz_product">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="biz_product"/></not>
+        </preConditions>
+        <createTable remarks="业务产品(现金/技能包等)，与积分商城 point_product 分离" tableName="biz_product">
+            <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
+            <column name="code" type="VARCHAR(64)" remarks="产品编码"><constraints nullable="false" unique="true"/></column>
+            <column name="name" type="VARCHAR(255)" remarks="产品名称"><constraints nullable="false"/></column>
+            <column name="product_type" type="VARCHAR(50)" remarks="类型：SKILL_PACK/TOOL/MEMBER 等"/>
+            <column name="price_amount" type="DECIMAL(24,4)" remarks="现金标价"/>
+            <column name="valid_days" type="INT" remarks="购买/兑换后续期天数"/>
+            <column name="identity_code" type="VARCHAR(50)" remarks="关联身份编码"/>
+            <column name="buy_url" type="TEXT" remarks="小鹅通等外部购买链接"/>
+            <column name="cover_image_url" type="TEXT" remarks="封面图"/>
+            <column name="detail_content" type="TEXT" remarks="详情"/>
+            <column name="biz_status" type="VARCHAR(20)" defaultValue="ACTIVE" remarks="上架状态"/>
+            <column name="order_num" type="INT" defaultValueNumeric="0" remarks="排序"/>
+            <column name="json_data" type="jsonb" remarks="扩展JSON"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="create_by" type="VARCHAR(64)" defaultValue="" remarks="创建者"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
+            <column name="update_by" type="VARCHAR(64)" defaultValue="" remarks="更新者"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
+            <column name="delete_id" type="BIGINT" remarks="删除人ID"/>
+            <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间"/>
+            <column name="status" type="CHAR(1)" defaultValue="0" remarks="状态（0正常 1停用）"/>
+            <column name="del_flag" type="SMALLINT" defaultValueNumeric="0" remarks="删除标志"/>
+            <column name="remark" type="TEXT" remarks="备注"/>
+        </createTable>
+        <createIndex indexName="idx_biz_product_identity" tableName="biz_product"><column name="identity_code"/></column>
+        <createIndex indexName="idx_biz_product_biz_status" tableName="biz_product"><column name="biz_status"/></column>
+    </changeSet>
+
+    <changeSet author="tao-business" id="power6-002-product_beneficiary">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="product_beneficiary"/></not>
+        </preConditions>
+        <createTable remarks="产品多方分润受益人配置" tableName="product_beneficiary">
+            <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
+            <column name="product_id" type="BIGINT" remarks="biz_product.id"><constraints nullable="false"/></column>
+            <column name="user_id" type="BIGINT" remarks="受益用户，可空表示平台"/>
+            <column name="role_code" type="VARCHAR(50)" remarks="INVENTOR/CO_CREATOR/OWNER/PLATFORM/INVITER 等"><constraints nullable="false"/></column>
+            <column name="share_ratio" type="DECIMAL(10,6)" remarks="分润比率0-1"><constraints nullable="false"/></column>
+            <column name="currency" type="VARCHAR(20)" defaultValue="CONTRIB" remarks="CONTRIB/POINT"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="create_by" type="VARCHAR(64)" defaultValue="" remarks="创建者"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
+            <column name="update_by" type="VARCHAR(64)" defaultValue="" remarks="更新者"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
+            <column name="status" type="CHAR(1)" defaultValue="0" remarks="状态"/>
+            <column name="del_flag" type="SMALLINT" defaultValueNumeric="0" remarks="删除标志"/>
+            <column name="remark" type="TEXT" remarks="备注"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="product_beneficiary" baseColumnNames="product_id"
+                                 constraintName="fk_product_beneficiary_product" referencedTableName="biz_product" referencedColumnNames="id" onDelete="CASCADE"/>
+        <createIndex indexName="idx_product_beneficiary_product" tableName="product_beneficiary"><column name="product_id"/></column>
+    </changeSet>
+
+    <changeSet author="tao-business" id="power6-003-knowledge_usage_record">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="knowledge_usage_record"/></not>
+        </preConditions>
+        <createTable remarks="知识内容使用记录(测评等)，content_type 区分 TOOL 等" tableName="knowledge_usage_record">
+            <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
+            <column name="content_id" type="BIGINT" remarks="knowledge_content.id"><constraints nullable="false"/></column>
+            <column name="content_type" type="VARCHAR(50)" remarks="内容类型快照，如 TOOL"/>
+            <column name="tool_code" type="VARCHAR(64)" remarks="工具码，如 POWER6"/>
+            <column name="user_id" type="BIGINT" remarks="提交用户"><constraints nullable="false"/></column>
+            <column name="identity_code" type="VARCHAR(50)" remarks="关联身份"/>
+            <column name="subject_name" type="VARCHAR(100)" remarks="被测称呼"/>
+            <column name="answer_json" type="jsonb" remarks="答题原始数据"/>
+            <column name="score_summary" type="jsonb" remarks="分值简述"/>
+            <column name="result_basic" type="jsonb" remarks="基础评测结果"/>
+            <column name="result_pro" type="jsonb" remarks="高级/AI 评测结果"/>
+            <column name="result_human" type="jsonb" remarks="人工解读，二期"/>
+            <column name="comment_id" type="BIGINT" remarks="关联私有评论句柄"/>
+            <column name="ai_task_id" type="BIGINT" remarks="关联 ai_tasks.id"/>
+            <column name="deducted" type="BOOLEAN" defaultValueBoolean="false" remarks="本次高级是否已扣次"/>
+            <column name="used_under_membership" type="BOOLEAN" defaultValueBoolean="false" remarks="是否有效期内生成高级"/>
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="create_by" type="VARCHAR(64)" defaultValue="" remarks="创建者"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
+            <column name="update_by" type="VARCHAR(64)" defaultValue="" remarks="更新者"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
+            <column name="delete_id" type="BIGINT" remarks="删除人ID"/>
+            <column name="delete_time" type="TIMESTAMPTZ" remarks="删除时间"/>
+            <column name="status" type="CHAR(1)" defaultValue="0" remarks="状态"/>
+            <column name="del_flag" type="SMALLINT" defaultValueNumeric="0" remarks="删除标志"/>
+            <column name="remark" type="TEXT" remarks="备注"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="knowledge_usage_record" baseColumnNames="content_id"
+                                 constraintName="fk_knowledge_usage_content" referencedTableName="knowledge_content" referencedColumnNames="id" onDelete="CASCADE"/>
+        <addForeignKeyConstraint baseTableName="knowledge_usage_record" baseColumnNames="user_id"
+                                 constraintName="fk_knowledge_usage_user" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
+        <createIndex indexName="idx_knowledge_usage_user" tableName="knowledge_usage_record"><column name="user_id"/></column>
+        <createIndex indexName="idx_knowledge_usage_content" tableName="knowledge_usage_record"><column name="content_id"/></column>
+        <createIndex indexName="idx_knowledge_usage_tool" tableName="knowledge_usage_record"><column name="tool_code"/></column>
+    </changeSet>
+
+    <changeSet author="tao-business" id="power6-004-identities-default_points">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="identities" columnName="default_available_points"/></not>
+        </preConditions>
+        <addColumn tableName="identities">
+            <column name="default_available_points" type="INT" defaultValueNumeric="0" remarks="该身份默认可用积分(次数)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="tao-business" id="power6-005-user_identities-available_points">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="user_identities" columnName="available_points"/></not>
+        </preConditions>
+        <addColumn tableName="user_identities">
+            <column name="available_points" type="INT" defaultValueNumeric="0" remarks="身份域可用积分(次数)，不计入用户总积分"/>
+        </addColumn>
+        <createIndex indexName="uk_user_identities_user_code" tableName="user_identities" unique="true">
+            <column name="user_id"/>
+            <column name="identity_code"/>
+            <column name="del_flag"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="tao-business" id="power6-006-user_point_logs-identity_code">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="user_point_logs" columnName="identity_code"/></not>
+        </preConditions>
+        <addColumn tableName="user_point_logs">
+            <column name="identity_code" type="VARCHAR(50)" remarks="非空表示身份域流水，不累计 user_profiles.points"/>
+        </addColumn>
+        <createIndex indexName="idx_user_point_logs_identity" tableName="user_point_logs"><column name="identity_code"/></column>
+    </changeSet>
+
+    <changeSet author="tao-business" id="power6-007-user_invite-identity_code">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="user_invite" columnName="identity_code"/></not>
+        </preConditions>
+        <addColumn tableName="user_invite">
+            <column name="identity_code" type="VARCHAR(50)" remarks="邀请场景身份，如 IDENTITY_P6"/>
+        </addColumn>
+        <createIndex indexName="idx_user_invite_identity" tableName="user_invite"><column name="identity_code"/></column>
+    </changeSet>
+
+    <changeSet author="tao-business" id="power6-008-knowledge_comment-share">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="knowledge_comment" columnName="usage_record_id"/></not>
+        </preConditions>
+        <addColumn tableName="knowledge_comment">
+            <column name="visibility" type="VARCHAR(20)" defaultValue="PUBLIC" remarks="PUBLIC/PRIVATE"/>
+            <column name="usage_record_id" type="BIGINT" remarks="关联 knowledge_usage_record"/>
+            <column name="identity_code" type="VARCHAR(50)" remarks="可选身份标记"/>
+        </addColumn>
+        <createIndex indexName="idx_knowledge_comment_usage" tableName="knowledge_comment"><column name="usage_record_id"/></column>
+    </changeSet>
+
+    <changeSet author="tao-business" id="power6-009-knowledge_action-dual-target">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="knowledge_action" columnName="target_type"/></not>
+        </preConditions>
+        <addColumn tableName="knowledge_action">
+            <column name="target_type" type="VARCHAR(20)" defaultValue="CONTENT" remarks="CONTENT/COMMENT"/>
+            <column name="target_id" type="BIGINT" remarks="内容ID或评论ID"/>
+        </addColumn>
+        <sql>
+            UPDATE knowledge_action SET target_type = 'CONTENT', target_id = content_id WHERE target_id IS NULL;
+        </sql>
+        <dropIndex tableName="knowledge_action" indexName="uk_knowledge_action_content_user"/>
+        <createIndex indexName="uk_knowledge_action_target" tableName="knowledge_action" unique="true">
+            <column name="target_type"/>
+            <column name="target_id"/>
+            <column name="action_type"/>
+            <column name="user_id"/>
+            <column name="del_flag"/>
+        </createIndex>
+        <createIndex indexName="idx_knowledge_action_content_id" tableName="knowledge_action"><column name="content_id"/></column>
+    </changeSet>
+
+    <changeSet author="tao-business" id="power6-010-payment_items-product_id">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="payment_items" columnName="product_id"/></not>
+        </preConditions>
+        <addColumn tableName="payment_items">
+            <column name="product_id" type="BIGINT" remarks="关联 biz_product.id"/>
+        </addColumn>
+        <createIndex indexName="idx_payment_items_product" tableName="payment_items"><column name="product_id"/></column>
+    </changeSet>
+
+    <changeSet author="tao-business" id="power6-011-xiaoe_orders-claim-fields">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="xiaoe_orders" columnName="claim_phone"/></not>
+        </preConditions>
+        <addColumn tableName="xiaoe_orders">
+            <column name="claim_phone" type="VARCHAR(20)" remarks="待兑/购买人手机号"/>
+            <column name="product_id" type="BIGINT" remarks="关联 biz_product.id"/>
+        </addColumn>
+        <createIndex indexName="idx_xiaoe_orders_claim_phone" tableName="xiaoe_orders"><column name="claim_phone"/></column>
+        <createIndex indexName="idx_xiaoe_orders_product" tableName="xiaoe_orders"><column name="product_id"/></column>
+    </changeSet>
+
+    <changeSet author="tao-business" id="power6-012-seed-identity-p6">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM identities WHERE identity_code = 'IDENTITY_P6'</sqlCheck>
+        </preConditions>
+        <insert tableName="identities">
+            <column name="identity_code" value="IDENTITY_P6"/>
+            <column name="identity_level" valueNumeric="10"/>
+            <column name="name" value="六大能力测评权益"/>
+            <column name="intro" value="潜能测评专业解读与有效期权益"/>
+            <column name="rights_text" value="有效期内高级解读不扣次；过期可用身份域次数解锁高级"/>
+            <column name="default_available_points" valueNumeric="3"/>
+            <column name="create_by" value="system"/>
+            <column name="status" value="0"/>
+            <column name="del_flag" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="tao-business" id="power6-013-seed-biz-product-199">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM biz_product WHERE code = 'SKILL_199_P6'</sqlCheck>
+        </preConditions>
+        <insert tableName="biz_product">
+            <column name="code" value="SKILL_199_P6"/>
+            <column name="name" value="识别好199·六大能力技能包"/>
+            <column name="product_type" value="SKILL_PACK"/>
+            <column name="price_amount" valueNumeric="199"/>
+            <column name="valid_days" valueNumeric="30"/>
+            <column name="identity_code" value="IDENTITY_P6"/>
+            <column name="buy_url" value=""/>
+            <column name="biz_status" value="ACTIVE"/>
+            <column name="order_num" valueNumeric="0"/>
+            <column name="create_by" value="system"/>
+            <column name="status" value="0"/>
+            <column name="del_flag" valueNumeric="0"/>
+            <column name="remark" value="请在管理端补全小鹅通 buy_url"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="tao-business" id="power6-014-seed-knowledge-content-power6">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM knowledge_content WHERE id = 920006</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO knowledge_content (
+                id, title, subtitle, content, content_type, author_id, tags, biz_status, publish_time,
+                view_count, like_count, comment_count, share_count, collect_count,
+                json_data, create_id, create_by, create_time, status, del_flag, remark
+            )
+            SELECT
+                920006, '「10倍好」潜能测评', '六大能力测评工具',
+                '三框番号计分：目标力/专注力/执行力/协作力/抗压力/学习力。',
+                'TOOL', 1, '潜能,测评,POWER6', 'PUBLISHED', NOW(),
+                0, 0, 0, 0, 0,
+                '{"toolCode":"POWER6","identityCode":"IDENTITY_P6","entry_url":"/#/tools/power6?contentId=920006","productCode":"SKILL_199_P6"}',
+                1, 'admin', NOW(), '0', 0, 'P6工具种子'
+            WHERE NOT EXISTS (SELECT 1 FROM knowledge_content WHERE id = 920006);
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

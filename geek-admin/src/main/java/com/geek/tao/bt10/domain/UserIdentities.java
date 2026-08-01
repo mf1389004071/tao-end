@@ -68,6 +68,11 @@ public class UserIdentities extends BaseEntity
     @Excel(name = "来源业务ID(如支付订单ID)")
     private Long sourceId;
 
+    /** 身份域可用积分(次数)，不计入用户总积分 */
+    @Schema(title = "身份域可用积分(次数)")
+    @Excel(name = "可用积分")
+    private Integer availablePoints;
+
     /** 状态（0正常 1停用） */
     @Schema(title = "状态（0正常 1停用）")
     @Excel(name = "状态", readConverterExp = "0=正常,1=停用")

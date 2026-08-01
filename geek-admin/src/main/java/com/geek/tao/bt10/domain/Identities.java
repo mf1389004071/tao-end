@@ -83,6 +83,11 @@ public class Identities extends BaseEntity
     @Excel(name = "身份付费金额(人民币)")
     private BigDecimal priceAmount;
 
+    /** 该身份默认可用积分(次数) */
+    @Schema(title = "该身份默认可用积分(次数)")
+    @Excel(name = "默认可用积分")
+    private Integer defaultAvailablePoints;
+
     /** 状态（0正常 1停用） */
     @Schema(title = "状态（0正常 1停用）")
     @Excel(name = "状态", readConverterExp = "0=正常,1=停用")

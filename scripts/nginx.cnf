@@ -71,7 +71,11 @@ server
         try_files $uri $uri/ =404;
     }
 
-
+    # 前端SPA
+    location / {
+        # 核心配置：依次尝试查找文件、目录，如果都找不到，则返回 /index.html
+        try_files $uri $uri/ /index.html;
+    }
 
     #禁止访问的文件或目录
     location ~ ^/(\.user.ini|\.htaccess|\.git|\.env|\.svn|\.project|LICENSE|README.md)
