@@ -27,6 +27,8 @@ import com.geek.common.core.domain.entity.SysUser;
 import com.geek.common.exception.ServiceException;
 import com.geek.system.service.ISysUserService;
 import com.geek.tao.bt10.domain.XiaoeContents;
+import com.geek.tao.bt10.domain.XiaoeMaterialGroups;
+import com.geek.tao.bt10.domain.XiaoeMaterials;
 import com.geek.tao.bt10.domain.XiaoeOrders;
 import com.geek.tao.bt10.domain.XiaoeProducts;
 import com.geek.tao.bt10.domain.XiaoeSvipMembers;
@@ -34,6 +36,8 @@ import com.geek.tao.bt10.domain.XiaoeUserMapping;
 import com.geek.tao.bt10.domain.XeknowReportEncryptedReq;
 import com.geek.tao.bt10.mapper.XiaoeUserMappingMapper;
 import com.geek.tao.bt10.service.IXiaoeContentsService;
+import com.geek.tao.bt10.service.IXiaoeMaterialGroupsService;
+import com.geek.tao.bt10.service.IXiaoeMaterialsService;
 import com.geek.tao.bt10.service.IXiaoeOrdersService;
 import com.geek.tao.bt10.service.IXiaoeProductsService;
 import com.geek.tao.bt10.service.IXiaoeSvipMembersService;
@@ -57,6 +61,8 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
     private static final String SOURCE_PRODUCT = "product_list";
     private static final String SOURCE_CONTENT = "content_list";
     private static final String SOURCE_SVIP = "svip_list";
+    private static final String SOURCE_MATERIAL_GROUP = "material_group";
+    private static final String SOURCE_MATERIAL = "material_list";
     private static final DateTimeFormatter XE_TIME =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final DateTimeFormatter XE_DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -77,6 +83,10 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
     private IXiaoeContentsService xiaoeContentsService;
     @Autowired
     private IXiaoeSvipMembersService xiaoeSvipMembersService;
+    @Autowired
+    private IXiaoeMaterialGroupsService xiaoeMaterialGroupsService;
+    @Autowired
+    private IXiaoeMaterialsService xiaoeMaterialsService;
     @Autowired
     private XiaoeUserMappingMapper xiaoeUserMappingMapper;
     @Autowired
@@ -126,6 +136,14 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
             int[] r = upsertSvipMembers(root);
             inserted = r[0];
             updated = r[1];
+        } else if (SOURCE_MATERIAL_GROUP.equals(source)) {
+            int[] r = upsertMaterialGroups(root);
+            inserted = r[0];
+            updated = r[1];
+        } else if (SOURCE_MATERIAL.equals(source)) {
+            int[] r = upsertMaterials(root);
+            inserted = r[0];
+            updated = r[1];
         } else {
             throw new ServiceException("不支持的 source: " + source);
         }
@@ -148,6 +166,10 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
         if (SOURCE_SVIP.equals(source)) {
             data.put("svipId", text(root, "svip_id"));
             data.put("svipTitle", text(root, "svip_title"));
+        }
+        if (SOURCE_MATERIAL_GROUP.equals(source) || SOURCE_MATERIAL.equals(source)) {
+            data.put("materialType", root.path("material_type").asInt(0));
+            data.put("materialKind", text(root, "material_kind"));
         }
         return data;
     }
@@ -415,6 +437,229 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
             case 2 -> "AUDIO";
             case 3 -> "VIDEO";
             default -> "RT_" + resourceType;
+        };
+    }
+
+    private int[] upsertMaterialGroups(JsonNode envelope) {
+        JsonNode list = envelope.path("payload").path("data").path("list");
+        if (!list.isArray()) {
+            throw new ServiceException("material group list 缺失");
+        }
+        Integer materialType = intOrNull(envelope.get("material_type"));
+        String materialKind = text(envelope, "material_kind");
+        String appId = text(envelope, "app_id");
+        Integer typeCount = intOrNull(envelope.path("payload").path("data").get("type_count"));
+        if (typeCount == null) {
+            typeCount = intOrNull(envelope.get("type_count"));
+        }
+        int inserted = 0;
+        int updated = 0;
+        for (JsonNode item : flattenMaterialGroups(list)) {
+            Long categoryId = longOrNull(item.get("id"));
+            Integer type = materialType != null ? materialType : intOrNull(item.get("type"));
+            if (categoryId == null || type == null) {
+                continue;
+            }
+            XiaoeMaterialGroups existing = xiaoeMaterialGroupsService.queryChain()
+                    .eq(XiaoeMaterialGroups::getMaterialType, type)
+                    .eq(XiaoeMaterialGroups::getCategoryId, categoryId)
+                    .one();
+            XiaoeMaterialGroups row = existing != null ? existing : new XiaoeMaterialGroups();
+            row.setCategoryId(categoryId);
+            row.setMaterialType(type);
+            row.setMaterialKind(resolveMaterialKind(materialKind, type));
+            row.setAppId(StringUtils.hasText(appId) ? appId : text(item, "app_id"));
+            if ("*".equals(row.getAppId())) {
+                row.setAppId(appId);
+            }
+            row.setParentId(longOrNull(item.get("parent_id")));
+            row.setName(text(item, "name"));
+            row.setCategorySort(text(item, "category_sort"));
+            Integer cnt = intOrNull(item.get("category_count"));
+            if (cnt == null && item.has("category_count") && item.get("category_count").isTextual()) {
+                try {
+                    cnt = Integer.parseInt(item.get("category_count").asText().trim());
+                } catch (Exception ignored) {
+                    cnt = null;
+                }
+            }
+            row.setCategoryCount(cnt);
+            row.setTypeCount(typeCount);
+            row.setJsonData(toJson(item));
+            row.setSyncStatus("SYNCED");
+            row.setLastSyncTime(Instant.now());
+            row.setDelFlag(0);
+            if (!StringUtils.hasText(row.getStatus())) {
+                row.setStatus("0");
+            }
+            if (existing == null) {
+                xiaoeMaterialGroupsService.save(row);
+                inserted++;
+            } else {
+                xiaoeMaterialGroupsService.updateById(row);
+                updated++;
+            }
+        }
+        return new int[] { inserted, updated };
+    }
+
+    private static List<JsonNode> flattenMaterialGroups(JsonNode list) {
+        List<JsonNode> out = new ArrayList<>();
+        if (list == null || !list.isArray()) {
+            return out;
+        }
+        for (JsonNode n : list) {
+            out.add(n);
+            JsonNode children = n.get("children");
+            if (children != null && children.isArray() && !children.isEmpty()) {
+                out.addAll(flattenMaterialGroups(children));
+            }
+        }
+        return out;
+    }
+
+    private int[] upsertMaterials(JsonNode envelope) {
+        JsonNode list = envelope.path("payload").path("data").path("list");
+        if (!list.isArray()) {
+            throw new ServiceException("material list 缺失");
+        }
+        Integer envelopeType = intOrNull(envelope.get("material_type"));
+        String envelopeKind = text(envelope, "material_kind");
+        String envelopeAppId = text(envelope, "app_id");
+        int inserted = 0;
+        int updated = 0;
+        for (JsonNode item : list) {
+            String materialId = text(item, "material_id");
+            if (!StringUtils.hasText(materialId)) {
+                continue;
+            }
+            XiaoeMaterials existing = xiaoeMaterialsService.queryChain()
+                    .eq(XiaoeMaterials::getMaterialId, materialId)
+                    .one();
+            XiaoeMaterials row = existing != null ? existing : new XiaoeMaterials();
+            fillMaterialRow(row, item, envelopeType, envelopeKind, envelopeAppId);
+            if (existing == null) {
+                xiaoeMaterialsService.save(row);
+                inserted++;
+            } else {
+                xiaoeMaterialsService.updateById(row);
+                updated++;
+            }
+        }
+        return new int[] { inserted, updated };
+    }
+
+    private void fillMaterialRow(XiaoeMaterials row, JsonNode item, Integer envelopeType,
+            String envelopeKind, String envelopeAppId) {
+        Integer type = intOrNull(item.get("type"));
+        if (type == null) {
+            type = envelopeType;
+        }
+        row.setMaterialId(text(item, "material_id"));
+        row.setMaterialRecId(longOrNull(item.get("id")));
+        row.setAppId(StringUtils.hasText(envelopeAppId) ? envelopeAppId : text(item, "app_id"));
+        row.setMaterialType(type);
+        row.setMaterialKind(resolveMaterialKind(envelopeKind, type));
+        row.setSubType(intOrNull(item.get("sub_type")));
+        row.setTitle(text(item, "title"));
+
+        String url = text(item, "url");
+        String showUrl = text(item, "show_url");
+        String downloadUrl = text(item, "download_url");
+        row.setUrl(url);
+        row.setShowUrl(showUrl);
+        row.setDownloadUrl(downloadUrl);
+        // 桌面下载器 token 非 HTTP；原始链接优先 download_url，否则列表 url（CDN/VOD 源）
+        String original = StringUtils.hasText(downloadUrl) ? downloadUrl : url;
+        row.setOriginalUrl(original);
+
+        row.setCategoryId(longOrNull(item.get("category_id")));
+        row.setCategoryName(text(item, "category_name"));
+        row.setCreatorId(text(item, "creator_id"));
+        row.setCreatorName(text(item, "creator_name"));
+        row.setMaterialSize(text(item, "material_size"));
+
+        JsonNode prop = item.get("material_property");
+        if (prop != null && prop.isTextual()) {
+            try {
+                prop = objectMapper.readTree(prop.asText());
+            } catch (Exception e) {
+                prop = null;
+            }
+        }
+        if (prop != null && prop.isObject()) {
+            row.setFileId(text(prop, "file_id"));
+            row.setWidth(intOrNull(prop.get("width")));
+            row.setHeight(intOrNull(prop.get("height")));
+            if (prop.has("length") && !prop.get("length").isNull()) {
+                try {
+                    row.setLengthSec(BigDecimal.valueOf(prop.get("length").asDouble())
+                            .setScale(4, RoundingMode.HALF_UP));
+                } catch (Exception e) {
+                    row.setLengthSec(null);
+                }
+            } else {
+                row.setLengthSec(null);
+            }
+            row.setPixelData(text(prop, "pixel_data"));
+            row.setPatchImgUrl(text(prop, "patch_img_url"));
+            row.setMaterialProperty(toJson(prop));
+        } else {
+            row.setFileId(null);
+            row.setWidth(null);
+            row.setHeight(null);
+            row.setLengthSec(null);
+            row.setPixelData(null);
+            row.setPatchImgUrl(null);
+            row.setMaterialProperty(null);
+        }
+
+        row.setState(intOrNull(item.get("state")));
+        row.setAuditState(intOrNull(item.get("audit_state")));
+        row.setBannedState(intOrNull(item.get("banned_state")));
+        row.setMaterialState(intOrNull(item.get("material_state")));
+        row.setMaterialStatus(intOrNull(item.get("material_status")));
+        row.setDealState(intOrNull(item.get("deal_state")));
+        row.setDecodeState(intOrNull(item.get("decode_state")));
+        row.setDecodeDescription(text(item, "decode_description"));
+        row.setReauditStatus(intOrNull(item.get("reaudit_status")));
+        JsonNode prot = item.get("protection_status");
+        if (prot != null && prot.isBoolean()) {
+            row.setProtectionStatus(prot.asBoolean() ? 1 : 0);
+        } else {
+            row.setProtectionStatus(intOrNull(prot));
+        }
+        row.setMaterialSource(intOrNull(item.get("material_source")));
+        row.setCostSummary(intOrNull(item.get("cost_summary")));
+        row.setReferCount(intOrNull(item.get("refer_count")));
+        row.setViewCount(intOrNull(item.get("view_count")));
+        row.setBannedReason(text(item, "banned_reason"));
+        row.setBannedAt(parseFlexibleTime(item.get("banned_at")));
+        row.setLatestViewAt(parseFlexibleTime(item.get("latest_view_at")));
+        row.setMaterialCreatedAt(parseFlexibleTime(item.get("created_at")));
+        row.setMaterialUpdatedAt(parseFlexibleTime(item.get("updated_at")));
+        row.setExtendData(toJson(item.get("extend_data")));
+        row.setJsonData(toJson(item));
+        row.setSyncStatus("SYNCED");
+        row.setLastSyncTime(Instant.now());
+        row.setDelFlag(0);
+        if (!StringUtils.hasText(row.getStatus())) {
+            row.setStatus("0");
+        }
+    }
+
+    private static String resolveMaterialKind(String envelopeKind, Integer materialType) {
+        if (StringUtils.hasText(envelopeKind)) {
+            return envelopeKind.trim().toUpperCase();
+        }
+        if (materialType == null) {
+            return null;
+        }
+        return switch (materialType) {
+            case 1 -> "IMAGE";
+            case 2 -> "AUDIO";
+            case 3 -> "VIDEO";
+            default -> "MT_" + materialType;
         };
     }
 

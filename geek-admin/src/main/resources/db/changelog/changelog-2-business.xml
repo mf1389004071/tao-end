@@ -1821,4 +1821,114 @@
         <setColumnRemarks tableName="xiaoe_user_mapping" columnName="phone" remarks="账户绑定手机号（明文；无绑定时可回退采集号）"/>
     </changeSet>
 
+    <!-- 58. xeknow：素材中心分组 -->
+    <changeSet author="tao-business" id="business-058-xiaoe_material_groups">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="xiaoe_material_groups"/></not>
+        </preConditions>
+        <createTable remarks="小鹅通素材中心分组：按图片/音频/视频类型分树，json_data 存原始节点" tableName="xiaoe_material_groups">
+            <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
+            <column name="category_id" type="BIGINT" remarks="小鹅通分组ID"><constraints nullable="false"/></column>
+            <column name="material_type" type="INT" remarks="素材类型：1图片/2音频/3视频"><constraints nullable="false"/></column>
+            <column name="material_kind" type="VARCHAR(32)" remarks="IMAGE/AUDIO/VIDEO"/>
+            <column name="app_id" type="VARCHAR(64)" remarks="小鹅通 app_id"/>
+            <column name="parent_id" type="BIGINT" remarks="父分组ID，0为根"/>
+            <column name="name" type="VARCHAR(255)" remarks="分组名称"/>
+            <column name="category_sort" type="VARCHAR(64)" remarks="排序值"/>
+            <column name="category_count" type="INT" remarks="分组下素材数"/>
+            <column name="type_count" type="INT" remarks="该类型素材总数快照"/>
+            <column name="sync_status" type="VARCHAR(20)" defaultValue="SYNCED" remarks="同步状态"/>
+            <column name="last_sync_time" type="TIMESTAMPTZ" remarks="最近同步时间"/>
+            <column name="json_data" type="jsonb" remarks="分组节点原始 JSON"/>
+
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="create_by" type="VARCHAR(64)" defaultValue="" remarks="创建者"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
+            <column name="update_by" type="VARCHAR(64)" defaultValue="" remarks="更新者"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
+            <column name="status" type="CHAR(1)" defaultValue="0" remarks="状态"/>
+            <column name="del_flag" type="SMALLINT" defaultValueNumeric="0" remarks="删除标志"/>
+            <column name="remark" type="TEXT" remarks="备注"/>
+        </createTable>
+        <addUniqueConstraint tableName="xiaoe_material_groups" columnNames="material_type,category_id" constraintName="uk_xiaoe_material_groups_type_cat"/>
+        <createIndex indexName="idx_xiaoe_material_groups_parent" tableName="xiaoe_material_groups">
+            <column name="material_type"/><column name="parent_id"/>
+        </createIndex>
+        <createIndex indexName="idx_xiaoe_material_groups_kind" tableName="xiaoe_material_groups">
+            <column name="material_kind"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- 59. xeknow：素材中心内容 -->
+    <changeSet author="tao-business" id="business-059-xiaoe_materials">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="xiaoe_materials"/></not>
+        </preConditions>
+        <createTable remarks="小鹅通素材中心内容：图片/音频/视频散列字段 + json_data 原始行；original_url 优先 download_url 否则 url" tableName="xiaoe_materials">
+            <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
+            <column name="material_id" type="VARCHAR(128)" remarks="小鹅通素材ID"><constraints nullable="false" unique="true"/></column>
+            <column name="material_rec_id" type="BIGINT" remarks="素材数字主键 id"/>
+            <column name="app_id" type="VARCHAR(64)" remarks="小鹅通 app_id"/>
+            <column name="material_type" type="INT" remarks="1图片/2音频/3视频"><constraints nullable="false"/></column>
+            <column name="material_kind" type="VARCHAR(32)" remarks="IMAGE/AUDIO/VIDEO"/>
+            <column name="sub_type" type="INT" remarks="子类型"/>
+            <column name="title" type="VARCHAR(512)" remarks="标题"/>
+            <column name="url" type="TEXT" remarks="列表 url（多为原始 CDN/VOD）"/>
+            <column name="show_url" type="TEXT" remarks="预览/加密播放地址"/>
+            <column name="download_url" type="TEXT" remarks="接口 download_url 字段"/>
+            <column name="original_url" type="TEXT" remarks="原始下载链接：download_url 优先，否则 url"/>
+            <column name="category_id" type="BIGINT" remarks="分组ID"/>
+            <column name="category_name" type="VARCHAR(255)" remarks="分组名称"/>
+            <column name="creator_id" type="VARCHAR(128)" remarks="创建者ID"/>
+            <column name="creator_name" type="VARCHAR(255)" remarks="创建者名"/>
+            <column name="material_size" type="VARCHAR(64)" remarks="文件大小(接口原文字符串，单位通常KB)"/>
+            <column name="file_id" type="VARCHAR(128)" remarks="点播/文件 file_id"/>
+            <column name="width" type="INT" remarks="宽"/>
+            <column name="height" type="INT" remarks="高"/>
+            <column name="length_sec" type="NUMERIC(24,4)" remarks="时长秒"/>
+            <column name="pixel_data" type="VARCHAR(64)" remarks="像素描述"/>
+            <column name="patch_img_url" type="TEXT" remarks="封面截图"/>
+            <column name="material_property" type="jsonb" remarks="material_property 对象"/>
+            <column name="state" type="INT" remarks="状态"/>
+            <column name="audit_state" type="INT" remarks="审核状态"/>
+            <column name="banned_state" type="INT" remarks="封禁状态"/>
+            <column name="material_state" type="INT" remarks="素材状态"/>
+            <column name="material_status" type="INT" remarks="material_status"/>
+            <column name="deal_state" type="INT" remarks="处理状态"/>
+            <column name="decode_state" type="INT" remarks="转码状态"/>
+            <column name="decode_description" type="TEXT" remarks="转码描述"/>
+            <column name="reaudit_status" type="INT" remarks="复审状态"/>
+            <column name="protection_status" type="SMALLINT" remarks="是否受保护"/>
+            <column name="material_source" type="INT" remarks="来源"/>
+            <column name="cost_summary" type="INT" remarks="容量占用标记"/>
+            <column name="refer_count" type="INT" remarks="引用数"/>
+            <column name="view_count" type="INT" remarks="浏览数"/>
+            <column name="banned_reason" type="TEXT" remarks="封禁原因"/>
+            <column name="banned_at" type="TIMESTAMPTZ" remarks="封禁时间"/>
+            <column name="latest_view_at" type="TIMESTAMPTZ" remarks="最近查看"/>
+            <column name="material_created_at" type="TIMESTAMPTZ" remarks="素材创建时间"/>
+            <column name="material_updated_at" type="TIMESTAMPTZ" remarks="素材更新时间"/>
+            <column name="extend_data" type="jsonb" remarks="extend_data"/>
+            <column name="sync_status" type="VARCHAR(20)" defaultValue="SYNCED" remarks="同步状态"/>
+            <column name="last_sync_time" type="TIMESTAMPTZ" remarks="最近同步时间"/>
+            <column name="json_data" type="jsonb" remarks="列表项原始 JSON"/>
+
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="create_by" type="VARCHAR(64)" defaultValue="" remarks="创建者"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
+            <column name="update_by" type="VARCHAR(64)" defaultValue="" remarks="更新者"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
+            <column name="status" type="CHAR(1)" defaultValue="0" remarks="状态"/>
+            <column name="del_flag" type="SMALLINT" defaultValueNumeric="0" remarks="删除标志"/>
+            <column name="remark" type="TEXT" remarks="备注"/>
+        </createTable>
+        <createIndex indexName="idx_xiaoe_materials_type" tableName="xiaoe_materials"><column name="material_type"/></createIndex>
+        <createIndex indexName="idx_xiaoe_materials_kind" tableName="xiaoe_materials"><column name="material_kind"/></createIndex>
+        <createIndex indexName="idx_xiaoe_materials_category" tableName="xiaoe_materials"><column name="category_id"/></createIndex>
+        <createIndex indexName="idx_xiaoe_materials_title" tableName="xiaoe_materials"><column name="title"/></createIndex>
+        <createIndex indexName="idx_xiaoe_materials_created" tableName="xiaoe_materials"><column name="material_created_at"/></createIndex>
+    </changeSet>
+
 </databaseChangeLog>
