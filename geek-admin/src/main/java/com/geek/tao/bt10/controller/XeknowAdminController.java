@@ -36,9 +36,15 @@ public class XeknowAdminController extends BaseController {
     }
 
     @Anonymous
-    @Operation(summary = "下发缺手机号的小鹅通用户ID列表")
+    @Operation(summary = "分页下发缺手机号的小鹅通用户ID")
     @GetMapping("/umissing")
-    public AjaxResult umissing(@RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit) {
-        return success(xeknowAdminService.listPhoneMissingUserIds(limit == null ? 10 : limit));
+    public AjaxResult umissing(
+            @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+            @RequestParam(value = "pageSize", required = false) Integer pageSize,
+            @RequestParam(value = "limit", required = false) Integer limit) {
+        // pageSize 优先；兼容旧参数 limit；默认 100
+        int size = pageSize != null ? pageSize : (limit != null ? limit : 100);
+        int p = page == null || page < 1 ? 1 : page;
+        return success(xeknowAdminService.listPhoneMissingUserIds(p, size));
     }
 }

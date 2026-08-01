@@ -4,6 +4,9 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <changeSet author="tao-business" id="gen-menu-bt10-bizproduct">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM sys_menu WHERE menu_id = 12980</sqlCheck>
+        </preConditions>
         <loadData tableName="sys_menu" file="../data/sys_menu_gen_bt10_bizproduct.csv" separator="," encoding="UTF-8" relativeToChangelogFile="true">
             <column name="menu_id" type="BIGINT"/>
             <column name="menu_name" type="VARCHAR(50)"/>
@@ -28,6 +31,9 @@
         </loadData>
     </changeSet>
     <changeSet author="tao-business" id="gen-role-menu-bt10-bizproduct">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM sys_role_menu WHERE menu_id = 12980</sqlCheck>
+        </preConditions>
         <loadData tableName="sys_role_menu" file="../data/sys_role_menu_gen_bt10_bizproduct.csv" separator="," encoding="UTF-8" relativeToChangelogFile="true">
             <column name="role_id" type="BIGINT"/>
             <column name="menu_id" type="BIGINT"/>

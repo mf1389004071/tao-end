@@ -35,6 +35,7 @@ import com.geek.tao.bt10.service.IXeknowAdminService;
 import com.geek.tao.bt10.xeknow.XeknowCryptoHelper;
 import com.geek.tao.bt10.xeknow.XeknowProperties;
 import com.mybatisflex.core.query.QueryWrapper;
+import com.mybatisflex.core.update.UpdateChain;
 
 /**
  * xeknow 采集上报：解密 → 订单/用户落库
@@ -111,16 +112,26 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
     }
 
     @Override
-    public Map<String, Object> listPhoneMissingUserIds(int limit) {
-        int size = limit > 0 ? Math.min(limit, 50) : 10;
+    public Map<String, Object> listPhoneMissingUserIds(int page, int pageSize) {
+        int size = pageSize > 0 ? Math.min(pageSize, 200) : 100;
+        int p = page < 1 ? 1 : page;
         Instant now = Instant.now();
+        // 仅「有效手机号」算已有号；null / '' / 掩码 / 非法格式都进重查队列
+        QueryWrapper countQw = QueryWrapper.create()
+                .from(XiaoeUserMapping.class)
+                .where("del_flag = 0")
+                .and("(phone IS NULL OR btrim(phone) = '' OR phone !~ '^1[3-9][0-9]{9}$')")
+                .and("(phone_next_query_at IS NULL OR phone_next_query_at <= ?)", now);
+        long total = xiaoeUserMappingMapper.selectCountByQuery(countQw);
+
         QueryWrapper qw = QueryWrapper.create()
                 .from(XiaoeUserMapping.class)
                 .where("del_flag = 0")
-                .and("(phone IS NULL OR phone = '')")
+                .and("(phone IS NULL OR btrim(phone) = '' OR phone !~ '^1[3-9][0-9]{9}$')")
                 .and("(phone_next_query_at IS NULL OR phone_next_query_at <= ?)", now)
                 .orderBy("phone_next_query_at", true)
-                .limit(size);
+                .limit(size)
+                .offset((long) (p - 1) * size);
         List<XiaoeUserMapping> rows = xiaoeUserMappingMapper.selectListByQuery(qw);
 
         List<String> userIds = new ArrayList<>();
@@ -130,9 +141,16 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
             }
         }
 
+        int totalPages = total <= 0 ? 0 : (int) ((total + size - 1) / size);
         Map<String, Object> data = new LinkedHashMap<>();
         data.put("ok", true);
         data.put("userIds", userIds);
+        data.put("page", p);
+        data.put("pageSize", size);
+        // 用 int，避免全局 Long→String 序列化把分页总数变成字符串
+        data.put("total", (int) Math.min(total, Integer.MAX_VALUE));
+        data.put("totalPages", totalPages);
+        // 兼容旧字段
         data.put("limit", size);
         return data;
     }
@@ -158,10 +176,17 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
             row.setTradeNo(text(item, "trade_id"));
             row.setOrderState(asState(item.get("order_state")));
             row.setPayState(asState(item.get("pay_state")));
+            row.setPayTypeCode(asState(item.get("pay_type")));
             row.setPayType(text(item, "pay_type_description"));
             if (!StringUtils.hasText(row.getPayType())) {
-                row.setPayType(asState(item.get("pay_type")));
+                row.setPayType(row.getPayTypeCode());
             }
+            row.setOrderType(asState(item.get("order_type")));
+            row.setOrderTypeDesc(text(item, "order_type_description"));
+            row.setShipWay(asState(item.get("ship_way_choose_type")));
+            row.setShipWayDesc(text(item, "ship_way_choose_type_description"));
+            row.setChannelSource(text(item, "channel_source_description"));
+            row.setAppId(text(item, "app_id"));
             row.setActualFee(centsToYuan(item.get("actual_fee")));
             row.setXiaoeCreateTime(parseXeTime(text(item, "create_at")));
             fillGoods(row, item.path("goods_list"));
@@ -176,13 +201,27 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
             }
 
             String xeUserId = text(item, "user_id");
+            row.setXiaoeUserId(xeUserId);
+            row.setXiaoeNickName(text(item, "nick_name"));
+            String buyerPhone = resolveBuyerPhone(item);
+            XiaoeUserMapping mapping = null;
             if (StringUtils.hasText(xeUserId)) {
-                XiaoeUserMapping mapping = xiaoeUserMappingService.queryChain()
+                mapping = xiaoeUserMappingService.queryChain()
                         .eq(XiaoeUserMapping::getXiaoeUserId, xeUserId)
                         .one();
                 if (mapping != null && mapping.getUserId() != null) {
                     row.setUserId(mapping.getUserId());
                 }
+                if (!isValidPhone(buyerPhone) && mapping != null && isValidPhone(mapping.getPhone())) {
+                    buyerPhone = mapping.getPhone().trim();
+                }
+                if (!StringUtils.hasText(row.getXiaoeNickName()) && mapping != null) {
+                    row.setXiaoeNickName(mapping.getNickName());
+                }
+            }
+            row.setBuyerPhone(buyerPhone);
+            if (isValidPhone(buyerPhone)) {
+                row.setClaimPhone(buyerPhone);
             }
 
             if (existing == null) {
@@ -213,11 +252,11 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
             if (!StringUtils.hasText(xeId)) {
                 continue;
             }
-            String phone = "";
+            String phone = null;
             if (phones != null && phones.has(xeId) && !phones.get(xeId).isNull()) {
-                phone = phones.get(xeId).asText("");
+                phone = phones.get(xeId).asText(null);
             }
-            phone = phone == null ? "" : phone.trim();
+            phone = normalizePhone(phone);
 
             String nick = text(item, "user_name");
             if (!StringUtils.hasText(nick)) {
@@ -226,7 +265,11 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
 
             ObjectNode snap = objectMapper.createObjectNode();
             snap.set("list_item", item);
-            snap.put("phone", phone);
+            if (phone != null) {
+                snap.put("phone", phone);
+            } else {
+                snap.putNull("phone");
+            }
             if (StringUtils.hasText(capturedAt)) {
                 snap.put("captured_at", capturedAt);
             }
@@ -256,6 +299,20 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
                 existing.setJsonData(jsonData);
                 applyPhoneOnWrite(existing, phone, false, retryAt);
                 xiaoeUserMappingService.updateById(existing);
+                // updateById 默认忽略 null：有效号时必须显式清空 phone_next_query_at；
+                // 缺号时显式把 phone 置 null（避免库里残留 ""）
+                if (isValidPhone(phone)) {
+                    UpdateChain.of(XiaoeUserMapping.class)
+                            .set(XiaoeUserMapping::getPhoneNextQueryAt, null)
+                            .eq(XiaoeUserMapping::getId, existing.getId())
+                            .update();
+                } else if (!isValidPhone(existing.getPhone())) {
+                    UpdateChain.of(XiaoeUserMapping.class)
+                            .set(XiaoeUserMapping::getPhone, null)
+                            .set(XiaoeUserMapping::getPhoneNextQueryAt, existing.getPhoneNextQueryAt())
+                            .eq(XiaoeUserMapping::getId, existing.getId())
+                            .update();
+                }
                 maybeWriteSysUserPhone(existing, phone);
                 updated++;
             }
@@ -264,21 +321,19 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
     }
 
     /**
-     * 有号：写入并清空延期；空号：不覆盖已有真号，仍缺号则 +N 天
+     * 有效号：写入并清空延期；空串/非法号视为缺号（存 null），不覆盖已有有效号，仍缺号则 +N 天
      */
     private void applyPhoneOnWrite(XiaoeUserMapping row, String phone, boolean isNew, Instant retryAt) {
-        boolean hasPhone = StringUtils.hasText(phone);
-        if (hasPhone) {
+        if (isValidPhone(phone)) {
             row.setPhone(phone);
             row.setPhoneNextQueryAt(null);
             return;
         }
-        // 空号
-        if (StringUtils.hasText(row.getPhone())) {
-            // 保留历史真号，不延期
+        // 上报无有效号：保留历史有效号
+        if (isValidPhone(row.getPhone())) {
             return;
         }
-        row.setPhone("");
+        row.setPhone(null);
         row.setPhoneNextQueryAt(retryAt);
         if (isNew) {
             log.debug("xeknow new user missing phone, nextQueryAt={}", retryAt);
@@ -286,7 +341,7 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
     }
 
     private void maybeWriteSysUserPhone(XiaoeUserMapping mapping, String phone) {
-        if (!StringUtils.hasText(phone) || mapping.getUserId() == null) {
+        if (!isValidPhone(phone) || mapping.getUserId() == null) {
             return;
         }
         SysUser user = sysUserService.selectUserById(mapping.getUserId());
@@ -311,6 +366,31 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
         row.setSpuType(text(g0, "spu_type"));
         String typeDesc = text(g0, "spu_type_description");
         row.setGoodsType(StringUtils.hasText(typeDesc) ? typeDesc : text(g0, "relation_goods_type_description"));
+        row.setUnitPrice(centsToYuan(g0.get("goods_original_unit_price")));
+        if (g0.has("goods_buy_num") && g0.get("goods_buy_num").isNumber()) {
+            row.setQuantity(g0.get("goods_buy_num").asInt());
+        }
+        // 订单级无状态描述时，用商品订单状态描述兜底
+        if (!StringUtils.hasText(row.getOrderStateDesc())) {
+            row.setOrderStateDesc(text(g0, "goods_order_state_description"));
+        }
+    }
+
+    /** 手机号优先级：学员信息 > 收货人 > 无效则 null */
+    private String resolveBuyerPhone(JsonNode item) {
+        String fromStudent = null;
+        JsonNode stu = item.get("student_info");
+        if (stu != null && !stu.isNull()) {
+            fromStudent = text(stu, "phone");
+        }
+        if (isValidPhone(fromStudent)) {
+            return fromStudent.trim();
+        }
+        String consignee = text(item, "consignee_phone");
+        if (isValidPhone(consignee)) {
+            return consignee.trim();
+        }
+        return null;
     }
 
     private static BigDecimal centsToYuan(JsonNode node) {
@@ -365,5 +445,26 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    /** 归一化：去空白；空串/仅星号掩码等返回 null */
+    private static String normalizePhone(String raw) {
+        if (raw == null) {
+            return null;
+        }
+        String p = raw.trim();
+        if (p.isEmpty() || p.contains("*")) {
+            return null;
+        }
+        return p;
+    }
+
+    /** 仅大陆 11 位手机号视为有效，其余（含 ""）一律缺号待重查 */
+    private static boolean isValidPhone(String phone) {
+        if (phone == null) {
+            return false;
+        }
+        String p = phone.trim();
+        return p.matches("1[3-9]\\d{9}");
     }
 }

@@ -35,8 +35,8 @@
             <column name="del_flag" type="SMALLINT" defaultValueNumeric="0" remarks="删除标志"/>
             <column name="remark" type="TEXT" remarks="备注"/>
         </createTable>
-        <createIndex indexName="idx_biz_product_identity" tableName="biz_product"><column name="identity_code"/></column>
-        <createIndex indexName="idx_biz_product_biz_status" tableName="biz_product"><column name="biz_status"/></column>
+        <createIndex indexName="idx_biz_product_identity" tableName="biz_product"><column name="identity_code"/></createIndex>
+        <createIndex indexName="idx_biz_product_biz_status" tableName="biz_product"><column name="biz_status"/></createIndex>
     </changeSet>
 
     <changeSet author="tao-business" id="power6-002-product_beneficiary">
@@ -62,7 +62,7 @@
         </createTable>
         <addForeignKeyConstraint baseTableName="product_beneficiary" baseColumnNames="product_id"
                                  constraintName="fk_product_beneficiary_product" referencedTableName="biz_product" referencedColumnNames="id" onDelete="CASCADE"/>
-        <createIndex indexName="idx_product_beneficiary_product" tableName="product_beneficiary"><column name="product_id"/></column>
+        <createIndex indexName="idx_product_beneficiary_product" tableName="product_beneficiary"><column name="product_id"/></createIndex>
     </changeSet>
 
     <changeSet author="tao-business" id="power6-003-knowledge_usage_record">
@@ -102,9 +102,9 @@
                                  constraintName="fk_knowledge_usage_content" referencedTableName="knowledge_content" referencedColumnNames="id" onDelete="CASCADE"/>
         <addForeignKeyConstraint baseTableName="knowledge_usage_record" baseColumnNames="user_id"
                                  constraintName="fk_knowledge_usage_user" referencedTableName="sys_user" referencedColumnNames="user_id" onDelete="CASCADE"/>
-        <createIndex indexName="idx_knowledge_usage_user" tableName="knowledge_usage_record"><column name="user_id"/></column>
-        <createIndex indexName="idx_knowledge_usage_content" tableName="knowledge_usage_record"><column name="content_id"/></column>
-        <createIndex indexName="idx_knowledge_usage_tool" tableName="knowledge_usage_record"><column name="tool_code"/></column>
+        <createIndex indexName="idx_knowledge_usage_user" tableName="knowledge_usage_record"><column name="user_id"/></createIndex>
+        <createIndex indexName="idx_knowledge_usage_content" tableName="knowledge_usage_record"><column name="content_id"/></createIndex>
+        <createIndex indexName="idx_knowledge_usage_tool" tableName="knowledge_usage_record"><column name="tool_code"/></createIndex>
     </changeSet>
 
     <changeSet author="tao-business" id="power6-004-identities-default_points">
@@ -137,7 +137,7 @@
         <addColumn tableName="user_point_logs">
             <column name="identity_code" type="VARCHAR(50)" remarks="非空表示身份域流水，不累计 user_profiles.points"/>
         </addColumn>
-        <createIndex indexName="idx_user_point_logs_identity" tableName="user_point_logs"><column name="identity_code"/></column>
+        <createIndex indexName="idx_user_point_logs_identity" tableName="user_point_logs"><column name="identity_code"/></createIndex>
     </changeSet>
 
     <changeSet author="tao-business" id="power6-007-user_invite-identity_code">
@@ -147,7 +147,7 @@
         <addColumn tableName="user_invite">
             <column name="identity_code" type="VARCHAR(50)" remarks="邀请场景身份，如 IDENTITY_P6"/>
         </addColumn>
-        <createIndex indexName="idx_user_invite_identity" tableName="user_invite"><column name="identity_code"/></column>
+        <createIndex indexName="idx_user_invite_identity" tableName="user_invite"><column name="identity_code"/></createIndex>
     </changeSet>
 
     <changeSet author="tao-business" id="power6-008-knowledge_comment-share">
@@ -159,7 +159,7 @@
             <column name="usage_record_id" type="BIGINT" remarks="关联 knowledge_usage_record"/>
             <column name="identity_code" type="VARCHAR(50)" remarks="可选身份标记"/>
         </addColumn>
-        <createIndex indexName="idx_knowledge_comment_usage" tableName="knowledge_comment"><column name="usage_record_id"/></column>
+        <createIndex indexName="idx_knowledge_comment_usage" tableName="knowledge_comment"><column name="usage_record_id"/></createIndex>
     </changeSet>
 
     <changeSet author="tao-business" id="power6-009-knowledge_action-dual-target">
@@ -181,7 +181,7 @@
             <column name="user_id"/>
             <column name="del_flag"/>
         </createIndex>
-        <createIndex indexName="idx_knowledge_action_content_id" tableName="knowledge_action"><column name="content_id"/></column>
+        <createIndex indexName="idx_knowledge_action_content_id" tableName="knowledge_action"><column name="content_id"/></createIndex>
     </changeSet>
 
     <changeSet author="tao-business" id="power6-010-payment_items-product_id">
@@ -191,7 +191,7 @@
         <addColumn tableName="payment_items">
             <column name="product_id" type="BIGINT" remarks="关联 biz_product.id"/>
         </addColumn>
-        <createIndex indexName="idx_payment_items_product" tableName="payment_items"><column name="product_id"/></column>
+        <createIndex indexName="idx_payment_items_product" tableName="payment_items"><column name="product_id"/></createIndex>
     </changeSet>
 
     <changeSet author="tao-business" id="power6-011-xiaoe_orders-claim-fields">
@@ -202,8 +202,8 @@
             <column name="claim_phone" type="VARCHAR(20)" remarks="待兑/购买人手机号"/>
             <column name="product_id" type="BIGINT" remarks="关联 biz_product.id"/>
         </addColumn>
-        <createIndex indexName="idx_xiaoe_orders_claim_phone" tableName="xiaoe_orders"><column name="claim_phone"/></column>
-        <createIndex indexName="idx_xiaoe_orders_product" tableName="xiaoe_orders"><column name="product_id"/></column>
+        <createIndex indexName="idx_xiaoe_orders_claim_phone" tableName="xiaoe_orders"><column name="claim_phone"/></createIndex>
+        <createIndex indexName="idx_xiaoe_orders_product" tableName="xiaoe_orders"><column name="product_id"/></createIndex>
     </changeSet>
 
     <changeSet author="tao-business" id="power6-012-seed-identity-p6">

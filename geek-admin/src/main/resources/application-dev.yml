@@ -6,7 +6,8 @@ spring:
       datasource:
         MASTER:
 #          url: ${GEEK_DB_URL:jdbc:postgresql://39.102.57.167:5432/bt10}
-          url: ${GEEK_DB_URL:jdbc:postgresql://127.0.0.1:5433/bt10}
+          # stringtype=unspecified：String 绑定 jsonb 列时由 PG 推断类型，避免 varchar→jsonb 报错
+          url: ${GEEK_DB_URL:jdbc:postgresql://127.0.0.1:5433/bt10?stringtype=unspecified}
           username: ${GEEK_DB_USERNAME:postgres}
           password: ${GEEK_DB_PASSWORD:Bt10@1234}
           driver-class-name: org.postgresql.Driver

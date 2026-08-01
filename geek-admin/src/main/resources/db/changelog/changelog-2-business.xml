@@ -1550,4 +1550,35 @@
         </createIndex>
     </changeSet>
 
+    <!-- 53. xeknow 订单：扩展可查询独立字段（小鹅用户/类型/单价数量/配送/手机号等） -->
+    <changeSet author="tao-business" id="business-053-xiaoe_orders_xeknow_cols">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="xiaoe_orders" columnName="xiaoe_user_id"/></not>
+        </preConditions>
+        <addColumn tableName="xiaoe_orders">
+            <column name="xiaoe_user_id" type="VARCHAR(255)" remarks="小鹅通用户ID"/>
+            <column name="xiaoe_nick_name" type="VARCHAR(255)" remarks="小鹅通用户昵称"/>
+            <column name="order_type" type="VARCHAR(50)" remarks="订单类型码"/>
+            <column name="order_type_desc" type="VARCHAR(100)" remarks="订单类型描述"/>
+            <column name="order_state_desc" type="VARCHAR(100)" remarks="订单状态描述"/>
+            <column name="pay_type_code" type="VARCHAR(50)" remarks="支付方式码"/>
+            <column name="unit_price" type="NUMERIC(24,4)" remarks="商品单价(元)"/>
+            <column name="quantity" type="INT" remarks="购买数量"/>
+            <column name="ship_way" type="VARCHAR(50)" remarks="配送方式码"/>
+            <column name="ship_way_desc" type="VARCHAR(100)" remarks="配送方式描述"/>
+            <column name="buyer_phone" type="VARCHAR(32)" remarks="买家手机号"/>
+            <column name="channel_source" type="VARCHAR(100)" remarks="渠道来源描述"/>
+            <column name="app_id" type="VARCHAR(64)" remarks="小鹅通 app_id"/>
+        </addColumn>
+        <createIndex indexName="idx_xiaoe_orders_xiaoe_user_id" tableName="xiaoe_orders">
+            <column name="xiaoe_user_id"/>
+        </createIndex>
+        <createIndex indexName="idx_xiaoe_orders_buyer_phone" tableName="xiaoe_orders">
+            <column name="buyer_phone"/>
+        </createIndex>
+        <createIndex indexName="idx_xiaoe_orders_xiaoe_create_time" tableName="xiaoe_orders">
+            <column name="xiaoe_create_time"/>
+        </createIndex>
+    </changeSet>
+
 </databaseChangeLog>

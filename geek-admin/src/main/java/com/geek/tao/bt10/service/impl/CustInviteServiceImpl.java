@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,10 +63,9 @@ public class CustInviteServiceImpl implements ICustInviteService {
         SysUser invitee = userService.selectUserById(inviteeUserId);
         if (invitee == null) throw new ServiceException("用户不存在");
         // 仅新用户：账号创建时间在 24h 内
-        Date createTime = invitee.getCreateTime();
+        Instant createTime = invitee.getCreateTime();
         if (createTime != null) {
-            Instant created = createTime.toInstant();
-            if (created.isBefore(Instant.now().minus(24, ChronoUnit.HOURS))) {
+            if (createTime.isBefore(Instant.now().minus(24, ChronoUnit.HOURS))) {
                 throw new ServiceException("仅新用户可绑定邀请");
             }
         }

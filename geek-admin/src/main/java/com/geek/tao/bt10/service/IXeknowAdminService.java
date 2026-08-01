@@ -15,7 +15,10 @@ public interface IXeknowAdminService {
     Map<String, Object> ingestReport(XeknowReportEncryptedReq req);
 
     /**
-     * 下发缺手机号且已到期的小鹅 user_id
+     * 分页下发缺手机号且已到期的小鹅 user_id
+     *
+     * @param page     页码，从 1 起
+     * @param pageSize 每页条数，默认 100
      */
-    Map<String, Object> listPhoneMissingUserIds(int limit);
+    Map<String, Object> listPhoneMissingUserIds(int page, int pageSize);
 }
