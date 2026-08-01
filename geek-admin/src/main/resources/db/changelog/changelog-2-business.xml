@@ -1931,4 +1931,78 @@
         <createIndex indexName="idx_xiaoe_materials_created" tableName="xiaoe_materials"><column name="material_created_at"/></createIndex>
     </changeSet>
 
+    <!-- 60. xeknow：商城商品（知识/实物/组合多类型同表） -->
+    <changeSet author="tao-business" id="business-060-xiaoe_goods">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="xiaoe_goods"/></not>
+        </preConditions>
+        <createTable remarks="小鹅通商城商品同步表：知识/实物/组合多类型同表，json_data 存原始行" tableName="xiaoe_goods">
+            <column name="id" type="BIGINT" autoIncrement="true" remarks="主键"><constraints nullable="false" primaryKey="true"/></column>
+            <column name="spu_id" type="VARCHAR(128)" remarks="SPU ID"><constraints nullable="false" unique="true"/></column>
+            <column name="resource_id" type="VARCHAR(128)" remarks="资源ID"/>
+            <column name="goods_kind" type="VARCHAR(32)" remarks="KNOWLEDGE/ENTITY/COMBINATION"><constraints nullable="false"/></column>
+            <column name="app_id" type="VARCHAR(64)" remarks="小鹅通 app_id"/>
+            <column name="resource_type" type="INT" remarks="资源类型码"/>
+            <column name="spu_type" type="VARCHAR(32)" remarks="如 EKC/ENT/COP"/>
+            <column name="spu_type_name" type="VARCHAR(64)" remarks="类型中文名"/>
+            <column name="goods_name" type="VARCHAR(512)" remarks="商品名称"/>
+            <column name="goods_sn" type="VARCHAR(128)" remarks="商品编码"/>
+            <column name="goods_img" type="jsonb" remarks="商品图数组"/>
+            <column name="img_url_compressed" type="TEXT" remarks="压缩封面"/>
+            <column name="price_low" type="NUMERIC(24,4)" remarks="最低价(元)"/>
+            <column name="price_high" type="NUMERIC(24,4)" remarks="最高价(元)"/>
+            <column name="price_line" type="NUMERIC(24,4)" remarks="划线价(元)"/>
+            <column name="sale_status" type="INT" remarks="上架状态"/>
+            <column name="sell_mode" type="INT" remarks="售卖模式"/>
+            <column name="sell_type" type="INT" remarks="售卖类型"/>
+            <column name="is_display" type="SMALLINT" remarks="是否展示"/>
+            <column name="is_forbid" type="SMALLINT" remarks="是否禁售"/>
+            <column name="is_free" type="SMALLINT" remarks="是否免费"/>
+            <column name="is_password" type="SMALLINT" remarks="是否加密"/>
+            <column name="is_public" type="SMALLINT" remarks="是否公开"/>
+            <column name="is_stop_sell" type="SMALLINT" remarks="是否停售"/>
+            <column name="is_timing_sale" type="SMALLINT" remarks="是否定时开售"/>
+            <column name="sale_at" type="TIMESTAMPTZ" remarks="开售时间"/>
+            <column name="timing_sale" type="VARCHAR(64)" remarks="定时开售"/>
+            <column name="timing_offtime" type="TIMESTAMPTZ" remarks="定时下架"/>
+            <column name="resource_url" type="TEXT" remarks="H5详情"/>
+            <column name="short_url" type="TEXT" remarks="短链"/>
+            <column name="goods_category_id" type="VARCHAR(64)" remarks="商品分组ID"/>
+            <column name="new_category_id_v2" type="BIGINT" remarks="类目ID"/>
+            <column name="distribution_pattern" type="INT" remarks="配送方式"/>
+            <column name="stock" type="INT" remarks="库存"/>
+            <column name="sell_num" type="INT" remarks="销量"/>
+            <column name="visit_num" type="INT" remarks="访问数"/>
+            <column name="pv" type="INT" remarks="PV"/>
+            <column name="uv" type="INT" remarks="UV"/>
+            <column name="attach_count" type="INT" remarks="附件数"/>
+            <column name="period" type="VARCHAR(64)" remarks="有效期原始值"/>
+            <column name="period_type" type="INT" remarks="有效期类型"/>
+            <column name="period_value" type="VARCHAR(128)" remarks="有效期值"/>
+            <column name="sku_json" type="jsonb" remarks="SKU 列表"/>
+            <column name="category_json" type="jsonb" remarks="类目树"/>
+            <column name="extend_json" type="jsonb" remarks="extend 对象"/>
+            <column name="stock_json" type="jsonb" remarks="库存明细"/>
+            <column name="goods_created_at" type="TIMESTAMPTZ" remarks="商品创建时间"/>
+            <column name="sync_status" type="VARCHAR(20)" defaultValue="SYNCED" remarks="同步状态"/>
+            <column name="last_sync_time" type="TIMESTAMPTZ" remarks="最近同步时间"/>
+            <column name="json_data" type="jsonb" remarks="列表项原始 JSON"/>
+
+            <column name="create_id" type="BIGINT" remarks="创建者ID"/>
+            <column name="create_by" type="VARCHAR(64)" defaultValue="" remarks="创建者"/>
+            <column name="create_time" type="TIMESTAMPTZ" remarks="创建时间"/>
+            <column name="update_id" type="BIGINT" remarks="更新者ID"/>
+            <column name="update_by" type="VARCHAR(64)" defaultValue="" remarks="更新者"/>
+            <column name="update_time" type="TIMESTAMPTZ" remarks="更新时间"/>
+            <column name="status" type="CHAR(1)" defaultValue="0" remarks="状态"/>
+            <column name="del_flag" type="SMALLINT" defaultValueNumeric="0" remarks="删除标志"/>
+            <column name="remark" type="TEXT" remarks="备注"/>
+        </createTable>
+        <createIndex indexName="idx_xiaoe_goods_kind" tableName="xiaoe_goods"><column name="goods_kind"/></createIndex>
+        <createIndex indexName="idx_xiaoe_goods_resource_id" tableName="xiaoe_goods"><column name="resource_id"/></createIndex>
+        <createIndex indexName="idx_xiaoe_goods_resource_type" tableName="xiaoe_goods"><column name="resource_type"/></createIndex>
+        <createIndex indexName="idx_xiaoe_goods_sale_status" tableName="xiaoe_goods"><column name="sale_status"/></createIndex>
+        <createIndex indexName="idx_xiaoe_goods_name" tableName="xiaoe_goods"><column name="goods_name"/></createIndex>
+    </changeSet>
+
 </databaseChangeLog>

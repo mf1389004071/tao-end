@@ -27,6 +27,7 @@ import com.geek.common.core.domain.entity.SysUser;
 import com.geek.common.exception.ServiceException;
 import com.geek.system.service.ISysUserService;
 import com.geek.tao.bt10.domain.XiaoeContents;
+import com.geek.tao.bt10.domain.XiaoeGoods;
 import com.geek.tao.bt10.domain.XiaoeMaterialGroups;
 import com.geek.tao.bt10.domain.XiaoeMaterials;
 import com.geek.tao.bt10.domain.XiaoeOrders;
@@ -36,6 +37,7 @@ import com.geek.tao.bt10.domain.XiaoeUserMapping;
 import com.geek.tao.bt10.domain.XeknowReportEncryptedReq;
 import com.geek.tao.bt10.mapper.XiaoeUserMappingMapper;
 import com.geek.tao.bt10.service.IXiaoeContentsService;
+import com.geek.tao.bt10.service.IXiaoeGoodsService;
 import com.geek.tao.bt10.service.IXiaoeMaterialGroupsService;
 import com.geek.tao.bt10.service.IXiaoeMaterialsService;
 import com.geek.tao.bt10.service.IXiaoeOrdersService;
@@ -63,6 +65,7 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
     private static final String SOURCE_SVIP = "svip_list";
     private static final String SOURCE_MATERIAL_GROUP = "material_group";
     private static final String SOURCE_MATERIAL = "material_list";
+    private static final String SOURCE_GOODS = "goods_list";
     private static final DateTimeFormatter XE_TIME =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final DateTimeFormatter XE_DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -87,6 +90,8 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
     private IXiaoeMaterialGroupsService xiaoeMaterialGroupsService;
     @Autowired
     private IXiaoeMaterialsService xiaoeMaterialsService;
+    @Autowired
+    private IXiaoeGoodsService xiaoeGoodsService;
     @Autowired
     private XiaoeUserMappingMapper xiaoeUserMappingMapper;
     @Autowired
@@ -144,6 +149,10 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
             int[] r = upsertMaterials(root);
             inserted = r[0];
             updated = r[1];
+        } else if (SOURCE_GOODS.equals(source)) {
+            int[] r = upsertGoods(root);
+            inserted = r[0];
+            updated = r[1];
         } else {
             throw new ServiceException("不支持的 source: " + source);
         }
@@ -170,6 +179,10 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
         if (SOURCE_MATERIAL_GROUP.equals(source) || SOURCE_MATERIAL.equals(source)) {
             data.put("materialType", root.path("material_type").asInt(0));
             data.put("materialKind", text(root, "material_kind"));
+        }
+        if (SOURCE_GOODS.equals(source)) {
+            data.put("goodsKind", text(root, "goods_kind"));
+            data.put("resourceType", root.path("resource_type").asInt(0));
         }
         return data;
     }
@@ -661,6 +674,155 @@ public class XeknowAdminServiceImpl implements IXeknowAdminService {
             case 3 -> "VIDEO";
             default -> "MT_" + materialType;
         };
+    }
+
+    private int[] upsertGoods(JsonNode envelope) {
+        JsonNode list = envelope.path("payload").path("data").path("list");
+        if (!list.isArray()) {
+            // 实物/组合接口分页在 data.data
+            list = envelope.path("payload").path("data").path("data");
+        }
+        if (!list.isArray()) {
+            throw new ServiceException("goods list 缺失");
+        }
+        String goodsKind = text(envelope, "goods_kind");
+        String envelopeAppId = text(envelope, "app_id");
+        int inserted = 0;
+        int updated = 0;
+        for (JsonNode item : list) {
+            String spuId = text(item, "spu_id");
+            if (!StringUtils.hasText(spuId)) {
+                spuId = text(item, "resource_id");
+            }
+            if (!StringUtils.hasText(spuId)) {
+                continue;
+            }
+            XiaoeGoods existing = xiaoeGoodsService.queryChain()
+                    .eq(XiaoeGoods::getSpuId, spuId)
+                    .one();
+            XiaoeGoods row = existing != null ? existing : new XiaoeGoods();
+            fillGoodsRow(row, item, goodsKind, envelopeAppId);
+            if (existing == null) {
+                xiaoeGoodsService.save(row);
+                inserted++;
+            } else {
+                xiaoeGoodsService.updateById(row);
+                updated++;
+            }
+        }
+        return new int[] { inserted, updated };
+    }
+
+    private void fillGoodsRow(XiaoeGoods row, JsonNode item, String goodsKind, String envelopeAppId) {
+        String spuId = text(item, "spu_id");
+        if (!StringUtils.hasText(spuId)) {
+            spuId = text(item, "resource_id");
+        }
+        row.setSpuId(spuId);
+        row.setResourceId(text(item, "resource_id"));
+        Integer resourceType = intOrNull(item.get("resource_type"));
+        row.setResourceType(resourceType);
+        row.setGoodsKind(resolveGoodsKind(goodsKind, text(item, "spu_type"), resourceType));
+        row.setAppId(StringUtils.hasText(envelopeAppId) ? envelopeAppId : text(item, "app_id"));
+        row.setSpuType(text(item, "spu_type"));
+        row.setSpuTypeName(text(item, "spu_type_name"));
+        row.setGoodsName(text(item, "goods_name"));
+        row.setGoodsSn(text(item, "goods_sn"));
+        row.setGoodsImg(toJson(item.get("goods_img")));
+        row.setImgUrlCompressed(text(item, "img_url_compressed"));
+        row.setPriceLow(centsToYuan(item.get("price_low")));
+        row.setPriceHigh(centsToYuan(item.get("price_high")));
+        row.setPriceLine(centsToYuan(item.get("price_line")));
+        row.setSaleStatus(intOrNull(item.get("sale_status")));
+        row.setSellMode(intOrNull(item.get("sell_mode")));
+        row.setSellType(intOrNull(item.get("sell_type")));
+        row.setIsDisplay(intOrNull(item.get("is_display")));
+        row.setIsForbid(intOrNull(item.get("is_forbid")));
+        row.setIsFree(intOrNull(item.get("is_free")));
+        row.setIsPassword(intOrNull(item.get("is_password")));
+        row.setIsPublic(intOrNull(item.get("is_public")));
+        row.setIsStopSell(intOrNull(item.get("is_stop_sell")));
+        row.setIsTimingSale(intOrNull(item.get("is_timing_sale")));
+        row.setSaleAt(parseFlexibleTime(item.get("sale_at")));
+        row.setTimingSale(text(item, "timing_sale"));
+        row.setTimingOfftime(parseFlexibleTime(item.get("timing_offtime")));
+        row.setResourceUrl(firstText(item, "resource_url", item, "short_url"));
+        row.setShortUrl(text(item, "short_url"));
+        row.setGoodsCategoryId(text(item, "goods_category_id"));
+        row.setNewCategoryIdV2(longOrNull(item.get("new_category_id_v2")));
+        row.setDistributionPattern(intOrNull(item.get("distribution_pattern")));
+
+        JsonNode extend = item.get("extend");
+        Integer sellNum = null;
+        Integer stock = null;
+        if (extend != null && !extend.isNull()) {
+            row.setExtendJson(toJson(extend));
+            if (extend.isObject()) {
+                sellNum = intOrNull(extend.get("sell_num"));
+                stock = intOrNull(extend.get("stock"));
+            }
+        } else {
+            row.setExtendJson(null);
+        }
+        row.setSellNum(sellNum);
+        row.setStock(stock);
+        row.setVisitNum(intOrNull(item.get("visit_num")));
+        row.setPv(intOrNull(item.get("pv")));
+        row.setUv(intOrNull(item.get("uv")));
+        row.setAttachCount(intOrNull(item.get("attach_count")));
+
+        if (item.has("period") && !item.get("period").isNull()) {
+            JsonNode p = item.get("period");
+            row.setPeriod(p.isNumber() ? String.valueOf(p.asLong()) : p.asText());
+        } else {
+            row.setPeriod(null);
+        }
+        row.setPeriodType(intOrNull(item.get("period_type")));
+        row.setPeriodValue(text(item, "period_value"));
+        // knowledge sku[0].period_*
+        JsonNode sku = item.get("sku");
+        if ((row.getPeriodType() == null || !StringUtils.hasText(row.getPeriodValue()))
+                && sku != null && sku.isArray() && !sku.isEmpty()) {
+            JsonNode s0 = sku.get(0);
+            if (row.getPeriodType() == null) {
+                row.setPeriodType(intOrNull(s0.get("period_type")));
+            }
+            if (!StringUtils.hasText(row.getPeriodValue())) {
+                row.setPeriodValue(text(s0, "period_value"));
+            }
+        }
+        row.setSkuJson(toJson(sku));
+        row.setCategoryJson(toJson(item.get("category")));
+        row.setStockJson(toJson(item.get("stock")));
+        row.setGoodsCreatedAt(parseFlexibleTime(item.get("created_at")));
+        row.setJsonData(toJson(item));
+        row.setSyncStatus("SYNCED");
+        row.setLastSyncTime(Instant.now());
+        row.setDelFlag(0);
+        if (!StringUtils.hasText(row.getStatus())) {
+            row.setStatus("0");
+        }
+    }
+
+    private static String resolveGoodsKind(String envelopeKind, String spuType, Integer resourceType) {
+        if (StringUtils.hasText(envelopeKind)) {
+            return envelopeKind.trim().toUpperCase();
+        }
+        if (StringUtils.hasText(spuType)) {
+            return switch (spuType.trim().toUpperCase()) {
+                case "ENT" -> "ENTITY";
+                case "COP" -> "COMBINATION";
+                default -> "KNOWLEDGE";
+            };
+        }
+        if (resourceType != null) {
+            return switch (resourceType) {
+                case 21 -> "ENTITY";
+                case 69 -> "COMBINATION";
+                default -> "KNOWLEDGE";
+            };
+        }
+        return "KNOWLEDGE";
     }
 
     private int[] upsertSvipMembers(JsonNode envelope) {
