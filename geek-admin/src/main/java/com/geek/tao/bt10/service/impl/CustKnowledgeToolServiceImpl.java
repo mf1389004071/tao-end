@@ -38,6 +38,8 @@ import com.geek.tao.bt10.tool.KnowledgeToolHandlerRegistry;
 import com.geek.tao.bt10.tool.ToolProTemplateService;
 import com.mybatisflex.core.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -91,6 +93,8 @@ public class CustKnowledgeToolServiceImpl implements ICustKnowledgeToolService {
     private ProductBeneficiaryMapper productBeneficiaryMapper;
     @Autowired
     private ISysUserService userService;
+    @Autowired
+    private Environment environment;
 
     private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
             .withZone(ZoneId.of("Asia/Shanghai"));
@@ -220,7 +224,17 @@ public class CustKnowledgeToolServiceImpl implements ICustKnowledgeToolService {
                     + "\n基础卡片: " + toJson(resultBasic.get("cards"))
                     + "\n请基于得分给出解读。";
 
-            String aiText = aiChatService.chat(system, user);
+            String aiText;
+            try {
+                aiText = aiChatService.chat(system, user);
+            } catch (Exception aiEx) {
+                // 开发环境外网 AI 超时/失败时，用本地兜底解读，保证模板渲染与扣次链路可测
+                if (environment.acceptsProfiles(Profiles.of("dev"))) {
+                    aiText = buildDevFallbackAiJson(scoreSummary, rec.getSubjectName());
+                } else {
+                    throw aiEx;
+                }
+            }
             Map<String, Object> aiSlots = parseAiJson(aiText);
 
             Map<String, Object> slots = new LinkedHashMap<>();
@@ -445,6 +459,18 @@ public class CustKnowledgeToolServiceImpl implements ICustKnowledgeToolService {
                     .append(sign).append(score).append("</span></div>");
         }
         return sb.toString();
+    }
+
+    private String buildDevFallbackAiJson(Map<String, Object> scoreSummary, String subjectName) {
+        String name = StringUtils.isEmpty(subjectName) ? "学员" : subjectName;
+        String totals = scoreSummary == null ? "{}" : String.valueOf(scoreSummary.get("totals"));
+        String narrative = name + " 的潜能画像（开发环境本地兜底，因 AI 网关不可达）。得分摘要：" + totals
+                + "。建议先聚焦相对偏低的维度做小步练习，再巩固优势项。";
+        String actions = "1. 每天记录一个可量化小目标并完成\n2. 把优势维度用于本周一件关键事\n3. 找同伴复盘一次卡点";
+        return toJson(Map.of(
+                "aiNarrative", narrative,
+                "aiActions", actions,
+                "focusDimension", "综合"));
     }
 
     private Map<String, Object> parseAiJson(String aiText) {
